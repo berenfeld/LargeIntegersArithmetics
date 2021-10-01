@@ -10,6 +10,7 @@ file(GLOB LargeIntsIncludes "${PROJECT_SOURCE_DIR}/include")
 add_library(LargeInts STATIC ${LargeIntsSrcs})
 target_include_directories(LargeInts PUBLIC ${LargeIntsIncludes})
 
+find_package(GTest REQUIRED)
 include(GoogleTest)
 file(GLOB TestLargeIntsSrcs "${PROJECT_SOURCE_DIR}/tests/*.cpp")
 add_executable(TestLargeInts ${TestLargeIntsSrcs})
