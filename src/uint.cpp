@@ -25,7 +25,7 @@ namespace large_numbers
                     const size_t token_length = std::min(DWORD_HEX_STRING_LEN, len);
                     const std::string token = left.substr(len - token_length, token_length);
                     left = left.substr(0, len - token_length);
-                    ss << token;
+                    ss << std::hex << token;
                     ss >> value;
                     _values.push_back(value);
                 } while(true);
@@ -47,7 +47,9 @@ namespace large_numbers
                 for (const uint32_t& value : _values) {
                     ss << std::hex << value;
                 }
-                return ss.str();
+                std::string result = ss.str();
+                std::transform(result.begin(), result.end(),result.begin(), ::toupper);
+                return result;
             }
             default: throw Error("Base not supported");
         }
