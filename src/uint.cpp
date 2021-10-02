@@ -6,6 +6,14 @@
 
 namespace large_numbers
 {
+    UInt::UInt()
+    {}
+
+    UInt::UInt(uint32_t value)
+    {
+        _values.push_back(value);
+    }
+
     UInt::UInt(const std::string& str, int base)
     {
         switch(base)
@@ -19,6 +27,22 @@ namespace large_numbers
             default: throw Error("Base not supported");
         }
         
+    }
+
+    bool UInt::operator ==(const UInt& other) const
+    {
+        return _values == other._values;
+    }
+
+    UInt UInt::operator *(uint32_t arg) const
+    {
+        UInt result;
+        for (const uint32_t& value : _values)
+        {
+            // TODO: handle overflow
+            result._values.push_back(arg * value);
+        }
+        return result;
     }
 
     std::string UInt::toString(int base) const
