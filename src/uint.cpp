@@ -1,5 +1,6 @@
 #include "uint.h"
 #include "error.h"
+#include "utils.h"
 #include <sstream>
 #include <algorithm>
 
@@ -12,23 +13,7 @@ namespace large_numbers
             case 2: throw Error("Base not supported"); break;
             case 10: throw Error("Base not supported"); break;
             case 16: {
-                std::string left = str;
-                std::stringstream ss;
-                uint32_t value;
-                const size_t DWORD_HEX_STRING_LEN = 8;
-                do
-                {
-                    const size_t len = left.size();
-                    if (len == 0) {
-                        break;
-                    }
-                    const size_t token_length = std::min(DWORD_HEX_STRING_LEN, len);
-                    const std::string token = left.substr(len - token_length, token_length);
-                    left = left.substr(0, len - token_length);
-                    ss << std::hex << token;
-                    ss >> value;
-                    _values.push_back(value);
-                } while(true);
+                parseBase16StringValues(str, _values);
                 break;
             }
             default: throw Error("Base not supported");
