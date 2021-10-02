@@ -13,6 +13,19 @@ TEST(UInt, Constructions)
     EXPECT_EQ(two, two2);
 }
 
+TEST(UInt, MultiplyImmidiate)
+{
+    large_numbers::UInt a(1234);
+    large_numbers::UInt b = a * 5678;
+    EXPECT_EQ(large_numbers::UInt(1234 * 5678), b);
+
+    large_numbers::UInt x("FFFFFFFF", 16);
+    EXPECT_EQ(large_numbers::UInt(0xFFFFFFFFULL), x);
+    large_numbers::UInt y = x * 16;
+    EXPECT_EQ(large_numbers::UInt("FFFFFFFF0", 16), y);
+}
+
+
 TEST(UInt, Base16String)
 {
     large_numbers::UInt test("ABCDABCD", 16);

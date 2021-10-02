@@ -12,7 +12,6 @@ namespace large_numbers
     void parseBase16StringValues(const std::string& str, std::vector<uint32_t>& values)
     {
         std::string left = str;
-        std::stringstream ss;
         uint32_t value;
         const size_t DWORD_HEX_STRING_LEN = 8;
         do
@@ -24,6 +23,7 @@ namespace large_numbers
             const size_t token_length = std::min(DWORD_HEX_STRING_LEN, len);
             const std::string token = left.substr(len - token_length, token_length);
             left = left.substr(0, len - token_length);
+            std::stringstream ss;
             ss << std::hex << token;
             ss >> value;
             values.push_back(value);

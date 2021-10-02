@@ -37,10 +37,16 @@ namespace large_numbers
     UInt UInt::operator *(uint32_t arg) const
     {
         UInt result;
-        for (const uint32_t& value : _values)
-        {
-            // TODO: handle overflow
-            result._values.push_back(arg * value);
+        uint32_t add_to_next_value = 0;
+        uint64_t arg64 = static_cast<uint64_t>(arg);
+        for (const uint32_t& value : _values) {
+            uint64_t result_value = static_cast<uint64_t>(value) * arg64;
+            result_value += add_to_next_value;
+            result._values.push_back(static_cast<uint32_t>(result_value));
+            add_to_next_value = result_value >> 32;
+        }
+        if (add_to_next_value) {
+            result._values.push_back(add_to_next_value);
         }
         return result;
     }
