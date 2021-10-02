@@ -15,12 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    
     - name: Install libraries
-      run: apt-get install -y libgtest-dev
-      
+      run: sudo apt-get install -y libgtest-dev
+
     - name: Configure CMake
+      uses: actions/checkout@v2
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
