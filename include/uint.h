@@ -14,7 +14,11 @@ namespace large_numbers
         UInt(const std::string& str, int base = 10);
 
         bool operator ==(const UInt& other) const;
+        bool operator ==(uint32_t value) const;
+        bool operator !=(const UInt& other) const;
+        bool operator !=(uint32_t value) const;
         UInt& operator +=(const UInt& other);
+        UInt operator +(const UInt& other) const;
 
         UInt operator *(uint32_t arg) const;
 
