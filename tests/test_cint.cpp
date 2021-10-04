@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "uint.h"
+#include "error.h"
 
 TEST(UInt, Constructions)
 {
@@ -30,4 +31,10 @@ TEST(UInt, Base16String)
 {
     large_numbers::UInt test("ABCDABCD", 16);
     EXPECT_EQ("ABCDABCD", test.toString(16));
+}
+
+TEST(UInt, ErrorConditions)
+{
+    EXPECT_THROW(new large_numbers::UInt("TEST", 3), large_numbers::Error);
+    EXPECT_THROW(large_numbers::UInt().toString(3), large_numbers::Error);
 }
