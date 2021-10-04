@@ -18,8 +18,6 @@ namespace large_numbers
     {
         switch(base)
         {
-            case 2: throw Error("Base not supported"); break;
-            case 10: throw Error("Base not supported"); break;
             case 16: {
                 parseBase16StringValues(str, _values);
                 break;
@@ -55,8 +53,6 @@ namespace large_numbers
     {
         switch(base)
         {
-            case 2: throw Error("Base not supported"); break;
-            case 10: throw Error("Base not supported"); break;
             case 16: {
                 std::stringstream ss;
                 for (const uint32_t& value : _values) {

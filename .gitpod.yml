@@ -1,2 +1,13 @@
+
 image:
   file: .gitpod.Dockerfile
+
+vscode:
+  extensions:
+    - ritwickdey.liveserver
+    - twxs.cmake
+    - ms-vscode.cmake-tools
+    - ms-azuretools.vscode-docker
+    - cschlosser.doxdocgen
+    - webfreak.debug
+    - eamodio.gitlens

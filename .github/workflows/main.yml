@@ -7,20 +7,20 @@ on:
     branches: [ main ]
 
 env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
+  BUILD_TYPE: Debug
+  COVERAGE_PERCENT: 100
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
+    steps:        
     - name: Install libraries
-      run: sudo apt-get install -y libgtest-dev
-
-    - uses: actions/checkout@v2
-      
-    - name: Configure CMake
+      run: sudo apt-get install -y --no-install-recommends libgtest-dev gcovr
+         
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Configure CMake      
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 
     - name: Build
@@ -30,3 +30,13 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{env.BUILD_TYPE}}
       
+    - name: Coverage Report
+      run: |
+        mkdir -p build/coverage/html
+        gcovr -s -r . --html --html-details -o build/coverage/html/index.html --fail-under-line  ${{env.COVERAGE_PERCENT}}
+        
+    - name: Coverage Report Artifact
+      uses: actions/upload-artifact@v2
+      with:
+          name: code-coverage-report
+          path: build/coverage/html
