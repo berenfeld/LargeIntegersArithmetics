@@ -39,6 +39,25 @@ namespace large_numbers
         return _values == other._values;
     }
 
+    bool UInt::operator ==(uint32_t value) const
+    {
+        if (value) {
+            return _values.size() == 1 && _values[0] == value;
+        } else {
+            return _values.empty();
+        }
+    }
+
+    bool UInt::operator !=(const UInt& other) const
+    {
+        return ! (*this == other);
+    }
+
+    bool UInt::operator !=(uint32_t value) const
+    {
+        return ! (*this == value);
+    }
+
     UInt& UInt::operator +=(const UInt& other)
     {
         _values.resize(std::max(_values.size(), other._values.size()));
@@ -53,6 +72,23 @@ namespace large_numbers
             _values.push_back(add_to_next_value);
         }
         return *this;
+    }
+
+    UInt UInt::operator +(const UInt& other) const
+    {
+        UInt result;
+        result._values.resize(std::max(_values.size(), other._values.size()));
+        uint32_t add_to_next_value = 0;
+        for(int i=0; i<other._values.size(); ++i)
+        {
+            uint64_t added_value = static_cast<uint64_t>(_values[i]) + static_cast<uint64_t>(other._values[i]) + add_to_next_value;
+            result._values[i] = added_value;
+            add_to_next_value = added_value >> 32;
+        }
+        if (add_to_next_value) {
+            result._values.push_back(add_to_next_value);
+        }
+        return result;
     }
 
     UInt UInt::operator *(uint32_t arg) const

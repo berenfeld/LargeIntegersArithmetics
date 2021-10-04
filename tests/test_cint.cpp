@@ -16,20 +16,40 @@ TEST(UInt, Constructions)
     EXPECT_EQ(two, two2);
 }
 
+TEST(UInt, Comparison)
+{
+    UInt zero;
+    EXPECT_EQ(zero, 0);
+    EXPECT_NE(zero, 1);
+    UInt one("1", 16);
+    UInt one2(1);
+    UInt two(2);
+    EXPECT_EQ(one, one2);
+    EXPECT_NE(one, two);
+}
+
 TEST(UInt, Addition)
 {
     UInt a(1);
     UInt b(2);
     a += b;
     EXPECT_EQ(UInt(3), a);
+    a = 1;
+    b = 2;
+    UInt c = a + b;
+    EXPECT_EQ(UInt(3), c);
 
     UInt x("12341234123412341234123412341234", 16);
     x += x;
     EXPECT_EQ(UInt("24682468246824682468246824682468", 16), x);
 
     UInt y("88888888888888888888888888888888", 16);
-    y += y;
-    EXPECT_EQ(UInt("111111111111111111111111111111110", 16), y);
+    UInt z = y;
+    z += y;
+    EXPECT_EQ(UInt("111111111111111111111111111111110", 16), z);
+    z = 0;
+    z = y + y;
+    EXPECT_EQ(UInt("111111111111111111111111111111110", 16), z);
 }
 
 TEST(UInt, MultiplyImmidiate)
