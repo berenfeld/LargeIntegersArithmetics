@@ -21,4 +21,11 @@ namespace large_numbers
      * @param values 
      */
     void parseBase16StringValues(const std::string& str, std::vector<uint32_t>& values);
+
+    /**
+     * @brief return the position of the left most bit of n
+     * @param n
+     * @return
+     */
+    uint8_t last_bit(int n);
 }
