@@ -11,15 +11,21 @@ env:
   COVERAGE_PERCENT: 100
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:        
     - name: Install libraries
-      run: sudo apt-get install -y --no-install-recommends libgtest-dev gcovr
+      run: sudo apt-get install -y --no-install-recommends libgtest-dev gcovr clang-format
          
     - name: Checkout
       uses: actions/checkout@v2
     
+    - name: Check Format
+      run: |
+        clang-format --version
+        clang-format --verbose -i src/* include/* tests/*
+        git diff-index --quiet HEAD
+
     - name: Configure CMake      
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
 

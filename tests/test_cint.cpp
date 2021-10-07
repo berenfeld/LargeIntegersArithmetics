@@ -1,10 +1,11 @@
-#include <gtest/gtest.h>
-#include "uint.h"
 #include "error.h"
+#include "uint.h"
+#include <gtest/gtest.h>
 
 using namespace large_numbers;
 
-TEST(UInt, Constructions) {
+TEST(UInt, Constructions)
+{
     UInt zero;
     UInt one("1");
     UInt one2(1);
@@ -15,7 +16,8 @@ TEST(UInt, Constructions) {
     EXPECT_EQ(two, two2);
 }
 
-TEST(UInt, Comparison) {
+TEST(UInt, Comparison)
+{
     UInt zero;
     EXPECT_EQ(zero, 0);
     EXPECT_NE(zero, 1);
@@ -26,7 +28,8 @@ TEST(UInt, Comparison) {
     EXPECT_NE(one, two);
 }
 
-TEST(UInt, Addition) {
+TEST(UInt, Addition)
+{
     UInt a(1);
     UInt b(2);
     a += b;
@@ -54,7 +57,8 @@ TEST(UInt, Addition) {
     EXPECT_EQ(x + y, UInt("0x88888889888111111111111111111110"));
 }
 
-TEST(UInt, Substraction) {
+TEST(UInt, Substraction)
+{
     UInt a(5);
     UInt b(2);
     a -= b;
@@ -70,11 +74,11 @@ TEST(UInt, Substraction) {
     EXPECT_EQ(UInt("12341234123412341234123412341234"), k);
 
     UInt z("88888888888888888888888888888888");
-    UInt y(           "777777777777777777777");
+    UInt y("777777777777777777777");
     z = z - y;
     EXPECT_EQ(UInt("88888888888111111111111111111111"), z);
     z = 0;
-    EXPECT_EQ(y, y-z);
+    EXPECT_EQ(y, y - z);
 
     z = UInt("0x100000000000000000000000000000000");
     y = UInt(0x1);
@@ -82,10 +86,11 @@ TEST(UInt, Substraction) {
 
     z = UInt("0x100000000000000000000000000000000");
     y = UInt("0xffffffffffffffffffffffffffffffff");
-    EXPECT_EQ(UInt(0x1), z-y);
+    EXPECT_EQ(UInt(0x1), z - y);
 }
 
-TEST(UInt, MultiplyImmidiate) {
+TEST(UInt, MultiplyImmidiate)
+{
     UInt a(1234);
     UInt b = a * 5678;
     EXPECT_EQ(UInt(1234 * 5678), b);
@@ -96,7 +101,8 @@ TEST(UInt, MultiplyImmidiate) {
     EXPECT_EQ(UInt("FFFFFFFF0"), y);
 }
 
-TEST(UInt, Shift) {
+TEST(UInt, Shift)
+{
     UInt test("0x10000000");
     EXPECT_EQ(UInt("0x10000000"), test << 0);
     EXPECT_EQ(UInt("0x20000000"), test << 1);
@@ -114,10 +120,11 @@ TEST(UInt, Shift) {
     EXPECT_EQ(UInt("0x123456781234567800000000000000000000000000000000"), test2 << 128);
 }
 
-TEST(UInt, Base10String) {
+TEST(UInt, Base10String)
+{
     UInt zero("");
     EXPECT_TRUE(zero == 0);
-    
+
     UInt test("256");
     EXPECT_EQ("0X100", test.toString(16));
 
@@ -130,12 +137,14 @@ TEST(UInt, Base10String) {
     EXPECT_EQ("0X1B6F141F98EEB619BC0360220160A5F75EA07CDF1D", rsa_100_b.toString(16));
 }
 
-TEST(UInt, Base16String) {
+TEST(UInt, Base16String)
+{
     UInt test("ABCDABCD");
     EXPECT_EQ("0XABCDABCD", test.toString(16));
 }
 
-TEST(UInt, ErrorConditions) {
+TEST(UInt, ErrorConditions)
+{
     EXPECT_THROW(new large_numbers::UInt("TEST", 3), large_numbers::Error);
     EXPECT_THROW(large_numbers::UInt().toString(3), large_numbers::Error);
     EXPECT_THROW(large_numbers::UInt("-3"), large_numbers::Error);
