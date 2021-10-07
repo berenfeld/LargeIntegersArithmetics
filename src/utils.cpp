@@ -86,11 +86,13 @@ namespace large_numbers
             return 16;
         }
 
-        if (std::find_if(str.begin(), str.end(), [](unsigned char c) { return !std::isdigit(c); }) == str.end())
+        if (std::find_if(str.begin(), str.end(), [](unsigned char c)
+                         { return !std::isdigit(c); }) == str.end())
         {
             return 10;
         }
-        if (std::find_if(str.begin(), str.end(), [](unsigned char c) { return !std::isxdigit(c); }) == str.end())
+        if (std::find_if(str.begin(), str.end(), [](unsigned char c)
+                         { return !std::isxdigit(c); }) == str.end())
         {
             return 16;
         }
@@ -106,7 +108,6 @@ namespace large_numbers
             blocks = MAX_RAND_UINT_BLOCKS;
         }
         int num_blocks = std::max(::rand() % blocks, 1); // at least one block
-        std::cout << "blocks " << num_blocks << std::endl;
         for (auto i = 0; i < num_blocks; ++i)
         {
             result += ::rand();
