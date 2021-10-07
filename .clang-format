@@ -1,6 +1,6 @@
 UseTab: false
 IndentWidth: 4
-BreakBeforeBraces: Allman
+BreakBeforeBraces: Linux
 AllowShortIfStatementsOnASingleLine: false
 IndentCaseLabels: false
 ColumnLimit: 0

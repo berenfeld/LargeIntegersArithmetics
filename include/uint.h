@@ -51,8 +51,7 @@ namespace large_numbers
             size_t operator()(const UInt &key) const
             {
                 size_t result = 0;
-                for (const uint32_t &value : key._values)
-                {
+                for (const uint32_t &value : key._values) {
                     result += std::hash<uint32_t>()(value);
                 }
                 return result;
