@@ -3,8 +3,6 @@
 #include "utils.h"
 #include <sstream>
 #include <algorithm>
-#include <iomanip>
-#include <iostream>
 #include <cmath>
 
 namespace large_numbers {
@@ -15,6 +13,9 @@ namespace large_numbers {
     }
 
     UInt::UInt(const std::string &str, int base) {
+        if (base == 0) {
+            base = guessBaseOf(str);
+        }
         switch (base) {
             case 10: {
                 UInt result = parseBase10StringValues(str);
@@ -26,7 +27,7 @@ namespace large_numbers {
                 break;
             }
             default:
-                throw Error("Base not supported");
+                throw Error("Base not supported " + std::to_string(base) + " for : '" + str + "'");
         }
 
     }
@@ -124,23 +125,36 @@ namespace large_numbers {
         return *this;
     }
 
+    UInt UInt::operator<<(uint32_t offset) const {
+        UInt result(*this);
+        uint32_t zero_blocks = offset / 32u;
+        uint32_t reminder = static_cast<int>(offset % 32u);
+        uint32_t reminder_comp = (32u - reminder);
+        uint32_t carry = 0;
+        for (auto i = result._values.begin(); i != result._values.end(); ++i) {
+            uint64_t val = static_cast<uint64_t>(*i);
+            uint32_t next_value = static_cast<uint32_t>((val << reminder) | carry);
+            carry = (val >> reminder_comp);
+            *i = next_value;
+        }
+        if (carry) {
+            result._values.push_back(carry);
+        }
+
+        for (int i = 0; i < zero_blocks; ++i) {
+            result._values.insert(result._values.cbegin(), 0);
+        }
+
+        return result;
+    }
+
     std::string UInt::toString(int base) const {
         switch (base) {
             case 16: {
-                std::stringstream ss;
-                ss << "0X" << std::hex;
-                for (int i = size() - 1; i >= 0; --i) {
-                    if (i != size() - 1) {
-                        ss << std::setfill('0') << std::setw(8);
-                    }
-                    ss << _values[i];
-                }
-                std::string result = ss.str();
-                std::transform(result.begin(), result.end(), result.begin(), ::toupper);
-                return result;
+                return base16StringOf(*this);
             }
             default:
-                throw Error("Base not supported");
+                throw Error("Base not supported " + std::to_string(base));
         }
     }
 
@@ -148,6 +162,10 @@ namespace large_numbers {
         return _values.size();
     }
 
+    uint32_t UInt::getBlock(int i) const {
+        return _values[i];
+    }
+    
     UInt UInt::negate() const {
         UInt result;
         for (uint32_t _value : _values) {

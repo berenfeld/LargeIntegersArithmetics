@@ -11,7 +11,7 @@ namespace large_numbers
     public:
         UInt();
         UInt(uint32_t value);
-        UInt(const std::string& str, int base = 10);
+        UInt(const std::string& str, int base = 0);
 
         // comparison
         bool operator ==(const UInt& other) const;
@@ -32,7 +32,12 @@ namespace large_numbers
         // multiplication
         UInt operator *(uint32_t arg) const;
 
+        // shift
+        UInt operator <<(uint32_t offset) const;
+
         [[nodiscard]] size_t size() const;
+        uint32_t getBlock(int i) const;
+
         [[nodiscard]] std::string toString(int base = 10) const;
 
         friend std::ostream& operator<<(std::ostream& os, const UInt& value) {

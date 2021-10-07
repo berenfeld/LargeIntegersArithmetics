@@ -14,13 +14,9 @@ if(CODE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   target_compile_options(coverage_config INTERFACE
     -O0        # no optimization
     -g         # generate debug info
-    --coverage # sets all required flags
+    --coverage # sets all required flags    
   )
-  if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
-    target_link_options(coverage_config INTERFACE --coverage)
-  else()
-    target_link_libraries(coverage_config INTERFACE --coverage)
-  endif()
+  target_link_libraries(coverage_config INTERFACE gcov)
 endif(CODE_COVERAGE AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
 file(GLOB LargeIntsSrcs "${PROJECT_SOURCE_DIR}/src/*.cpp")
@@ -38,9 +34,3 @@ add_executable(TestLargeInts ${TestLargeIntsSrcs})
 target_include_directories(TestLargeInts PUBLIC ${LargeIntsIncludes})
 target_link_libraries(TestLargeInts LargeInts gtest gtest_main pthread)
 gtest_discover_tests(TestLargeInts AUTO)
-
-add_compile_options(-g -O0 -fprofile-arcs -ftest-coverage)
-target_link_libraries(
-        TestLargeInts
-        gcov
-)

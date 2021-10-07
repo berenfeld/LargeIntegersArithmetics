@@ -4,7 +4,9 @@
 #include <algorithm>
 #include <string>
 #include <cmath>
-
+#include <iomanip>
+#include <iostream>
+#include "error.h"
 
 namespace large_numbers
 {
@@ -31,7 +33,7 @@ namespace large_numbers
         uint32_t value;
         const size_t DWORD_HEX_STRING_LEN = 8;
         // remove prefix 0x or 0X
-        if ((left.rfind("0x", 0) == 0) || (left.rfind("0x", 0) == 0)) {
+        if ((left.rfind("0x", 0) == 0) || (left.rfind("0X", 0) == 0)) {
             left = left.substr(2, left.size() - 2);
         }
         do
@@ -50,4 +52,41 @@ namespace large_numbers
         } while(true);
     }
 
+    std::string base16StringOf(const UInt& value, const std::string& prefix)
+    {
+        std::stringstream ss;
+        ss << prefix << std::hex;
+        for (int i = value.size() - 1; i >= 0; --i) {
+            if (i != value.size() - 1) {
+                ss << std::setfill('0') << std::setw(8);
+            }
+            ss << value.getBlock(i);
+        }
+        std::string result = ss.str();
+        std::transform(result.begin(), result.end(), result.begin(), ::toupper);
+        return result;
+    }
+
+    int guessBaseOf(const std::string& str)
+    {
+        if (str.empty()) {
+            return 10;
+        }
+        if ((str.rfind("0x", 0) == 0) || (str.rfind("0X", 0) == 0)) {
+            return 16;
+        }
+
+        if (std::find_if(str.begin(), str.end(), [](unsigned char c) { 
+            return !std::isdigit(c); 
+        }) == str.end()) {
+            return 10;
+        }
+        if (std::find_if(str.begin(), str.end(), [](unsigned char c) { 
+            return !std::isxdigit(c); 
+        }) == str.end()) {
+            return 16;
+        }
+        // no idea
+        throw Error("Invalid base " + str);
+    }
 }
