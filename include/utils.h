@@ -48,8 +48,8 @@ namespace large_numbers
     /**
     * @brief Generate a random number with the given number of blocks
     * if blocks is 0, MAX_RAND_UINT_BLOCKS are used
-    * @param blocks 
-    * @return UInt 
+    * @param blocks
+    * @return UInt
     */
     UInt rand(int blocks = 0);
 } // namespace large_numbers
