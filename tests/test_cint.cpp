@@ -6,12 +6,12 @@ using namespace large_numbers;
 
 TEST(UInt, Constructions) {
     UInt zero;
-    UInt one("1", 16);
+    UInt one("1");
     UInt one2(1);
     EXPECT_EQ(one, one2);
 
     UInt two = one * 2;
-    UInt two2("2", 16);
+    UInt two2("2");
     EXPECT_EQ(two, two2);
 }
 
@@ -19,7 +19,7 @@ TEST(UInt, Comparison) {
     UInt zero;
     EXPECT_EQ(zero, 0);
     EXPECT_NE(zero, 1);
-    UInt one("1", 16);
+    UInt one("1");
     UInt one2(1);
     UInt two(2);
     EXPECT_EQ(one, one2);
@@ -37,21 +37,21 @@ TEST(UInt, Addition) {
     EXPECT_EQ(UInt(3), c);
     EXPECT_EQ(UInt(5), c + 2);
 
-    UInt x("12341234123412341234123412341234", 16);
+    UInt x("12341234123412341234123412341234");
     x += x;
-    EXPECT_EQ(UInt("24682468246824682468246824682468", 16), x);
+    EXPECT_EQ(UInt("24682468246824682468246824682468"), x);
 
-    UInt y("0x88888888888888888888888888888888", 16);
+    UInt y("0x88888888888888888888888888888888");
     UInt z = y;
     z += y;
-    EXPECT_EQ(UInt("0x111111111111111111111111111111110", 16), z);
+    EXPECT_EQ(UInt("0x111111111111111111111111111111110"), z);
     y = 0;
     z = z + y;
-    EXPECT_EQ(UInt("0x111111111111111111111111111111110", 16), z);
+    EXPECT_EQ(UInt("0x111111111111111111111111111111110"), z);
 
-    x = UInt("0x88888888888888888888888888888888", 16);
-    y = UInt("0xFFF888888888888888888888", 16);
-    EXPECT_EQ(x + y, UInt("0x88888889888111111111111111111110", 16));
+    x = UInt("0x88888888888888888888888888888888");
+    y = UInt("0xFFF888888888888888888888");
+    EXPECT_EQ(x + y, UInt("0x88888889888111111111111111111110"));
 }
 
 TEST(UInt, Substraction) {
@@ -64,24 +64,24 @@ TEST(UInt, Substraction) {
     UInt c = a - b;
     EXPECT_EQ(UInt(3), c);
 
-    UInt k("24682468246824682468246824682468", 16);
-    UInt x("12341234123412341234123412341234", 16);
+    UInt k("24682468246824682468246824682468");
+    UInt x("12341234123412341234123412341234");
     k -= x;
-    EXPECT_EQ(UInt("12341234123412341234123412341234", 16), k);
+    EXPECT_EQ(UInt("12341234123412341234123412341234"), k);
 
-    UInt z("88888888888888888888888888888888", 16);
-    UInt y(           "777777777777777777777", 16);
+    UInt z("88888888888888888888888888888888");
+    UInt y(           "777777777777777777777");
     z = z - y;
-    EXPECT_EQ(UInt("88888888888111111111111111111111", 16), z);
+    EXPECT_EQ(UInt("88888888888111111111111111111111"), z);
     z = 0;
     EXPECT_EQ(y, y-z);
 
-    z = UInt("0x100000000000000000000000000000000", 16);
+    z = UInt("0x100000000000000000000000000000000");
     y = UInt(0x1);
-    EXPECT_EQ(UInt("0xffffffffffffffffffffffffffffffff", 16), z - y);
+    EXPECT_EQ(UInt("0xffffffffffffffffffffffffffffffff"), z - y);
 
-    z = UInt("0x100000000000000000000000000000000", 16);
-    y = UInt("0xffffffffffffffffffffffffffffffff", 16);
+    z = UInt("0x100000000000000000000000000000000");
+    y = UInt("0xffffffffffffffffffffffffffffffff");
     EXPECT_EQ(UInt(0x1), z-y);
 }
 
@@ -90,13 +90,34 @@ TEST(UInt, MultiplyImmidiate) {
     UInt b = a * 5678;
     EXPECT_EQ(UInt(1234 * 5678), b);
 
-    UInt x("FFFFFFFF", 16);
+    UInt x("FFFFFFFF");
     EXPECT_EQ(UInt(0xFFFFFFFFULL), x);
     UInt y = x * 16;
-    EXPECT_EQ(UInt("FFFFFFFF0", 16), y);
+    EXPECT_EQ(UInt("FFFFFFFF0"), y);
+}
+
+TEST(UInt, Shift) {
+    UInt test("0x10000000");
+    EXPECT_EQ(UInt("0x10000000"), test << 0);
+    EXPECT_EQ(UInt("0x20000000"), test << 1);
+    EXPECT_EQ(UInt("0x100000000"), test << 4);
+    EXPECT_EQ(UInt("0x100000000000"), test << 16);
+    EXPECT_EQ(UInt("0x1000000000000000"), test << 32);
+
+    UInt test2("0x1234567812345678");
+    EXPECT_EQ(UInt("0x12345678123456780"), test2 << 4);
+    EXPECT_EQ(UInt("0X2468ACF02468ACF00"), test2 << 5);
+    EXPECT_EQ(UInt("0x123456781234567800"), test2 << 8);
+    EXPECT_EQ(UInt("0x123456781234567800000000"), test2 << 32);
+    EXPECT_EQ(UInt("0X2468ACF02468ACF0000000000"), test2 << 37);
+    EXPECT_EQ(UInt("0x12345678123456780000000000000000"), test2 << 64);
+    EXPECT_EQ(UInt("0x123456781234567800000000000000000000000000000000"), test2 << 128);
 }
 
 TEST(UInt, Base10String) {
+    UInt zero("");
+    EXPECT_TRUE(zero == 0);
+    
     UInt test("256");
     EXPECT_EQ("0X100", test.toString(16));
 
@@ -110,11 +131,13 @@ TEST(UInt, Base10String) {
 }
 
 TEST(UInt, Base16String) {
-    UInt test("ABCDABCD", 16);
+    UInt test("ABCDABCD");
     EXPECT_EQ("0XABCDABCD", test.toString(16));
 }
 
 TEST(UInt, ErrorConditions) {
     EXPECT_THROW(new large_numbers::UInt("TEST", 3), large_numbers::Error);
     EXPECT_THROW(large_numbers::UInt().toString(3), large_numbers::Error);
+    EXPECT_THROW(large_numbers::UInt("-3"), large_numbers::Error);
+    EXPECT_THROW(large_numbers::UInt("prime"), large_numbers::Error);
 }

@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "uint.h"
+#include "consts.h"
 
 namespace large_numbers
 {
@@ -23,9 +24,21 @@ namespace large_numbers
     void parseBase16StringValues(const std::string& str, std::vector<uint32_t>& values);
 
     /**
-     * @brief return the position of the left most bit of n
-     * @param n
-     * @return
+     * @brief Format a base16 string of the given value
+     * 
+     * @param value 
+     * @param prefix 
+     * @return std::string 
      */
-    uint8_t last_bit(int n);
+    std::string base16StringOf(const UInt& value, const std::string& prefix = "0X");
+
+    /**
+     * @brief Try to make an educated guess for the base of str
+     * The guess is natural. if the string starts with 0x or 0X its base 16,
+     * else if its only digits its base 10, else if its only hexadecimal its base 16,
+     *
+     * @param str 
+     * @return int 
+     */
+    int guessBaseOf(const std::string& str);
 }

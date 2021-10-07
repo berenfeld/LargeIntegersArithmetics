@@ -1,4 +1,4 @@
 {
     "debug.allowBreakpointsEverywhere": true,
-    "workbench.startupEditor": "none"
+    "workbench.startupEditor": "none",    
 }
