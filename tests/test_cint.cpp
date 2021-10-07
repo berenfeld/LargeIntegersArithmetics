@@ -1,5 +1,6 @@
 #include "error.h"
 #include "uint.h"
+#include "utils.h"
 #include <gtest/gtest.h>
 
 using namespace large_numbers;
@@ -149,4 +150,13 @@ TEST(UInt, ErrorConditions)
     EXPECT_THROW(large_numbers::UInt().toString(3), large_numbers::Error);
     EXPECT_THROW(large_numbers::UInt("-3"), large_numbers::Error);
     EXPECT_THROW(large_numbers::UInt("prime"), large_numbers::Error);
+}
+
+TEST(UInt, Random)
+{
+    // test that we have fixed seed for now
+    EXPECT_EQ(UInt("0X327B23C6"), large_numbers::rand(1));
+    EXPECT_EQ(UInt("0X66334873"), large_numbers::rand(2));
+    EXPECT_EQ(UInt("0X19495CFF2AE8944A"), large_numbers::rand(3));
+    EXPECT_EQ(UInt("0X238E1F2946E87CCD3D1B58BA507ED7AB2EB141F241B71EFB79E2A9E37545E146515F007C5BD062C2122008544DB127F8"), large_numbers::rand());
 }
