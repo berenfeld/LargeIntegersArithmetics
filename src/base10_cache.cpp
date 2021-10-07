@@ -16,17 +16,14 @@ namespace large_numbers
 
         void initCache()
         {
-            if (!_cache.empty())
-            {
+            if (!_cache.empty()) {
                 return;
             }
             int digit_pos = 0;
             UInt base10_num(1);
             for (; digit_pos < MAX_DECIMAL_DIGITS;
-                 ++digit_pos, base10_num = base10_num * 10)
-            {
-                for (int digit_value = 0; digit_value < 10; ++digit_value)
-                {
+                 ++digit_pos, base10_num = base10_num * 10) {
+                for (int digit_value = 0; digit_value < 10; ++digit_value) {
                     _cache[makeKey(digit_pos, digit_value)] = base10_num * digit_value;
                 }
             }
