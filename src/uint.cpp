@@ -140,6 +140,72 @@ namespace large_numbers
         return result;
     }
 
+    UInt UInt::operator/(const UInt &other) const
+    {
+        UInt q, r;
+        div_mod(*this, other, q, r);
+        return q;
+    }
+
+    UInt UInt::operator/=(const UInt &other)
+    {
+        UInt r;
+        div_mod(*this, other, *this, r);
+        return *this;
+    }
+
+    UInt UInt::operator%(const UInt &other) const
+    {
+        UInt q, r;
+        div_mod(*this, other, q, r);
+        return r;
+    }
+
+    // static
+    void UInt::div_mod(const UInt &a, const UInt &b, UInt &q, UInt &r)
+    {
+        r = a;
+        q = UInt(0);
+        UInt one = UInt(1);
+        UInt to_sub;
+        while (r >= b) {
+            size_t r_len = r.bits();
+            size_t b_len = b.bits();
+            size_t zeros = r_len - b_len;
+            q += (one << zeros);
+            to_sub = b << zeros;
+            r -= to_sub;
+        }
+    }
+
+    bool UInt::operator<(const UInt &other) const { return compare(*this, other) < 0; }
+    bool UInt::operator<=(const UInt &other) const { return compare(*this, other) <= 0; }
+    bool UInt::operator>(const UInt &other) const { return compare(*this, other) > 0; }
+    bool UInt::operator>=(const UInt &other) const { return compare(*this, other) >= 0; }
+    // static
+    int8_t UInt::compare(const UInt &a, const UInt &b)
+    {
+        if (a.size() < b.size())
+            return -1;
+        if (a.size() > b.size())
+            return 1;
+        if (lastBit(a.lastBlock()) < lastBit(b.lastBlock()))
+            return -1;
+        if (lastBit(a.lastBlock()) > lastBit(b.lastBlock()))
+            return 1;
+        auto ia = a._values.rbegin();
+        auto ib = b._values.rbegin();
+        for (; ia != a._values.rend() && ib != b._values.rend(); ia++, ib++) {
+            if (*ia != *ib) {
+                if (*ia < *ib)
+                    return -1;
+                if (*ia > *ib)
+                    return 1;
+            }
+        }
+        return 0;
+    }
+
     std::string UInt::toString(int base) const
     {
         switch (base) {
@@ -153,7 +219,8 @@ namespace large_numbers
 
     size_t UInt::size() const { return _values.size(); }
 
-    uint32_t UInt::getBlock(int i) const { return _values[i]; }
+    uint32_t UInt::block(int i) const { return _values[i]; }
+    uint32_t UInt::lastBlock() const { return _values[size() - 1]; }
 
     UInt UInt::negate() const
     {
@@ -167,4 +234,7 @@ namespace large_numbers
         }
         return result;
     }
+
+    size_t UInt::bits() const { return (size() - 1) * 32 + lastBit(lastBlock()); }
+
 } // namespace large_numbers

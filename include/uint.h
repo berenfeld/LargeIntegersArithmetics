@@ -35,8 +35,23 @@ namespace large_numbers
         // shift
         UInt operator<<(uint32_t offset) const;
 
+        // division
+        UInt operator/(const UInt &other) const;
+        UInt operator/=(const UInt &other);
+        UInt operator%(const UInt &other) const;
+        static void div_mod(const UInt &a, const UInt &b, UInt &q, UInt &r);
+
+        // comparison
+        bool operator<(const UInt &other) const;
+        bool operator<=(const UInt &other) const;
+        bool operator>(const UInt &other) const;
+        bool operator>=(const UInt &other) const;
+        static int8_t compare(const UInt &a, const UInt &b);
+
         [[nodiscard]] size_t size() const;
-        uint32_t getBlock(int i) const;
+        uint32_t block(int i) const;
+        uint32_t lastBlock() const;
+        size_t bits() const;
 
         [[nodiscard]] std::string toString(int base = 10) const;
 

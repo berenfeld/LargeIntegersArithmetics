@@ -12,6 +12,5 @@ vscode:
     - cschlosser.doxdocgen
     - webfreak.debug
     - eamodio.gitlens
-    - https://ms-vscode.gallery.vsassets.io/_apis/public/gallery/publisher/ms-vscode/extension/cpptools/1.6.0/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage
-    - https://matepek.gallery.vsassets.io/_apis/public/gallery/publisher/matepek/extension/vscode-catch2-test-adapter/3.6.32/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage
-
+    - https://github.com/microsoft/vscode-cpptools/releases/download/1.7.0-insiders2/cpptools-linux.vsix
+    - https://github.com/matepek/vscode-catch2-test-adapter/releases/download/v3.6.32/matepek-vscode-catch2-test-adapter-3.6.32.vsix

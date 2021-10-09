@@ -54,4 +54,13 @@ namespace large_numbers
 
     std::string executeCommand(const std::string &command, int &return_code);
 
+    /**
+     * @brief Returns the place of the most significant bit in the
+     * binary representation of n
+     *
+     * @param n
+     * @return uint8_t
+     */
+    uint8_t lastBit(uint32_t n);
+
 } // namespace large_numbers
