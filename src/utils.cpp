@@ -33,7 +33,7 @@ namespace large_numbers
         base10_cache::initCache();
 
         std::string str_copy = str;
-        UInt result;
+        UInt result = 0;
         int digit_pos = 0;
         const size_t len = str.size();
         while (digit_pos != len) {
@@ -68,6 +68,26 @@ namespace large_numbers
             ss >> value;
             values.push_back(value);
         } while (true);
+    }
+
+    std::string base10StringOf(const UInt &value)
+    {
+        if (value == UInt(0)) {
+            return "0";
+        }
+        std::stringstream ss;
+
+        const UInt UINT_10 = UInt(10);
+        UInt num = value;
+        UInt q, r;
+        while (num != 0) {
+            UInt::div_mod(num, UINT_10, q, r);
+            num = q;
+            ss << static_cast<char>('0' + r.block(0));
+        }
+        std::string result = ss.str();
+        std::reverse(result.begin(), result.end());
+        return result;
     }
 
     std::string base16StringOf(const UInt &value, const std::string &prefix)

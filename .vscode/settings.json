@@ -3,11 +3,14 @@
     "workbench.startupEditor": "none",
     "editor.formatOnSave": true,
     "editor.formatOnType": true,
-    "editor.defaultFormatter": "ms-vscode.cpptools",
+    "editor.defaultFormatter": "cschlosser.doxdocgen",
     "editor.tabSize": 4,
     "editor.insertSpaces": true,
     "files.trimTrailingWhitespace": true,
-    "editor.rulers": [120, 80],
+    "editor.rulers": [
+        120,
+        80
+    ],
     "testMate.cpp.debug.breakOnFailure": true,
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
 }

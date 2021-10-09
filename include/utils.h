@@ -34,6 +34,14 @@ namespace large_numbers
     std::string base16StringOf(const UInt &value, const std::string &prefix = "0X");
 
     /**
+     * @brief Return a bse 10 representation of the given value
+     *
+     * @param value
+     * @return std::string
+     */
+    std::string base10StringOf(const UInt &value);
+
+    /**
      * @brief Try to make an educated guess for the base of str
      * The guess is natural. if the string starts with 0x or 0X its base 16,
      * else if its only digits its base 10, else if its only hexadecimal its base
