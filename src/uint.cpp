@@ -27,15 +27,11 @@ namespace large_numbers
             break;
         }
         default:
-            throw Error("Base not supported " + std::to_string(base) + " for : '" +
-                        str + "'");
+            throw Error("Base not supported " + std::to_string(base) + " for : '" + str + "'");
         }
     }
 
-    bool UInt::operator==(const UInt &other) const
-    {
-        return _values == other._values;
-    }
+    bool UInt::operator==(const UInt &other) const { return _values == other._values; }
 
     bool UInt::operator==(uint32_t value) const
     {
@@ -57,10 +53,8 @@ namespace large_numbers
         uint32_t add_to_next_value = 0;
         int i = 0;
         while (i < max_block) {
-            uint64_t added_value =
-                static_cast<uint64_t>(_values[i]) +
-                static_cast<uint64_t>(add_to_next_value) +
-                (i < other.size() ? static_cast<uint64_t>(other._values[i]) : 0);
+            uint64_t added_value = static_cast<uint64_t>(_values[i]) + static_cast<uint64_t>(add_to_next_value) +
+                                   (i < other.size() ? static_cast<uint64_t>(other._values[i]) : 0);
             _values[i] = static_cast<uint32_t>(added_value);
             add_to_next_value = added_value >> 32;
             ++i;

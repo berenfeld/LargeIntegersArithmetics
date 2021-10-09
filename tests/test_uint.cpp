@@ -56,6 +56,28 @@ TEST(UInt, Addition)
     x = UInt("0x88888888888888888888888888888888");
     y = UInt("0xFFF888888888888888888888");
     EXPECT_EQ(x + y, UInt("0x88888889888111111111111111111110"));
+
+    for (auto i = 0; i < 10; ++i) {
+        UInt r1 = large_numbers::rand();
+        UInt r2 = large_numbers::rand();
+        UInt r1_r2 = r1 + r2;
+        EXPECT_EQ(r1_r2, r1 + r2);
+        UInt r1b = r1_r2 - r2;
+        UInt r2b = r1_r2 - r1;
+        EXPECT_EQ(r1b, r1);
+        EXPECT_EQ(r2b, r2);
+    }
+
+    int return_code;
+    for (auto i = 0; i < 10; ++i) {
+        UInt r1 = large_numbers::rand();
+        UInt r2 = large_numbers::rand();
+        std::string command = "python -c 'print(hex(" + r1.toString(16) + " + " + r2.toString(16) + "))'";
+        std::string result = executeCommand(command, return_code);
+        EXPECT_EQ(0, return_code) << "Failed executing command " << command;
+        UInt r1_r2(result);
+        EXPECT_EQ(r1_r2, r1 + r2);
+    }
 }
 
 TEST(UInt, Substraction)
@@ -88,6 +110,18 @@ TEST(UInt, Substraction)
     z = UInt("0x100000000000000000000000000000000");
     y = UInt("0xffffffffffffffffffffffffffffffff");
     EXPECT_EQ(UInt(0x1), z - y);
+
+    int return_code;
+    for (auto i = 0; i < 10; ++i) {
+        UInt r1 = large_numbers::rand();
+        UInt r2 = large_numbers::rand();
+        UInt r1_r2 = r1 + r2;
+        std::string command = "python -c 'print(hex(" + r1_r2.toString(16) + " - " + r1.toString(16) + "))'";
+        std::string result = executeCommand(command, return_code);
+        EXPECT_EQ(0, return_code);
+        UInt r2b(result);
+        EXPECT_EQ(r2b, r2);
+    }
 }
 
 TEST(UInt, MultiplyImmidiate)
@@ -146,17 +180,21 @@ TEST(UInt, Base16String)
 
 TEST(UInt, ErrorConditions)
 {
-    EXPECT_THROW(new large_numbers::UInt("TEST", 3), large_numbers::Error);
-    EXPECT_THROW(large_numbers::UInt().toString(3), large_numbers::Error);
-    EXPECT_THROW(large_numbers::UInt("-3"), large_numbers::Error);
-    EXPECT_THROW(large_numbers::UInt("prime"), large_numbers::Error);
+    EXPECT_THROW(new UInt("TEST", 3), large_numbers::Error);
+    EXPECT_THROW(UInt().toString(3), large_numbers::Error);
+    EXPECT_THROW(UInt("-3"), large_numbers::Error);
+    EXPECT_THROW(UInt("prime"), large_numbers::Error);
+    int unused;
 }
 
 TEST(UInt, Random)
 {
     // test that we have fixed seed for now
+    srand(0);
     EXPECT_EQ(UInt("0X327B23C6"), large_numbers::rand(1));
     EXPECT_EQ(UInt("0X66334873"), large_numbers::rand(2));
     EXPECT_EQ(UInt("0X19495CFF2AE8944A"), large_numbers::rand(3));
-    EXPECT_EQ(UInt("0X238E1F2946E87CCD3D1B58BA507ED7AB2EB141F241B71EFB79E2A9E37545E146515F007C5BD062C2122008544DB127F8"), large_numbers::rand());
+    EXPECT_EQ(
+        UInt("0X238E1F2946E87CCD3D1B58BA507ED7AB2EB141F241B71EFB79E2A9E37545E146515F007C5BD062C2122008544DB127F8"),
+        large_numbers::rand());
 }

@@ -3,5 +3,5 @@ IndentWidth: 4
 BreakBeforeBraces: Linux
 AllowShortIfStatementsOnASingleLine: false
 IndentCaseLabels: false
-ColumnLimit: 0
 NamespaceIndentation: All
+ColumnLimit: 120
