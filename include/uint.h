@@ -40,10 +40,7 @@ namespace large_numbers
 
         [[nodiscard]] std::string toString(int base = 10) const;
 
-        friend std::ostream &operator<<(std::ostream &os, const UInt &value)
-        {
-            return os << value.toString(16);
-        }
+        friend std::ostream &operator<<(std::ostream &os, const UInt &value) { return os << value.toString(16); }
 
         class UIntHash
         {
@@ -60,13 +57,13 @@ namespace large_numbers
 
       private:
         /**
-     * @brief negate all the bits in the number, and after negation trim leading
-     * zeros note : unlike fixed size ~ operator this operator does not reverse.
-     * i.e sometimes negate(negate(x)) != x
-     * TODO : formalize it, using either fixed block size argument or storing of
-     * "negate back" block size
-     * @return UInt
-     */
+         * @brief negate all the bits in the number, and after negation trim leading
+         * zeros note : unlike fixed size ~ operator this operator does not reverse.
+         * i.e sometimes negate(negate(x)) != x
+         * TODO : formalize it, using either fixed block size argument or storing of
+         * "negate back" block size
+         * @return UInt
+         */
         [[nodiscard]] UInt negate() const;
 
         std::vector<uint32_t> _values;

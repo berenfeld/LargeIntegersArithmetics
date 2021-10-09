@@ -12,6 +12,22 @@
 
 namespace large_numbers
 {
+    void ltrim(std::string &s)
+    {
+        s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) { return !std::isspace(ch); }));
+    }
+
+    void rtrim(std::string &s)
+    {
+        s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) { return !std::isspace(ch); }).base(), s.end());
+    }
+
+    void trim(std::string &s)
+    {
+        ltrim(s);
+        rtrim(s);
+    }
+
     UInt parseBase10StringValues(const std::string &str)
     {
         base10_cache::initCache();
@@ -29,10 +45,10 @@ namespace large_numbers
         return result;
     }
 
-    void parseBase16StringValues(const std::string &str,
-                                 std::vector<uint32_t> &values)
+    void parseBase16StringValues(const std::string &str, std::vector<uint32_t> &values)
     {
         std::string left = str;
+        trim(left);
         uint32_t value;
         const size_t DWORD_HEX_STRING_LEN = 8;
         // remove prefix 0x or 0X
@@ -101,6 +117,18 @@ namespace large_numbers
                 result = result << 32;
             }
         }
+        return result;
+    }
+
+    std::string executeCommand(const std::string &command, int &return_code)
+    {
+        std::array<char, 128> buffer;
+        std::string result;
+        FILE *pipe = popen(command.c_str(), "r");
+        while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
+            result += buffer.data();
+        }
+        return_code = pclose(pipe);
         return result;
     }
 } // namespace large_numbers
