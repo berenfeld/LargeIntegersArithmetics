@@ -2,6 +2,7 @@
 #include "error.h"
 #include "utils.h"
 #include <algorithm>
+#include <assert.h>
 #include <cmath>
 #include <sstream>
 
@@ -9,7 +10,12 @@ namespace large_numbers
 {
     UInt::UInt() {}
 
-    UInt::UInt(uint32_t value) { _values.push_back(value); }
+    UInt::UInt(uint32_t value)
+    {
+        if (value) {
+            _values.push_back(value);
+        }
+    }
 
     UInt::UInt(const std::string &str, int base)
     {
@@ -171,10 +177,17 @@ namespace large_numbers
         while (r >= b) {
             size_t r_len = r.bits();
             size_t b_len = b.bits();
-            size_t zeros = r_len - b_len;
+            if (r_len <= b_len + 1) {
+                break;
+            }
+            size_t zeros = r_len - b_len - 1;
             q += (one << zeros);
             to_sub = b << zeros;
             r -= to_sub;
+        }
+        while (r >= b) {
+            q += 1;
+            r -= b;
         }
     }
 
@@ -209,16 +222,16 @@ namespace large_numbers
     std::string UInt::toString(int base) const
     {
         switch (base) {
-        case 16: {
+        case 16:
             return base16StringOf(*this);
-        }
+        case 10:
+            return base10StringOf(*this);
         default:
             throw Error("Base not supported " + std::to_string(base));
         }
     }
 
     size_t UInt::size() const { return _values.size(); }
-
     uint32_t UInt::block(int i) const { return _values[i]; }
     uint32_t UInt::lastBlock() const { return _values[size() - 1]; }
 
