@@ -27,6 +27,19 @@ TEST(UInt, Comparison)
     UInt two(2);
     EXPECT_EQ(one, one2);
     EXPECT_NE(one, two);
+    EXPECT_TRUE(one >= one2);
+    EXPECT_TRUE(one <= one2);
+    EXPECT_TRUE(one < two);
+    EXPECT_TRUE(two > one);
+    EXPECT_FALSE(one >= two);
+    EXPECT_FALSE(two <= one);
+
+    UInt four(4);
+    UInt six(6);
+    EXPECT_FALSE(four > six);
+    EXPECT_FALSE(four >= six);
+    EXPECT_TRUE(four < six);
+    EXPECT_TRUE(four <= six);
 }
 
 TEST(UInt, Addition)
@@ -185,6 +198,33 @@ TEST(UInt, ErrorConditions)
     EXPECT_THROW(UInt("-3"), large_numbers::Error);
     EXPECT_THROW(UInt("prime"), large_numbers::Error);
     int unused;
+}
+
+TEST(UInt, Division)
+{
+    UInt a(7);
+    UInt b(2);
+    a /= b;
+    EXPECT_EQ(UInt(3), a);
+    EXPECT_EQ(UInt(1), a % b);
+
+    a = 7;
+    b = 2;
+    UInt c = a / b;
+    EXPECT_EQ(UInt(3), c);
+
+    UInt k("24682468246824682468246824682468", 16);
+    UInt x("12341234123412341234123412341234", 16);
+    c = k / x;
+    EXPECT_EQ(UInt(2), c);
+
+    c = k / 2;
+    EXPECT_EQ(x, c);
+
+    EXPECT_EQ(a, a / 1);
+    EXPECT_EQ(b, b / 1);
+    EXPECT_EQ(c, c / 1);
+    EXPECT_EQ(k, k / 1);
 }
 
 TEST(UInt, Random)

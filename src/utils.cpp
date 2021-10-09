@@ -78,7 +78,7 @@ namespace large_numbers
             if (i != value.size() - 1) {
                 ss << std::setfill('0') << std::setw(8);
             }
-            ss << value.getBlock(i);
+            ss << value.block(i);
         }
         std::string result = ss.str();
         std::transform(result.begin(), result.end(), result.begin(), ::toupper);
@@ -131,4 +131,7 @@ namespace large_numbers
         return_code = pclose(pipe);
         return result;
     }
+
+    uint8_t lastBit(uint32_t n) { return (int)log2(n) + 1; }
+
 } // namespace large_numbers
