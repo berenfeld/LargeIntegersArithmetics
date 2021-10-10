@@ -7,42 +7,47 @@ on:
     branches: [ main ]
 
 env:
-  BUILD_TYPE: Debug
   COVERAGE_PERCENT: 100
 jobs:
   build:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        BUILD_TYPE: [Release, Debug]
 
-    steps:        
+    steps:
     - name: Install libraries
       run: sudo apt-get install -y --no-install-recommends libgtest-dev gcovr clang-format
-         
+
     - name: Checkout
       uses: actions/checkout@v2
-    
+
     - name: Check Format
       run: |
         clang-format --version
         clang-format --verbose -i src/* include/* tests/*
         git diff-index --quiet HEAD
 
-    - name: Configure CMake      
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build/${{matrix.BUILD_TYPE}} -DCMAKE_BUILD_TYPE=${{matrix.BUILD_TYPE}}
 
     - name: Build
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --build ${{github.workspace}}/build/${{matrix.BUILD_TYPE}} --config ${{matrix.BUILD_TYPE}}
 
     - name: Test
-      working-directory: ${{github.workspace}}/build
-      run: ctest -C ${{env.BUILD_TYPE}}
-      
+      working-directory: ${{github.workspace}}/build/${{matrix.BUILD_TYPE}}
+      run: ctest -C ${{matrix.BUILD_TYPE}}
+
     - name: Coverage Report
+      if: ${{ matrix.BUILD_TYPE }} == 'Debug'
       run: |
-        mkdir -p build/coverage/html
-        gcovr -s -r . --html --html-details -o build/coverage/html/index.html --fail-under-line  ${{env.COVERAGE_PERCENT}}
-        
+        mkdir -p build/${{ matrix.BUILD_TYPE }}/coverage/html
+        gcovr -s -r . --html --html-details -o build/${{ matrix.BUILD_TYPE }}/coverage/html/index.html \
+        --fail-under-line  ${{env.COVERAGE_PERCENT}}
+
     - name: Coverage Report Artifact
+      if: ${{ matrix.BUILD_TYPE }} == 'Debug'
       uses: actions/upload-artifact@v2
       with:
           name: code-coverage-report
-          path: build/coverage/html
+          path: build/${{ matrix.BUILD_TYPE }}/coverage/html

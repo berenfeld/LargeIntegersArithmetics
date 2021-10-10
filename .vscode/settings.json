@@ -14,5 +14,6 @@
     "testMate.cpp.debug.breakOnFailure": true,
     "editor.minimap.enabled": false,
     "gitlens.showWhatsNewAfterUpgrades": false,
-    "gitlens.showWelcomeOnInstall": false
+    "gitlens.showWelcomeOnInstall": false,
+    "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}"
 }
