@@ -37,6 +37,10 @@ namespace large_numbers
         UInt operator*(const UInt &arg) const;
         UInt &operator*=(const UInt &arg);
 
+        // power
+        static UInt pow(const UInt &base, uint32_t exp);
+        UInt &raiseToPower(uint32_t exp);
+
         // shift
         UInt operator<<(uint32_t offset) const;
 
