@@ -1,4 +1,5 @@
 #include "error.h"
+#include "primes_base.h"
 #include "uint.h"
 #include "utils.h"
 #include <gtest/gtest.h>
@@ -378,4 +379,39 @@ TEST(UInt, sqrt)
         powered.sqrt(result);
         EXPECT_EQ(base, result);
     }
+}
+
+TEST(UInt, BasicPrimeCheck)
+{
+    EXPECT_TRUE(isPrime(0));
+    EXPECT_TRUE(isPrime(1));
+    EXPECT_TRUE(isPrime(2));
+    EXPECT_TRUE(isPrime(3));
+    EXPECT_TRUE(isPrime(5));
+    EXPECT_TRUE(isPrime(7));
+    EXPECT_TRUE(isPrime(101));
+    EXPECT_TRUE(isPrime(997));
+
+    EXPECT_FALSE(isPrime(4));
+    EXPECT_FALSE(isPrime(6));
+    EXPECT_FALSE(isPrime(8));
+    EXPECT_FALSE(isPrime(9));
+    EXPECT_FALSE(isPrime(10));
+    EXPECT_FALSE(isPrime(1001));
+}
+
+TEST(UInt, PrimesBase)
+{
+    PrimesBase base(5); // 2,3,5,7,11
+    EXPECT_TRUE(base.contains(2));
+    EXPECT_TRUE(base.contains(3));
+    EXPECT_TRUE(base.contains(5));
+    EXPECT_TRUE(base.contains(10));
+    EXPECT_TRUE(base.contains(4));
+    EXPECT_TRUE(base.contains(40));
+    EXPECT_TRUE(base.contains(2 * 3 * 5 * 7 * 9 * 2 * 3 * 5 * 7 * 9));
+
+    EXPECT_FALSE(base.contains(13));
+    EXPECT_FALSE(base.contains(29));
+    EXPECT_FALSE(base.contains(2 * 3 * 5 * 7 * 17));
 }

@@ -77,4 +77,6 @@ namespace large_numbers
      */
     uint8_t lastBit(uint32_t n);
 
+    bool isPrime(uint32_t n);
+
 } // namespace large_numbers

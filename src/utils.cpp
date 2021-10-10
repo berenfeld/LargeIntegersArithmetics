@@ -155,4 +155,27 @@ namespace large_numbers
 
     uint8_t lastBit(uint32_t n) { return (int)log2(n) + 1; }
 
+    /**
+     * @brief basic primility check for small numbers
+     * check for divisors from 1 to sqrt(n)
+     * return true for 0,1
+     * @param n
+     * @return true
+     * @return false
+     */
+    bool isPrime(uint32_t n)
+    {
+        if (n <= 3) {
+            return true;
+        }
+        UInt q, r;
+        const uint32_t check_until = static_cast<uint32_t>(std::ceil(std::sqrt(static_cast<float>(n))));
+        for (uint32_t num = 2; num <= check_until; ++num) {
+            UInt::div_mod(n, num, q, r);
+            if (r == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 } // namespace large_numbers
