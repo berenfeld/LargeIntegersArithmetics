@@ -1,4 +1,5 @@
 #include "uint.h"
+#include "base2_cache.h"
 #include "error.h"
 #include "utils.h"
 #include <algorithm>
@@ -241,7 +242,6 @@ namespace large_numbers
     {
         r = a;
         q = UInt(0);
-        UInt one = UInt(1);
         UInt to_sub;
         while (r >= b) {
             size_t r_len = r.bits();
@@ -250,7 +250,7 @@ namespace large_numbers
                 break;
             }
             size_t zeros = r_len - b_len - 1;
-            q += (one << zeros);
+            q += base2Cache.get(zeros);
             to_sub = b << zeros;
             r -= to_sub;
         }

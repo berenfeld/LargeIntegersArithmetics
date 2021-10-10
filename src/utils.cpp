@@ -30,8 +30,6 @@ namespace large_numbers
 
     UInt parseBase10StringValues(const std::string &str)
     {
-        base10_cache::initCache();
-
         std::string str_copy = str;
         UInt result = 0;
         size_t digit_pos = 0;
@@ -39,7 +37,7 @@ namespace large_numbers
         while (digit_pos != len) {
             char digit = str_copy.at(len - digit_pos - 1);
             uint32_t digit_value = static_cast<int>(digit - '0');
-            result += base10_cache::getUint(digit_pos, digit_value);
+            result += base10Cache.get(digit_pos, digit_value);
             ++digit_pos;
         }
         return result;

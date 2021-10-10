@@ -15,5 +15,8 @@
     "editor.minimap.enabled": false,
     "gitlens.showWhatsNewAfterUpgrades": false,
     "gitlens.showWelcomeOnInstall": false,
-    "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}"
+    "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
+    "files.associations": {
+        "unordered_map": "cpp"
+    }
 }
