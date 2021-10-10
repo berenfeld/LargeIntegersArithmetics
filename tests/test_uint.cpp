@@ -236,6 +236,8 @@ TEST(UInt, Base10String)
 
 TEST(UInt, Base16String)
 {
+    UInt zero;
+    EXPECT_EQ("0X0", zero.toString(16));
     UInt test("ABCDABCD");
     EXPECT_EQ("0XABCDABCD", test.toString(16));
 }
@@ -246,7 +248,6 @@ TEST(UInt, ErrorConditions)
     EXPECT_THROW(UInt().toString(3), large_numbers::Error);
     EXPECT_THROW(UInt("-3"), large_numbers::Error);
     EXPECT_THROW(UInt("prime"), large_numbers::Error);
-    int unused;
 }
 
 TEST(UInt, Division)
