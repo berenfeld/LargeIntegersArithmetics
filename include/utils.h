@@ -7,6 +7,12 @@
 
 namespace large_numbers
 {
+    /**
+     * @brief Remove whitespaces from beginning and end of a string, in-place
+     *
+     * @param s
+     */
+    void trim(std::string &s);
 
     /**
      * @brief parse a base 10 string to uint32_t numbers

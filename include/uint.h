@@ -28,16 +28,23 @@ namespace large_numbers
         // subsctraction
         UInt &operator-=(const UInt &other);
         UInt operator-(const UInt &other) const;
+        UInt &operator-=(uint32_t arg);
+        UInt operator-(uint32_t arg);
 
         // multiplication
         UInt operator*(uint32_t arg) const;
+        UInt &operator*=(uint32_t arg);
+        UInt operator*(const UInt &arg) const;
+        UInt &operator*=(const UInt &arg);
 
         // shift
         UInt operator<<(uint32_t offset) const;
 
         // division
         UInt operator/(const UInt &other) const;
-        UInt operator/=(const UInt &other);
+        UInt &operator/=(const UInt &other);
+        UInt operator/(uint32_t other) const;
+        UInt &operator/=(uint32_t other);
         UInt operator%(const UInt &other) const;
         static void div_mod(const UInt &a, const UInt &b, UInt &q, UInt &r);
 
