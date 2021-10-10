@@ -57,6 +57,11 @@ namespace large_numbers
         static UInt power_modulo(const UInt &base, uint32_t exp, const UInt &modulo);
         UInt &raiseToPower(uint32_t exp, const UInt &modulo);
 
+        // root square
+        UInt& sqrt(UInt &result, uint32_t steps_limit) const;
+        UInt &sqrt(UInt &result) const;
+        UInt sqrt() const;
+
         // comparison
         bool operator<(const UInt &other) const;
         bool operator<=(const UInt &other) const;

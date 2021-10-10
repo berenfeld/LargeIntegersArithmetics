@@ -354,3 +354,27 @@ TEST(UInt, Random)
         UInt("0X238E1F2946E87CCD3D1B58BA507ED7AB2EB141F241B71EFB79E2A9E37545E146515F007C5BD062C2122008544DB127F8"),
         large_numbers::rand());
 }
+
+TEST(UInt, sqrt){
+    UInt x = 1;
+    EXPECT_EQ(x.sqrt(), UInt(1));
+    x = 4;
+    UInt result(0);
+    x.sqrt(result);
+    EXPECT_EQ(result, UInt(2));
+    EXPECT_EQ(x.sqrt(), UInt(2));
+    x = 25;
+    EXPECT_EQ(x.sqrt(), UInt(5));
+    x = UInt("4000000",10);
+    EXPECT_EQ(x.sqrt(), UInt("2000",10));
+    x = UInt("4000000000000000000000000000000000000000000000000",10);
+    EXPECT_EQ(x.sqrt(), UInt("2000000000000000000000000",10));
+
+    for (auto i = 0; i < 10; ++i) {
+        UInt base = large_numbers::rand(4);
+        UInt powered = UInt::pow(base, 2);
+        UInt result(0);
+        powered.sqrt(result);
+        EXPECT_EQ(base, result);
+    }
+}
