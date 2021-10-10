@@ -184,6 +184,34 @@ namespace large_numbers
         return *this;
     }
 
+    // static
+    UInt UInt::power_modulo(const UInt &base, uint32_t exp, const UInt &modulo)
+    {
+        // same as power, but modulo on each step
+        std::vector<UInt> powers(32);
+        UInt base_power = base;
+        for (uint8_t bit = 0; bit < lastBit(exp); ++bit) {
+            powers[bit] = base_power;
+            base_power *= base_power;
+            base_power %= modulo;
+        }
+        UInt result = 1;
+        uint32_t bit_value = 0x1;
+        for (uint8_t bit = 0; bit < lastBit(exp); ++bit) {
+            if (exp & bit_value) {
+                result *= powers[bit];
+                result %= modulo;
+            }
+            bit_value <<= 1;
+        }
+        return result;
+    }
+    UInt &UInt::raiseToPower(uint32_t exp, const UInt &modulo)
+    {
+        *this = power_modulo(*this, exp, modulo);
+        return *this;
+    }
+
     UInt UInt::operator<<(uint32_t offset) const
     {
         UInt result(*this);
@@ -235,6 +263,12 @@ namespace large_numbers
         UInt q, r;
         div_mod(*this, other, q, r);
         return r;
+    }
+
+    UInt &UInt::operator%=(const UInt &other)
+    {
+        *this = *this % other;
+        return *this;
     }
 
     // static
