@@ -212,6 +212,31 @@ namespace large_numbers
         return *this;
     }
 
+    UInt &UInt::sqrt(UInt &result, uint32_t steps_limit) const {
+        if (steps_limit<0)
+            steps_limit = INT32_MAX;
+
+        if (result==UInt(0)){
+            uint32_t len = this->bits()>>2;
+            result = UInt(1) << len;
+        }
+        UInt tmp = UInt(0);
+        UInt &old_res = tmp;
+        for (uint32_t i = 0; (i < steps_limit) && (old_res != result); i++){
+            old_res = result;
+            result = (result + (*this) / result)/2; //todo: implement >> and make it >>1
+        }
+        return result;
+    }
+    UInt &UInt::sqrt(UInt &result) const {
+        this->sqrt(result, -1);
+        return result;
+    }
+    UInt UInt::sqrt() const {
+        UInt result = *this;
+        this->sqrt(result);
+        return result;
+    }
     UInt UInt::operator<<(uint32_t offset) const
     {
         UInt result(*this);
