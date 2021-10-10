@@ -50,7 +50,12 @@ namespace large_numbers
         UInt operator/(uint32_t other) const;
         UInt &operator/=(uint32_t other);
         UInt operator%(const UInt &other) const;
+        UInt &operator%=(const UInt &other);
         static void div_mod(const UInt &a, const UInt &b, UInt &q, UInt &r);
+
+        // power modulo
+        static UInt power_modulo(const UInt &base, uint32_t exp, const UInt &modulo);
+        UInt &raiseToPower(uint32_t exp, const UInt &modulo);
 
         // comparison
         bool operator<(const UInt &other) const;

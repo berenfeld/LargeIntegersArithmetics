@@ -297,6 +297,13 @@ TEST(UInt, Modulo)
     UInt::div_mod(a, b, c, d);
     EXPECT_EQ(UInt(25), c);
     EXPECT_EQ(UInt(6), d);
+
+    UInt base = 2;
+    uint32_t exp = 10;
+    UInt modulo = 1000;
+    EXPECT_EQ(UInt::power_modulo(base, exp, modulo), 24);
+    base.raiseToPower(10, 1000);
+    EXPECT_EQ(base, 24);
 }
 
 TEST(UInt, power)
