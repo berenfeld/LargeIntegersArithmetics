@@ -155,6 +155,34 @@ namespace large_numbers
         return *this;
     }
 
+    // static
+    UInt UInt::pow(const UInt &base, uint32_t exp)
+    {
+        // build 2 powers of base based on the bits of exp
+        std::vector<UInt> powers(32);
+        UInt base_power = base;
+        for (uint8_t bit = 0; bit < lastBit(exp); ++bit) {
+            powers[bit] = base_power;
+            base_power *= base_power;
+        }
+        // now compute the power
+        UInt result = 1;
+        uint32_t bit_value = 0x1;
+        for (uint8_t bit = 0; bit < lastBit(exp); ++bit) {
+            if (exp & bit_value) {
+                result *= powers[bit];
+            }
+            bit_value <<= 1;
+        }
+        return result;
+    }
+
+    UInt &UInt::raiseToPower(uint32_t exp)
+    {
+        *this = pow(*this, exp);
+        return *this;
+    }
+
     UInt UInt::operator<<(uint32_t offset) const
     {
         UInt result(*this);

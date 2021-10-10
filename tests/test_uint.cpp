@@ -299,6 +299,43 @@ TEST(UInt, Modulo)
     EXPECT_EQ(UInt(6), d);
 }
 
+TEST(UInt, power)
+{
+    UInt one = 1;
+    EXPECT_EQ(UInt::pow(one, 1), 1);
+    EXPECT_EQ(UInt::pow(one, 2), 1);
+    EXPECT_EQ(UInt::pow(one, 0xFFFF), 1);
+    one.raiseToPower(1);
+    EXPECT_EQ(one, 1);
+    one.raiseToPower(2);
+    EXPECT_EQ(one, 1);
+    one.raiseToPower(0xFFFF);
+    EXPECT_EQ(one, 1);
+
+    UInt two = 2;
+    EXPECT_EQ(UInt::pow(two, 1), 2);
+    EXPECT_EQ(UInt::pow(two, 2), 4);
+    EXPECT_EQ(UInt::pow(two, 31), 0x80000000);
+    two.raiseToPower(1);
+    EXPECT_EQ(two, 2);
+    two.raiseToPower(2);
+    EXPECT_EQ(two, 4);
+    two.raiseToPower(4);
+    EXPECT_EQ(two, 0x100);
+
+    int return_code;
+    for (auto i = 0; i < 10; ++i) {
+        // cant go too large, otherwise it will take too long
+        UInt base = large_numbers::rand(4);
+        uint32_t exp = ::rand() % 10;
+        std::string command = "python -c 'print(" + base.toString() + " ** " + std::to_string(exp) + ")'";
+        std::string result = executeCommand(command, return_code);
+        EXPECT_EQ(0, return_code) << "Failed executing command " << command;
+        UInt base_to_exp(result);
+        EXPECT_EQ(base_to_exp, UInt::pow(base, exp));
+    }
+}
+
 TEST(UInt, Random)
 {
     // test that we have fixed seed for now
