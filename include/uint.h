@@ -55,12 +55,11 @@ namespace large_numbers
         bool operator>=(const UInt &other) const;
         static int8_t compare(const UInt &a, const UInt &b);
 
-        [[nodiscard]] size_t size() const;
+        size_t size() const;
         uint32_t block(int i) const;
         uint32_t lastBlock() const;
         size_t bits() const;
-
-        [[nodiscard]] std::string toString(int base = 10) const;
+        std::string toString(int base = 10) const;
 
         friend std::ostream &operator<<(std::ostream &os, const UInt &value) { return os << value.toString(16); }
 

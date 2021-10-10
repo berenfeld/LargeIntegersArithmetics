@@ -34,7 +34,7 @@ namespace large_numbers
 
         std::string str_copy = str;
         UInt result = 0;
-        int digit_pos = 0;
+        size_t digit_pos = 0;
         const size_t len = str.size();
         while (digit_pos != len) {
             char digit = str_copy.at(len - digit_pos - 1);
@@ -92,10 +92,13 @@ namespace large_numbers
 
     std::string base16StringOf(const UInt &value, const std::string &prefix)
     {
+        if (value.size() == 0) {
+            return "0X0";
+        }
         std::stringstream ss;
         ss << prefix << std::hex;
         for (int i = value.size() - 1; i >= 0; --i) {
-            if (i != value.size() - 1) {
+            if (static_cast<size_t>(i) != value.size() - 1) {
                 ss << std::setfill('0') << std::setw(8);
             }
             ss << value.block(i);

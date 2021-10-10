@@ -59,7 +59,7 @@ namespace large_numbers
         const size_t max_block = std::max(size(), other.size());
         _values.resize(max_block);
         uint32_t add_to_next_value = 0;
-        int i = 0;
+        size_t i = 0;
         while (i < max_block) {
             uint64_t added_value = static_cast<uint64_t>(_values[i]) + static_cast<uint64_t>(add_to_next_value) +
                                    (i < other.size() ? static_cast<uint64_t>(other._values[i]) : 0);
@@ -93,7 +93,7 @@ namespace large_numbers
         // other rounded up to 32. so we need to substract 2^n and add 1 back
         *this += other_negate;
         *this += 1;
-        for (int i = other_size; i < _values.size(); ++i) {
+        for (size_t i = other_size; i < _values.size(); ++i) {
             if (_values[i] != 0) {
                 --_values[i];
                 break;
@@ -141,7 +141,7 @@ namespace large_numbers
     UInt UInt::operator*(const UInt &arg) const
     {
         UInt result;
-        for (auto i = 0; i < arg.size(); ++i) {
+        for (size_t i = 0; i < arg.size(); ++i) {
             UInt interm = *this * arg.block(i);
             interm = interm << (i * 32);
             result += interm;
@@ -172,7 +172,7 @@ namespace large_numbers
             result._values.push_back(carry);
         }
 
-        for (int i = 0; i < zero_blocks; ++i) {
+        for (size_t i = 0; i < zero_blocks; ++i) {
             result._values.insert(result._values.cbegin(), 0);
         }
 
