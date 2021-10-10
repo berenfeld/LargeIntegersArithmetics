@@ -103,6 +103,9 @@ TEST(UInt, Substraction)
     b = 2;
     UInt c = a - b;
     EXPECT_EQ(UInt(3), c);
+    EXPECT_EQ(UInt(3), a - 2);
+    a -= 2;
+    EXPECT_EQ(UInt(3), a);
 
     UInt k("24682468246824682468246824682468");
     UInt x("12341234123412341234123412341234");
@@ -142,11 +145,53 @@ TEST(UInt, MultiplyImmidiate)
     UInt a(1234);
     UInt b = a * 5678;
     EXPECT_EQ(UInt(1234 * 5678), b);
+    a *= 5678;
+    EXPECT_EQ(UInt(1234 * 5678), a);
+    UInt c = a / 5678;
+    EXPECT_EQ(UInt(1234), c);
+    a /= 5678;
+    EXPECT_EQ(UInt(1234), a);
 
     UInt x("FFFFFFFF");
     EXPECT_EQ(UInt(0xFFFFFFFFULL), x);
     UInt y = x * 16;
     EXPECT_EQ(UInt("FFFFFFFF0"), y);
+}
+
+TEST(UInt, Multiply)
+{
+    UInt a(1234);
+    UInt b(5678);
+    EXPECT_EQ(UInt(1234 * 5678), a * b);
+    a *= b;
+    EXPECT_EQ(UInt(1234 * 5678), a);
+
+    UInt x("FFFFFFFF");
+    EXPECT_EQ(UInt(0xFFFFFFFFULL), x);
+    UInt y = x * UInt(16);
+    EXPECT_EQ(UInt("FFFFFFFF0"), y);
+
+    for (auto i = 0; i < 10; ++i) {
+        UInt r1 = large_numbers::rand();
+        UInt r2 = large_numbers::rand();
+        UInt r1_r2 = r1 * r2;
+        EXPECT_EQ(r1_r2, r1 * r2);
+        UInt r1b = r1_r2 / r2;
+        UInt r2b = r1_r2 / r1;
+        EXPECT_EQ(r1b, r1);
+        EXPECT_EQ(r2b, r2);
+    }
+
+    int return_code;
+    for (auto i = 0; i < 10; ++i) {
+        UInt r1 = large_numbers::rand();
+        UInt r2 = large_numbers::rand();
+        std::string command = "python -c 'print(" + r1.toString() + " * " + r2.toString() + ")'";
+        std::string result = executeCommand(command, return_code);
+        EXPECT_EQ(0, return_code) << "Failed executing command " << command;
+        UInt r1_r2(result);
+        EXPECT_EQ(r1_r2, r1 * r2);
+    }
 }
 
 TEST(UInt, Shift)
@@ -217,13 +262,6 @@ TEST(UInt, Division)
     UInt c = a / b;
     EXPECT_EQ(UInt(3), c);
 
-    a = 256;
-    b = 10;
-    UInt d;
-    UInt::div_mod(a, b, c, d);
-    EXPECT_EQ(UInt(25), c);
-    EXPECT_EQ(UInt(6), d);
-
     UInt k("24682468246824682468246824682468", 16);
     UInt x("12341234123412341234123412341234", 16);
     c = k / x;
@@ -236,6 +274,28 @@ TEST(UInt, Division)
     EXPECT_EQ(b, b / 1);
     EXPECT_EQ(c, c / 1);
     EXPECT_EQ(k, k / 1);
+
+    int return_code;
+    for (auto i = 0; i < 10; ++i) {
+        UInt r1 = large_numbers::rand();
+        UInt r2 = large_numbers::rand();
+        UInt r1_r2 = r1 * r2;
+        std::string command = "python -c 'print(" + r1_r2.toString() + " // " + r2.toString() + ")'";
+        std::string result = executeCommand(command, return_code);
+        EXPECT_EQ(0, return_code) << "Failed executing command " << command;
+        UInt r1b(result);
+        EXPECT_EQ(r1b, r1);
+    }
+}
+
+TEST(UInt, Modulo)
+{
+    UInt a = 256;
+    UInt b = 10;
+    UInt c, d;
+    UInt::div_mod(a, b, c, d);
+    EXPECT_EQ(UInt(25), c);
+    EXPECT_EQ(UInt(6), d);
 }
 
 TEST(UInt, Random)

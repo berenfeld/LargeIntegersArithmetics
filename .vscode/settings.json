@@ -13,4 +13,6 @@
     ],
     "testMate.cpp.debug.breakOnFailure": true,
     "editor.minimap.enabled": false,
+    "gitlens.showWhatsNewAfterUpgrades": false,
+    "gitlens.showWelcomeOnInstall": false
 }

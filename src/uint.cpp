@@ -19,21 +19,23 @@ namespace large_numbers
 
     UInt::UInt(const std::string &str, int base)
     {
+        std::string str2 = str;
+        trim(str2);
         if (base == 0) {
-            base = guessBaseOf(str);
+            base = guessBaseOf(str2);
         }
         switch (base) {
         case 10: {
-            UInt result = parseBase10StringValues(str);
+            UInt result = parseBase10StringValues(str2);
             _values = result._values;
             break;
         }
         case 16: {
-            parseBase16StringValues(str, _values);
+            parseBase16StringValues(str2, _values);
             break;
         }
         default:
-            throw Error("Base not supported " + std::to_string(base) + " for : '" + str + "'");
+            throw Error("Base not supported " + std::to_string(base) + " for : '" + str2 + "'");
         }
     }
 
@@ -81,23 +83,6 @@ namespace large_numbers
 
     UInt UInt::operator+(uint32_t arg) { return UInt(*this) + UInt(arg); }
 
-    UInt UInt::operator*(uint32_t arg) const
-    {
-        UInt result;
-        uint32_t add_to_next_value = 0;
-        uint64_t arg64 = static_cast<uint64_t>(arg);
-        for (const uint32_t &value : _values) {
-            uint64_t result_value = static_cast<uint64_t>(value) * arg64;
-            result_value += add_to_next_value;
-            result._values.push_back(static_cast<uint32_t>(result_value));
-            add_to_next_value = result_value >> 32;
-        }
-        if (add_to_next_value) {
-            result._values.push_back(add_to_next_value);
-        }
-        return result;
-    }
-
     UInt UInt::operator-(const UInt &other) const { return UInt(*this) -= other; }
 
     UInt &UInt::operator-=(const UInt &other)
@@ -119,6 +104,54 @@ namespace large_numbers
         while (_values.size() && _values[_values.size() - 1] == 0) {
             _values.pop_back();
         }
+        return *this;
+    }
+
+    UInt &UInt::operator-=(uint32_t arg)
+    {
+        *this -= UInt(arg);
+        return *this;
+    }
+
+    UInt UInt::operator-(uint32_t arg) { return UInt(*this) - UInt(arg); }
+
+    UInt UInt::operator*(uint32_t arg) const
+    {
+        UInt result;
+        uint32_t add_to_next_value = 0;
+        uint64_t arg64 = static_cast<uint64_t>(arg);
+        for (const uint32_t &value : _values) {
+            uint64_t result_value = static_cast<uint64_t>(value) * arg64;
+            result_value += add_to_next_value;
+            result._values.push_back(static_cast<uint32_t>(result_value));
+            add_to_next_value = result_value >> 32;
+        }
+        if (add_to_next_value) {
+            result._values.push_back(add_to_next_value);
+        }
+        return result;
+    }
+
+    UInt &UInt::operator*=(uint32_t arg)
+    {
+        *this = *this * arg;
+        return *this;
+    }
+
+    UInt UInt::operator*(const UInt &arg) const
+    {
+        UInt result;
+        for (auto i = 0; i < arg.size(); ++i) {
+            UInt interm = *this * arg.block(i);
+            interm = interm << (i * 32);
+            result += interm;
+        }
+        return result;
+    }
+
+    UInt &UInt::operator*=(const UInt &arg)
+    {
+        *this = *this * arg;
         return *this;
     }
 
@@ -153,10 +186,18 @@ namespace large_numbers
         return q;
     }
 
-    UInt UInt::operator/=(const UInt &other)
+    UInt &UInt::operator/=(const UInt &other)
     {
         UInt r;
         div_mod(*this, other, *this, r);
+        return *this;
+    }
+
+    UInt UInt::operator/(uint32_t other) const { return *this / UInt(other); }
+
+    UInt &UInt::operator/=(uint32_t other)
+    {
+        *this /= UInt(other);
         return *this;
     }
 
