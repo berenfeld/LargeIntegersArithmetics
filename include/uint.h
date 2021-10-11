@@ -58,8 +58,19 @@ namespace large_numbers
         UInt &raiseToPower(uint32_t exp, const UInt &modulo);
 
         // root square
-        UInt& sqrt(UInt &result, uint32_t steps_limit) const;
-        UInt &sqrt(UInt &result) const;
+        /**
+         * @brief calculate the sqrt of this and put the answer in reference result
+         *
+         * @param result input - best guess of the sqrt (preferred UInt(0), so the function will guess it by itself).
+         *               output - the result.
+         * @param steps_limit - maximum steps of the sqrt guessing. complexity of this method is
+         * O(steps_limit*O(operator/)) = O(steps_limit*n) steps_limit=0 returns initial guess of sqrt (2^(n/2))
+         *                      steps_limit<0 no limit.
+         */
+        void sqrt(UInt &result, uint32_t steps_limit = -1) const;
+        /**
+         * @brief calculate the sqrt of this and returns it
+         */
         UInt sqrt() const;
 
         // comparison
