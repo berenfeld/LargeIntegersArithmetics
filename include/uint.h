@@ -86,7 +86,7 @@ namespace large_numbers
         size_t bits() const;
         std::string toString(int base = 10) const;
 
-        friend std::ostream &operator<<(std::ostream &os, const UInt &value) { return os << value.toString(16); }
+        friend std::ostream &operator<<(std::ostream &os, const UInt &value) { return os << value.toString(); }
 
         class UIntHash
         {

@@ -17,6 +17,7 @@
     "gitlens.showWelcomeOnInstall": false,
     "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
     "files.associations": {
-        "unordered_map": "cpp"
+        "unordered_map": "cpp",
+        "iosfwd": "cpp"
     }
 }
