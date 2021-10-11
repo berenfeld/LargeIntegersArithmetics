@@ -212,27 +212,29 @@ namespace large_numbers
         return *this;
     }
 
-    UInt &UInt::sqrt(UInt &result, uint32_t steps_limit) const {
-        if (steps_limit<0)
+    void UInt::sqrt(UInt &result, uint32_t steps_limit) const
+    {
+        // case of no limit
+        if (steps_limit < 0) {
             steps_limit = INT32_MAX;
-
-        if (result==UInt(0)){
-            uint32_t len = this->bits()>>2;
+        }
+        // give a good guess if needed
+        if (result == UInt(0)) {
+            uint32_t len = this->bits() >> 2;
             result = UInt(1) << len;
         }
+        // to find the sqrt(S)=lim(x->inf): X_(n+1) = (Xn + S/Xn)/2
         UInt tmp = UInt(0);
         UInt &old_res = tmp;
-        for (uint32_t i = 0; (i < steps_limit) && (old_res != result); i++){
+        for (uint32_t i = 0; (i < steps_limit) && (old_res != result); i++) {
             old_res = result;
-            result = (result + (*this) / result)/2; //todo: implement >> and make it >>1
+            result += ((*this) / result);
+            result /= 2; // todo: implement >> and make this line ">> 1"
         }
-        return result;
+        return;
     }
-    UInt &UInt::sqrt(UInt &result) const {
-        this->sqrt(result, -1);
-        return result;
-    }
-    UInt UInt::sqrt() const {
+    UInt UInt::sqrt() const
+    {
         UInt result = *this;
         this->sqrt(result);
         return result;
@@ -292,7 +294,8 @@ namespace large_numbers
 
     UInt &UInt::operator%=(const UInt &other)
     {
-        *this = *this % other;
+        UInt q;
+        div_mod(*this, other, q, *this);
         return *this;
     }
 

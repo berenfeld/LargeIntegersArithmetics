@@ -355,7 +355,8 @@ TEST(UInt, Random)
         large_numbers::rand());
 }
 
-TEST(UInt, sqrt){
+TEST(UInt, sqrt)
+{
     UInt x = 1;
     EXPECT_EQ(x.sqrt(), UInt(1));
     x = 4;
@@ -365,10 +366,10 @@ TEST(UInt, sqrt){
     EXPECT_EQ(x.sqrt(), UInt(2));
     x = 25;
     EXPECT_EQ(x.sqrt(), UInt(5));
-    x = UInt("4000000",10);
-    EXPECT_EQ(x.sqrt(), UInt("2000",10));
-    x = UInt("4000000000000000000000000000000000000000000000000",10);
-    EXPECT_EQ(x.sqrt(), UInt("2000000000000000000000000",10));
+    x = UInt("4000000", 10);
+    EXPECT_EQ(x.sqrt(), UInt("2000", 10));
+    x = UInt("4000000000000000000000000000000000000000000000000", 10);
+    EXPECT_EQ(x.sqrt(), UInt("2000000000000000000000000", 10));
 
     for (auto i = 0; i < 10; ++i) {
         UInt base = large_numbers::rand(4);
