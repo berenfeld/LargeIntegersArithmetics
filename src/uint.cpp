@@ -212,6 +212,23 @@ namespace large_numbers
         return *this;
     }
 
+    // static
+    UInt UInt::gcd(const UInt &a, const UInt &b)
+    {
+        if (a == 0) {
+            return b;
+        }
+        if (b == 0) {
+            return a;
+        }
+        if (a > b) {
+            return gcd(a % b, b);
+        }
+        return gcd(a, b % a);
+    }
+
+    UInt UInt::gcdWith(const UInt &other) const { return gcd(*this, other); }
+
     void UInt::sqrt(UInt &result, uint32_t steps_limit) const
     {
         // case of no limit
