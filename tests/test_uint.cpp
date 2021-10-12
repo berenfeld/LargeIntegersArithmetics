@@ -415,3 +415,17 @@ TEST(UInt, PrimesBase)
     EXPECT_FALSE(base.contains(29));
     EXPECT_FALSE(base.contains(2 * 3 * 5 * 7 * 17));
 }
+
+TEST(UInt, gcd)
+{
+    EXPECT_EQ(UInt::gcd(2, 2), 2);
+    EXPECT_EQ(UInt::gcd(2, 3), 1);
+    EXPECT_EQ(UInt::gcd(3, 2), 1);
+    EXPECT_EQ(UInt::gcd(4, 2), 2);
+    EXPECT_EQ(UInt::gcd(2, 4), 2);
+    EXPECT_EQ(UInt::gcd(20, 36), 4);
+    EXPECT_EQ(UInt::gcd(36, 48), 12);
+
+    UInt a = 36;
+    EXPECT_EQ(a.gcdWith(48), 12);
+}

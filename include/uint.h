@@ -57,6 +57,10 @@ namespace large_numbers
         static UInt power_modulo(const UInt &base, uint32_t exp, const UInt &modulo);
         UInt &raiseToPower(uint32_t exp, const UInt &modulo);
 
+        // gcd
+        static UInt gcd(const UInt &a, const UInt &b);
+        UInt gcdWith(const UInt &other) const;
+
         // root square
         /**
          * @brief calculate the sqrt of this and put the answer in reference result
