@@ -429,3 +429,19 @@ TEST(UInt, gcd)
     UInt a = 36;
     EXPECT_EQ(a.gcdWith(48), 12);
 }
+
+TEST(UInt, StartWithRsa100)
+{
+    UInt rsa_100(
+        "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
+    UInt z = rsa_100.sqrt() += 1;
+    PrimesBase base(128);
+    for (int i = 0; i < 10; ++i) {
+        UInt candidate = UInt::power_modulo(z, 2, rsa_100);
+        std::cout << "checking z " << z << " candidate " << candidate << std::endl;
+        if (base.contains(candidate)) {
+            std::cout << "Found B-smooth ! : " << candidate << std::endl;
+        }
+        z += 1;
+    }
+}
