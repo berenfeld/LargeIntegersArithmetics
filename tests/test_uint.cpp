@@ -334,7 +334,7 @@ TEST(UInt, power)
     int return_code;
     for (auto i = 0; i < 10; ++i) {
         // cant go too large, otherwise it will take too long
-        UInt base = large_numbers::rand(2);
+        UInt base = large_numbers::rand(4);
         uint32_t exp = ::rand() % 10;
         std::string command = "python -c 'print(" + base.toString() + " ** " + std::to_string(exp) + ")'";
         std::string result = executeCommand(command, return_code);
@@ -350,10 +350,8 @@ TEST(UInt, Random)
     srand(0);
     EXPECT_EQ(UInt("0X327B23C6"), large_numbers::rand(1));
     EXPECT_EQ(UInt("0X66334873"), large_numbers::rand(2));
-    EXPECT_EQ(UInt("0X19495CFF2AE8944A"), large_numbers::rand(3));
-    EXPECT_EQ(
-        UInt("0X238E1F2946E87CCD3D1B58BA507ED7AB2EB141F241B71EFB79E2A9E37545E146515F007C5BD062C2122008544DB127F8"),
-        large_numbers::rand());
+    EXPECT_EQ(UInt("0X19495CFF000000002AE8944A"), large_numbers::rand(3));
+    EXPECT_EQ(UInt("0X238E1F290000000046E87CCD000000003D1B58BA00000000507ED7AB"), large_numbers::rand());
 }
 
 TEST(UInt, sqrt)

@@ -152,7 +152,7 @@ namespace large_numbers
         return result;
     }
 
-    size_t lastBit(LN_BLOCK_TYPE n) { return static_cast<size_t>(log2(n)) + 1; }
+    size_t lastBit(LN_BLOCK_TYPE n) { return n == 0 ? 0 : static_cast<size_t>(log2(n)) + 1; }
 
     /**
      * @brief basic primility check for small numbers
