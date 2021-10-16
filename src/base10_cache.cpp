@@ -15,11 +15,8 @@ namespace large_numbers
         }
     }
 
-    UInt Base10Cache::get(uint32_t digit_pos, uint32_t digit_value)
-    {
-        return _cache.at(makeKey(digit_pos, digit_value));
-    }
+    UInt Base10Cache::get(size_t digit_pos, size_t digit_value) { return _cache.at(makeKey(digit_pos, digit_value)); }
 
-    uint32_t Base10Cache::makeKey(uint32_t digit_pos, uint32_t digit_value) { return digit_pos << 16 | digit_value; }
+    size_t Base10Cache::makeKey(size_t digit_pos, size_t digit_value) { return digit_pos << 16 | digit_value; }
     Base10Cache base10Cache;
 } // namespace large_numbers

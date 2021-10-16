@@ -9,11 +9,11 @@ namespace large_numbers
     {
       public:
         Base10Cache();
-        UInt get(uint32_t digit_pos, uint32_t digit_value);
+        UInt get(size_t digit_pos, size_t digit_value);
 
       private:
-        uint32_t makeKey(uint32_t digit_pos, uint32_t digit_value);
-        std::unordered_map<uint32_t, UInt, UInt::UIntHash> _cache;
+        size_t makeKey(size_t digit_pos, size_t digit_value);
+        std::unordered_map<size_t, UInt, UInt::UIntHash> _cache;
     };
 
     /**

@@ -1,5 +1,6 @@
 #include "uint.h"
 #include "base2_cache.h"
+#include "consts.h"
 #include "error.h"
 #include "utils.h"
 #include <algorithm>
@@ -11,7 +12,7 @@ namespace large_numbers
 {
     UInt::UInt() {}
 
-    UInt::UInt(uint32_t value)
+    UInt::UInt(LN_BLOCK_TYPE value)
     {
         if (value) {
             _values.push_back(value);
@@ -42,7 +43,7 @@ namespace large_numbers
 
     bool UInt::operator==(const UInt &other) const { return _values == other._values; }
 
-    bool UInt::operator==(uint32_t value) const
+    bool UInt::operator==(LN_BLOCK_TYPE value) const
     {
         if (value) {
             return size() == 1 && _values[0] == value;
@@ -53,19 +54,20 @@ namespace large_numbers
 
     bool UInt::operator!=(const UInt &other) const { return !(*this == other); }
 
-    bool UInt::operator!=(uint32_t value) const { return !(*this == value); }
+    bool UInt::operator!=(LN_BLOCK_TYPE value) const { return !(*this == value); }
 
     UInt &UInt::operator+=(const UInt &other)
     {
         const size_t max_block = std::max(size(), other.size());
         _values.resize(max_block);
-        uint32_t add_to_next_value = 0;
+        LN_BLOCK_TYPE add_to_next_value = 0;
         size_t i = 0;
         while (i < max_block) {
-            uint64_t added_value = static_cast<uint64_t>(_values[i]) + static_cast<uint64_t>(add_to_next_value) +
-                                   (i < other.size() ? static_cast<uint64_t>(other._values[i]) : 0);
-            _values[i] = static_cast<uint32_t>(added_value);
-            add_to_next_value = added_value >> 32;
+            LN_SUM_MUL_BLOCK_TYPE added_value =
+                static_cast<LN_SUM_MUL_BLOCK_TYPE>(_values[i]) + static_cast<LN_SUM_MUL_BLOCK_TYPE>(add_to_next_value) +
+                (i < other.size() ? static_cast<LN_SUM_MUL_BLOCK_TYPE>(other._values[i]) : 0);
+            _values[i] = static_cast<LN_BLOCK_TYPE>(added_value);
+            add_to_next_value = added_value >> LN_BITS_IN_BLOCK;
             ++i;
         }
         if (add_to_next_value) {
@@ -76,13 +78,13 @@ namespace large_numbers
 
     UInt UInt::operator+(const UInt &other) const { return UInt(*this) += other; }
 
-    UInt &UInt::operator+=(uint32_t arg)
+    UInt &UInt::operator+=(LN_BLOCK_TYPE arg)
     {
         *this += UInt(arg);
         return *this;
     }
 
-    UInt UInt::operator+(uint32_t arg) { return UInt(*this) + UInt(arg); }
+    UInt UInt::operator+(LN_BLOCK_TYPE arg) { return UInt(*this) + UInt(arg); }
 
     UInt UInt::operator-(const UInt &other) const { return UInt(*this) -= other; }
 
@@ -91,7 +93,7 @@ namespace large_numbers
         const size_t other_size = other.size();
         UInt other_negate = other.negate();
         // negate value of other is 2^n - other - 1, where n is the number of bits of
-        // other rounded up to 32. so we need to substract 2^n and add 1 back
+        // other rounded up to 64. so we need to substract 2^n and add 1 back
         *this += other_negate;
         *this += 1;
         for (size_t i = other_size; i < _values.size(); ++i) {
@@ -99,7 +101,7 @@ namespace large_numbers
                 --_values[i];
                 break;
             }
-            _values[i] = 0xFFFFFFFF; // loan 1 from next dword
+            _values[i] = LN_MAX_BLOCK_VALUE; // loan 1 from next dword
         }
         // remove trailing 0 if present
         while (_values.size() && _values[_values.size() - 1] == 0) {
@@ -108,24 +110,24 @@ namespace large_numbers
         return *this;
     }
 
-    UInt &UInt::operator-=(uint32_t arg)
+    UInt &UInt::operator-=(LN_BLOCK_TYPE arg)
     {
         *this -= UInt(arg);
         return *this;
     }
 
-    UInt UInt::operator-(uint32_t arg) { return UInt(*this) - UInt(arg); }
+    UInt UInt::operator-(LN_BLOCK_TYPE arg) { return UInt(*this) - UInt(arg); }
 
-    UInt UInt::operator*(uint32_t arg) const
+    UInt UInt::operator*(LN_BLOCK_TYPE arg) const
     {
         UInt result;
-        uint32_t add_to_next_value = 0;
-        uint64_t arg64 = static_cast<uint64_t>(arg);
-        for (const uint32_t &value : _values) {
-            uint64_t result_value = static_cast<uint64_t>(value) * arg64;
+        LN_BLOCK_TYPE add_to_next_value = 0;
+        LN_SUM_MUL_BLOCK_TYPE arg64 = static_cast<LN_SUM_MUL_BLOCK_TYPE>(arg);
+        for (const LN_BLOCK_TYPE &value : _values) {
+            LN_SUM_MUL_BLOCK_TYPE result_value = static_cast<LN_SUM_MUL_BLOCK_TYPE>(value) * arg64;
             result_value += add_to_next_value;
-            result._values.push_back(static_cast<uint32_t>(result_value));
-            add_to_next_value = result_value >> 32;
+            result._values.push_back(static_cast<LN_BLOCK_TYPE>(result_value));
+            add_to_next_value = result_value >> LN_BITS_IN_BLOCK;
         }
         if (add_to_next_value) {
             result._values.push_back(add_to_next_value);
@@ -133,7 +135,7 @@ namespace large_numbers
         return result;
     }
 
-    UInt &UInt::operator*=(uint32_t arg)
+    UInt &UInt::operator*=(LN_BLOCK_TYPE arg)
     {
         *this = *this * arg;
         return *this;
@@ -144,7 +146,7 @@ namespace large_numbers
         UInt result;
         for (size_t i = 0; i < arg.size(); ++i) {
             UInt interm = *this * arg.block(i);
-            interm = interm << (i * 32);
+            interm = interm << (i * LN_BITS_IN_BLOCK);
             result += interm;
         }
         return result;
@@ -157,10 +159,10 @@ namespace large_numbers
     }
 
     // static
-    UInt UInt::pow(const UInt &base, uint32_t exp)
+    UInt UInt::pow(const UInt &base, LN_BLOCK_TYPE exp)
     {
         // build 2 powers of base based on the bits of exp
-        std::vector<UInt> powers(32);
+        std::vector<UInt> powers(LN_BITS_IN_BLOCK);
         UInt base_power = base;
         for (uint8_t bit = 0; bit < lastBit(exp); ++bit) {
             powers[bit] = base_power;
@@ -168,8 +170,8 @@ namespace large_numbers
         }
         // now compute the power
         UInt result = 1;
-        uint32_t bit_value = 0x1;
-        for (uint8_t bit = 0; bit < lastBit(exp); ++bit) {
+        LN_BLOCK_TYPE bit_value = 0x1;
+        for (size_t bit = 0; bit < lastBit(exp); ++bit) {
             if (exp & bit_value) {
                 result *= powers[bit];
             }
@@ -178,17 +180,17 @@ namespace large_numbers
         return result;
     }
 
-    UInt &UInt::raiseToPower(uint32_t exp)
+    UInt &UInt::raiseToPower(LN_BLOCK_TYPE exp)
     {
         *this = pow(*this, exp);
         return *this;
     }
 
     // static
-    UInt UInt::power_modulo(const UInt &base, uint32_t exp, const UInt &modulo)
+    UInt UInt::power_modulo(const UInt &base, LN_BLOCK_TYPE exp, const UInt &modulo)
     {
         // same as power, but modulo on each step
-        std::vector<UInt> powers(32);
+        std::vector<UInt> powers(LN_BITS_IN_BLOCK);
         UInt base_power = base;
         for (uint8_t bit = 0; bit < lastBit(exp); ++bit) {
             powers[bit] = base_power;
@@ -196,7 +198,7 @@ namespace large_numbers
             base_power %= modulo;
         }
         UInt result = 1;
-        uint32_t bit_value = 0x1;
+        LN_BLOCK_TYPE bit_value = 0x1;
         for (uint8_t bit = 0; bit < lastBit(exp); ++bit) {
             if (exp & bit_value) {
                 result *= powers[bit];
@@ -206,7 +208,7 @@ namespace large_numbers
         }
         return result;
     }
-    UInt &UInt::raiseToPower(uint32_t exp, const UInt &modulo)
+    UInt &UInt::raiseToPower(LN_BLOCK_TYPE exp, const UInt &modulo)
     {
         *this = power_modulo(*this, exp, modulo);
         return *this;
@@ -229,7 +231,7 @@ namespace large_numbers
 
     UInt UInt::gcdWith(const UInt &other) const { return gcd(*this, other); }
 
-    void UInt::sqrt(UInt &result, uint32_t steps_limit) const
+    void UInt::sqrt(UInt &result, LN_BLOCK_TYPE steps_limit) const
     {
         // case of no limit
         if (steps_limit < 0) {
@@ -237,13 +239,13 @@ namespace large_numbers
         }
         // give a good guess if needed
         if (result == UInt(0)) {
-            uint32_t len = this->bits() >> 2;
+            LN_BLOCK_TYPE len = this->bits() >> 2;
             result = UInt(1) << len;
         }
         // to find the sqrt(S)=lim(x->inf): X_(n+1) = (Xn + S/Xn)/2
         UInt tmp = UInt(0);
         UInt &old_res = tmp;
-        for (uint32_t i = 0; (i < steps_limit) && (old_res != result); i++) {
+        for (LN_BLOCK_TYPE i = 0; (i < steps_limit) && (old_res != result); i++) {
             old_res = result;
             result += ((*this) / result);
             result /= 2; // todo: implement >> and make this line ">> 1"
@@ -256,16 +258,16 @@ namespace large_numbers
         this->sqrt(result);
         return result;
     }
-    UInt UInt::operator<<(uint32_t offset) const
+    UInt UInt::operator<<(LN_BLOCK_TYPE offset) const
     {
         UInt result(*this);
-        uint32_t zero_blocks = offset / 32u;
-        uint32_t reminder = static_cast<int>(offset % 32u);
-        uint32_t reminder_comp = (32u - reminder);
-        uint32_t carry = 0;
+        LN_BLOCK_TYPE zero_blocks = offset / LN_BITS_IN_BLOCK;
+        LN_BLOCK_TYPE reminder = static_cast<int>(offset % LN_BITS_IN_BLOCK);
+        LN_BLOCK_TYPE reminder_comp = (LN_BITS_IN_BLOCK - reminder);
+        LN_BLOCK_TYPE carry = 0;
         for (auto i = result._values.begin(); i != result._values.end(); ++i) {
-            uint64_t val = static_cast<uint64_t>(*i);
-            uint32_t next_value = static_cast<uint32_t>((val << reminder) | carry);
+            LN_SUM_MUL_BLOCK_TYPE val = static_cast<LN_SUM_MUL_BLOCK_TYPE>(*i);
+            LN_BLOCK_TYPE next_value = static_cast<LN_BLOCK_TYPE>((val << reminder) | carry);
             carry = (val >> reminder_comp);
             *i = next_value;
         }
@@ -294,9 +296,9 @@ namespace large_numbers
         return *this;
     }
 
-    UInt UInt::operator/(uint32_t other) const { return *this / UInt(other); }
+    UInt UInt::operator/(LN_BLOCK_TYPE other) const { return *this / UInt(other); }
 
-    UInt &UInt::operator/=(uint32_t other)
+    UInt &UInt::operator/=(LN_BLOCK_TYPE other)
     {
         *this /= UInt(other);
         return *this;
@@ -380,13 +382,13 @@ namespace large_numbers
     }
 
     size_t UInt::size() const { return _values.size(); }
-    uint32_t UInt::block(int i) const { return _values[i]; }
-    uint32_t UInt::lastBlock() const { return _values[size() - 1]; }
+    LN_BLOCK_TYPE UInt::block(int i) const { return _values[i]; }
+    LN_BLOCK_TYPE UInt::lastBlock() const { return _values[size() - 1]; }
 
     UInt UInt::negate() const
     {
         UInt result;
-        for (uint32_t _value : _values) {
+        for (LN_BLOCK_TYPE _value : _values) {
             result._values.push_back(~_value);
         }
         // trim leading zeroes
@@ -396,6 +398,6 @@ namespace large_numbers
         return result;
     }
 
-    size_t UInt::bits() const { return (size() - 1) * 32 + lastBit(lastBlock()); }
+    size_t UInt::bits() const { return (size() - 1) * LN_BITS_IN_BLOCK + lastBit(lastBlock()); }
 
 } // namespace large_numbers

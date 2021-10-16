@@ -28,7 +28,7 @@ namespace large_numbers
      * @param str
      * @param values
      */
-    void parseBase16StringValues(const std::string &str, std::vector<uint32_t> &values);
+    void parseBase16StringValues(const std::string &str, std::vector<LN_BLOCK_TYPE> &values);
 
     /**
      * @brief Format a base16 string of the given value
@@ -75,7 +75,7 @@ namespace large_numbers
      * @param n
      * @return uint8_t
      */
-    uint8_t lastBit(uint32_t n);
+    size_t lastBit(LN_BLOCK_TYPE n);
 
     bool isPrime(uint32_t n);
 

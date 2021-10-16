@@ -334,7 +334,7 @@ TEST(UInt, power)
     int return_code;
     for (auto i = 0; i < 10; ++i) {
         // cant go too large, otherwise it will take too long
-        UInt base = large_numbers::rand(4);
+        UInt base = large_numbers::rand(2);
         uint32_t exp = ::rand() % 10;
         std::string command = "python -c 'print(" + base.toString() + " ** " + std::to_string(exp) + ")'";
         std::string result = executeCommand(command, return_code);

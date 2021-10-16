@@ -6,7 +6,7 @@ namespace large_numbers
     class PrimesBase
     {
       public:
-        PrimesBase(uint32_t size);
+        PrimesBase(size_t size);
         bool contains(const UInt &value) const;
 
       private:

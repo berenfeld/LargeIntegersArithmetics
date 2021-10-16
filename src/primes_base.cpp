@@ -3,7 +3,7 @@
 
 namespace large_numbers
 {
-    PrimesBase::PrimesBase(uint32_t size)
+    PrimesBase::PrimesBase(size_t size)
     {
         uint32_t num = 2;
         _product = 1;

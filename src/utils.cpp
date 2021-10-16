@@ -43,12 +43,11 @@ namespace large_numbers
         return result;
     }
 
-    void parseBase16StringValues(const std::string &str, std::vector<uint32_t> &values)
+    void parseBase16StringValues(const std::string &str, std::vector<LN_BLOCK_TYPE> &values)
     {
         std::string left = str;
         trim(left);
-        uint32_t value;
-        const size_t DWORD_HEX_STRING_LEN = 8;
+        LN_BLOCK_TYPE value;
         // remove prefix 0x or 0X
         if ((left.rfind("0x", 0) == 0) || (left.rfind("0X", 0) == 0)) {
             left = left.substr(2, left.size() - 2);
@@ -58,7 +57,7 @@ namespace large_numbers
             if (len == 0) {
                 break;
             }
-            const size_t token_length = std::min(DWORD_HEX_STRING_LEN, len);
+            const size_t token_length = std::min(LN_HEX_DIGITS_IN_BLOCK, len);
             const std::string token = left.substr(len - token_length, token_length);
             left = left.substr(0, len - token_length);
             std::stringstream ss;
@@ -97,7 +96,7 @@ namespace large_numbers
         ss << prefix << std::hex;
         for (int i = value.size() - 1; i >= 0; --i) {
             if (static_cast<size_t>(i) != value.size() - 1) {
-                ss << std::setfill('0') << std::setw(8);
+                ss << std::setfill('0') << std::setw(LN_HEX_DIGITS_IN_BLOCK);
             }
             ss << value.block(i);
         }
@@ -129,13 +128,13 @@ namespace large_numbers
     {
         UInt result = 0;
         if (blocks == 0) {
-            blocks = MAX_RAND_UINT_BLOCKS;
+            blocks = LN_MAX_RAND_UINT_BLOCKS;
         }
         int num_blocks = std::max(::rand() % blocks, 1); // at least one block
         for (auto i = 0; i < num_blocks; ++i) {
             result += ::rand();
             if (i != num_blocks - 1) {
-                result = result << 32;
+                result = result << LN_BITS_IN_BLOCK;
             }
         }
         return result;
@@ -153,7 +152,7 @@ namespace large_numbers
         return result;
     }
 
-    uint8_t lastBit(uint32_t n) { return (int)log2(n) + 1; }
+    size_t lastBit(LN_BLOCK_TYPE n) { return static_cast<size_t>(log2(n)) + 1; }
 
     /**
      * @brief basic primility check for small numbers
