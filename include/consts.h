@@ -1,9 +1,17 @@
 #pragma once
 
+#include <limits>
+
+#define LN_BLOCK_TYPE uint32_t
+#define LN_SUM_MUL_BLOCK_TYPE uint64_t
+#define LN_BITS_IN_BLOCK (sizeof(LN_BLOCK_TYPE) * 8)
+#define LN_MAX_RAND_UINT_BITS 512
+#define LN_MAX_RAND_UINT_BLOCKS (LN_MAX_RAND_UINT_BITS / LN_BITS_IN_BLOCK)
+#define LN_HEX_DIGITS_IN_BLOCK (sizeof(LN_BLOCK_TYPE) * 2)
+#define LN_MAX_BLOCK_VALUE (std::numeric_limits<LN_BLOCK_TYPE>::max())
+
 namespace large_numbers
 {
-    static constexpr int MAX_DECIMAL_DIGITS = 256;
-    static constexpr int MAX_BINARY_DIGITS = 1024;
-    static constexpr int MAX_RAND_UINT_BITS = 512;
-    static constexpr int MAX_RAND_UINT_BLOCKS = MAX_RAND_UINT_BITS / 32;
+    static constexpr int MAX_DECIMAL_DIGITS = 512;
+    static constexpr int MAX_BINARY_DIGITS = 2048;
 } // namespace large_numbers

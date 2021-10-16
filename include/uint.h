@@ -1,5 +1,6 @@
 #pragma once
 
+#include "consts.h"
 #include <functional>
 #include <string>
 #include <vector>
@@ -10,52 +11,52 @@ namespace large_numbers
     {
       public:
         UInt();
-        UInt(uint32_t value);
+        UInt(LN_BLOCK_TYPE value);
         UInt(const std::string &str, int base = 0);
 
         // comparison
         bool operator==(const UInt &other) const;
-        bool operator==(uint32_t value) const;
+        bool operator==(LN_BLOCK_TYPE value) const;
         bool operator!=(const UInt &other) const;
-        bool operator!=(uint32_t value) const;
+        bool operator!=(LN_BLOCK_TYPE value) const;
 
         // addition
         UInt &operator+=(const UInt &other);
         UInt operator+(const UInt &other) const;
-        UInt &operator+=(uint32_t arg);
-        UInt operator+(uint32_t arg);
+        UInt &operator+=(LN_BLOCK_TYPE arg);
+        UInt operator+(LN_BLOCK_TYPE arg);
 
         // subsctraction
         UInt &operator-=(const UInt &other);
         UInt operator-(const UInt &other) const;
-        UInt &operator-=(uint32_t arg);
-        UInt operator-(uint32_t arg);
+        UInt &operator-=(LN_BLOCK_TYPE arg);
+        UInt operator-(LN_BLOCK_TYPE arg);
 
         // multiplication
-        UInt operator*(uint32_t arg) const;
-        UInt &operator*=(uint32_t arg);
+        UInt operator*(LN_BLOCK_TYPE arg) const;
+        UInt &operator*=(LN_BLOCK_TYPE arg);
         UInt operator*(const UInt &arg) const;
         UInt &operator*=(const UInt &arg);
 
         // power
-        static UInt pow(const UInt &base, uint32_t exp);
-        UInt &raiseToPower(uint32_t exp);
+        static UInt pow(const UInt &base, LN_BLOCK_TYPE exp);
+        UInt &raiseToPower(LN_BLOCK_TYPE exp);
 
         // shift
-        UInt operator<<(uint32_t offset) const;
+        UInt operator<<(LN_BLOCK_TYPE offset) const;
 
         // division
         UInt operator/(const UInt &other) const;
         UInt &operator/=(const UInt &other);
-        UInt operator/(uint32_t other) const;
-        UInt &operator/=(uint32_t other);
+        UInt operator/(LN_BLOCK_TYPE other) const;
+        UInt &operator/=(LN_BLOCK_TYPE other);
         UInt operator%(const UInt &other) const;
         UInt &operator%=(const UInt &other);
         static void div_mod(const UInt &a, const UInt &b, UInt &q, UInt &r);
 
         // power modulo
-        static UInt power_modulo(const UInt &base, uint32_t exp, const UInt &modulo);
-        UInt &raiseToPower(uint32_t exp, const UInt &modulo);
+        static UInt power_modulo(const UInt &base, LN_BLOCK_TYPE exp, const UInt &modulo);
+        UInt &raiseToPower(LN_BLOCK_TYPE exp, const UInt &modulo);
 
         // gcd
         static UInt gcd(const UInt &a, const UInt &b);
@@ -71,7 +72,7 @@ namespace large_numbers
          * O(steps_limit*O(operator/)) = O(steps_limit*n) steps_limit=0 returns initial guess of sqrt (2^(n/2))
          *                      steps_limit<0 no limit.
          */
-        void sqrt(UInt &result, uint32_t steps_limit = -1) const;
+        void sqrt(UInt &result, LN_BLOCK_TYPE steps_limit = -1) const;
         /**
          * @brief calculate the sqrt of this and returns it
          */
@@ -85,8 +86,8 @@ namespace large_numbers
         static int8_t compare(const UInt &a, const UInt &b);
 
         size_t size() const;
-        uint32_t block(int i) const;
-        uint32_t lastBlock() const;
+        LN_BLOCK_TYPE block(int i) const;
+        LN_BLOCK_TYPE lastBlock() const;
         size_t bits() const;
         std::string toString(int base = 10) const;
 
@@ -98,8 +99,8 @@ namespace large_numbers
             size_t operator()(const UInt &key) const
             {
                 size_t result = 0;
-                for (const uint32_t &value : key._values) {
-                    result += std::hash<uint32_t>()(value);
+                for (const LN_BLOCK_TYPE &value : key._values) {
+                    result += std::hash<LN_BLOCK_TYPE>()(value);
                 }
                 return result;
             }
@@ -116,7 +117,7 @@ namespace large_numbers
          */
         [[nodiscard]] UInt negate() const;
 
-        std::vector<uint32_t> _values;
+        std::vector<LN_BLOCK_TYPE> _values;
     };
 
 } // namespace large_numbers

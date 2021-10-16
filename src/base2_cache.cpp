@@ -13,7 +13,7 @@ namespace large_numbers
         }
     }
 
-    UInt Base2Cache::get(uint32_t digit_pos) { return _cache.at(digit_pos); }
+    UInt Base2Cache::get(size_t digit_pos) { return _cache.at(digit_pos); }
 
     Base2Cache base2Cache;
 } // namespace large_numbers
