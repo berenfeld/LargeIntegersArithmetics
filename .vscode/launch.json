@@ -4,7 +4,7 @@
         "type": "gdb",
         "request": "launch",
         "name": "Launch Program",
-        "target": "./build/TestLargeInts",
+        "target": "./build/${command:cmake.buildType}/TestLargeInts",
         "cwd": "${workspaceRoot}",
         "valuesFormatting": "parseText"
     }
