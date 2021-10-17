@@ -436,12 +436,114 @@ TEST(UInt, StartWithRsa100)
         "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
     UInt z = rsa_100.sqrt() += 1;
     PrimesBase base(128);
-    for (int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 170; ++i) {
         UInt candidate = UInt::power_modulo(z, 2, rsa_100);
         std::cout << "checking z " << z << " candidate " << candidate << std::endl;
         if (base.contains(candidate)) {
             std::cout << "Found B-smooth ! : " << candidate << std::endl;
+            exit(0);
         }
         z += 1;
+    }
+}
+TEST(UInt, PreYuvals) {
+    UInt x = 1;
+    UInt y = x << 32;
+    EXPECT_EQ(y, UInt(2).raiseToPower(32));
+}
+TEST(UInt, Rsa100By17packs)
+{
+    UInt rsa_100(
+        "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
+    int number_of_checks = 170;
+    UInt a = rsa_100.sqrt() += 1;
+    PrimesBase base(128);
+    // int additions[] = {1, 2, 4, 8, 16};
+    UInt mults[] = {0, 0, 0, 0, 0};
+    UInt results[] = {0, 0, 0, 0, 0};
+    int number_of_packs = number_of_checks / 17;
+
+    std::function<void(UInt &, UInt &, int)> check_a2 = [&base, &rsa_100](UInt &a2, UInt &gelem, int plus) {
+        a2 %= rsa_100;
+        std::cout << "[INFO] checking a + k " << gelem << "+" << plus << "for Natural k in [0, 16] candidate"
+                  << std::endl;
+        if (base.contains(a2)) {
+            std::cout << "[SUCC] Found B-smooth ! : " << a2 << std::endl;
+            exit(0);
+        }
+    };
+
+    for (int i = 0; i < number_of_packs; ++i) {
+
+        UInt a2 = UInt::power_modulo(a, 2, rsa_100);
+        check_a2(a2, a, 0);
+
+        mults[0] = a << 1;
+        for (int shifts = 0; shifts < 3; shifts++) {
+            mults[shifts+1] = (mults[shifts] << 1)%rsa_100;
+        }
+        // mults[0] =  2a
+        // mults[1] =  4a
+        // mults[2] =  8a
+        // mults[3] = 16a
+        // mults[4] = 32a
+
+        a2 += 1;
+        for (int j = 0; j < 5;j++){
+            results[j] = (a2 + mults[j])%rsa_100;
+        }
+        // results[0] = (a+1)^2
+        // results[1] = (a+2)^2
+        // results[2] = (a+4)^2
+        // results[3] = (a+8)^2
+        // results[4] = (a+16)^2
+        UInt to_check;
+        UInt its_ap9s;
+        check_a2(results[0], a, 1);                         // check a +  1
+        check_a2(results[1], a, 2);                         // check a +  2
+        check_a2(to_check = results[1] + mults[0], a, 3);   // check a +  3
+        check_a2(results[2], a, 4);                         // check a +  4
+        check_a2(to_check = results[2] + mults[0], a, 5);   // check a +  5
+        check_a2(to_check = results[2] + mults[1], a, 6);   // check a +  6
+        check_a2(to_check = results[3] - mults[0], a, 7);   // check a +  7
+        check_a2(results[3], a, 8);                         // check a +  8
+        check_a2(its_ap9s = results[3] + mults[0], a, 9);   // check a +  9
+        check_a2(to_check = results[3] + mults[1], a, 10);  // check a + 10
+        check_a2(to_check = its_ap9s + mults[1], a, 11);  // check a + 11
+        check_a2(to_check = results[3] + mults[2], a, 12);  // check a + 12
+        check_a2(to_check = its_ap9s + mults[2], a, 13);  // check a + 13
+        check_a2(to_check = results[4] - mults[1], a, 14);  // check a + 14
+        check_a2(to_check = results[4] - mults[0], a, 15);  // check a + 15
+        check_a2(results[4], a, 16);                        // check a + 16
+        a += 17;
+    }
+}
+TEST(UInt, Rsa100ByAdditionalDoubleA)
+{
+    UInt rsa_100(
+        "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
+    int number_of_checks = 170;
+    UInt a = rsa_100.sqrt() += 1;
+    PrimesBase base(128);
+
+    std::function<void(UInt &, UInt &, int)> check = [&base, &rsa_100](UInt &to_check, UInt &gelem, int plus) {
+        to_check %= rsa_100;
+        std::cout << "[INFO] checking a + k " << gelem << "+" << plus << "candidate"
+                  << std::endl;
+        if (base.contains(to_check)) {
+            std::cout << "[SUCC] Found B-smooth ! : " << to_check << std::endl;
+            exit(0);
+        }
+    };
+
+    UInt a2 = UInt::power_modulo(a, 2, rsa_100);
+    UInt to_check = a2;
+    UInt twoA = a << 1;
+    check(to_check, a, 0);
+    to_check += 1;
+
+    for (int i = 1; i < number_of_checks; ++i) {
+        to_check += twoA;
+        check(to_check, a, i);
     }
 }

@@ -1,4 +1,4 @@
-./bin/bash
+run./bin/bash
 
 if [[ -z $BUILD_TYPE ]]; then
     BUILD_TYPE=Debug
