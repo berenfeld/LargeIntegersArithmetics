@@ -17,8 +17,8 @@ namespace large_numbers
     };
 
     /**
-     * @brief The default base 2 cache, holding binary numbers of the form 1000000
-     * up to constexpr binary digits
+     * @brief The default base 2 cache, holding binary numbers of the form
+     * 1000000 up to constexpr binary digits
      *
      */
     extern Base2Cache base2Cache;

@@ -50,8 +50,8 @@ namespace large_numbers
     /**
      * @brief Try to make an educated guess for the base of str
      * The guess is natural. if the string starts with 0x or 0X its base 16,
-     * else if its only digits its base 10, else if its only hexadecimal its base
-     * 16,
+     * else if its only digits its base 10, else if its only hexadecimal its
+     * base 16,
      *
      * @param str
      * @return int
