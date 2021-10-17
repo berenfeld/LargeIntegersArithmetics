@@ -8,7 +8,7 @@ namespace large_numbers
     {
         int digit_pos = 0;
         UInt base2_num(1);
-        for (; digit_pos < MAX_BINARY_DIGITS; ++digit_pos, base2_num = base2_num << 1) {
+        for (; digit_pos < LN_MAX_BINARY_DIGITS; ++digit_pos, base2_num = base2_num << 1) {
             _cache[digit_pos] = base2_num;
         }
     }

@@ -10,9 +10,5 @@
 #define LN_HEX_DIGITS_IN_BLOCK (sizeof(LN_BLOCK_TYPE) * 2)
 #define LN_MAX_BLOCK_VALUE (std::numeric_limits<LN_BLOCK_TYPE>::max())
 #define LN_BENCHMARK_UINT_BITS 512
-
-namespace large_numbers
-{
-    static constexpr int MAX_DECIMAL_DIGITS = 512;
-    static constexpr int MAX_BINARY_DIGITS = 2048;
-} // namespace large_numbers
+#define LN_MAX_BINARY_DIGITS 10240
+#define LN_MAX_DECIMAL_DIGITS 2048

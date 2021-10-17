@@ -37,7 +37,7 @@ void searchAroundRSA100(benchmark::State& state) {
         "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
         UInt z = rsa_100.sqrt() += 1;
         PrimesBase base(128);
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 1000; ++i) {
             UInt candidate = UInt::power_modulo(z, 2, rsa_100);
             if (base.contains(candidate)) {
                 z += 1;
