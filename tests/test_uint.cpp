@@ -438,7 +438,7 @@ TEST(UInt, StartWithRsa100)
     PrimesBase base(128);
     for (int i = 0; i < 170; ++i) {
         UInt candidate = UInt::power_modulo(z, 2, rsa_100);
-        std::cout << "checking z " << z << " candidate " << candidate << std::endl;
+        // std::cout << "checking z " << z << " candidate " << candidate << std::endl;
         if (base.contains(candidate)) {
             std::cout << "Found B-smooth ! : " << candidate << std::endl;
             exit(0);
@@ -463,12 +463,10 @@ TEST(UInt, Rsa100By17packs)
     UInt results[] = {0, 0, 0, 0, 0};
     int number_of_packs = number_of_checks / 17;
 
-    std::function<void(UInt &, UInt &, int)> check_a2 = [&base, &rsa_100](UInt &a2, UInt &gelem, int plus) {
-        a2 %= rsa_100;
-        std::cout << "[INFO] checking a + k " << gelem << "+" << plus << "for Natural k in [0, 16] candidate"
-                  << std::endl;
-        if (base.contains(a2)) {
-            std::cout << "[SUCC] Found B-smooth ! : " << a2 << std::endl;
+    std::function<void(UInt &, UInt &, int)> check_a2 = [&base, &rsa_100](UInt &to_check, UInt &gelem, int plus) {
+        to_check %= rsa_100;
+        if (base.contains(to_check)) {
+            std::cout << "[SUCC] Found B-smooth ! : " << to_check<<" produced by ("<<gelem << "+" << plus <<")^2 % rsa"<< std::endl;
             exit(0);
         }
     };
@@ -528,10 +526,9 @@ TEST(UInt, Rsa100ByAdditionalDoubleA)
 
     std::function<void(UInt &, UInt &, int)> check = [&base, &rsa_100](UInt &to_check, UInt &gelem, int plus) {
         to_check %= rsa_100;
-        std::cout << "[INFO] checking a + k " << gelem << "+" << plus << "candidate"
-                  << std::endl;
+
         if (base.contains(to_check)) {
-            std::cout << "[SUCC] Found B-smooth ! : " << to_check << std::endl;
+            std::cout << "[SUCC] Found B-smooth ! : " << to_check<<" produced by ("<<gelem << "+" << plus <<")^2 % rsa"<< std::endl;
             exit(0);
         }
     };
