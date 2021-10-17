@@ -17,8 +17,8 @@ namespace large_numbers
     };
 
     /**
-     * @brief The default base10 cache, holding decimal numbers of the form X000000
-     * where X is in 1..9 , up to MAX_DECIMAL_DIGITS decimal digits
+     * @brief The default base10 cache, holding decimal numbers of the form
+     * X000000 where X is in 1..9 , up to MAX_DECIMAL_DIGITS decimal digits
      *
      */
     extern Base10Cache base10Cache;

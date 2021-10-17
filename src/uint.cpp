@@ -92,8 +92,9 @@ namespace large_numbers
     {
         const size_t other_size = other.size();
         UInt other_negate = other.negate();
-        // negate value of other is 2^n - other - 1, where n is the number of bits of
-        // other rounded up to 64. so we need to substract 2^n and add 1 back
+        // negate value of other is 2^n - other - 1, where n is the number of
+        // bits of other rounded up to 64. so we need to substract 2^n and add 1
+        // back
         *this += other_negate;
         *this += 1;
         for (size_t i = other_size; i < _values.size(); ++i) {

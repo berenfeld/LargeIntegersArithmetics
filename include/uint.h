@@ -64,13 +64,15 @@ namespace large_numbers
 
         // root square
         /**
-         * @brief calculate the sqrt of this and put the answer in reference result
+         * @brief calculate the sqrt of this and put the answer in reference
+         * result
          *
-         * @param result input - best guess of the sqrt (preferred UInt(0), so the function will guess it by itself).
-         *               output - the result.
-         * @param steps_limit - maximum steps of the sqrt guessing. complexity of this method is
-         * O(steps_limit*O(operator/)) = O(steps_limit*n) steps_limit=0 returns initial guess of sqrt (2^(n/2))
-         *                      steps_limit<0 no limit.
+         * @param result input - best guess of the sqrt (preferred UInt(0), so
+         * the function will guess it by itself). output - the result.
+         * @param steps_limit - maximum steps of the sqrt guessing. complexity
+         * of this method is O(steps_limit*O(operator/)) = O(steps_limit*n)
+         * steps_limit=0 returns initial guess of sqrt (2^(n/2)) steps_limit<0
+         * no limit.
          */
         void sqrt(UInt &result, LN_BLOCK_TYPE steps_limit = -1) const;
         /**
@@ -108,11 +110,11 @@ namespace large_numbers
 
       private:
         /**
-         * @brief negate all the bits in the number, and after negation trim leading
-         * zeros note : unlike fixed size ~ operator this operator does not reverse.
-         * i.e sometimes negate(negate(x)) != x
-         * TODO : formalize it, using either fixed block size argument or storing of
-         * "negate back" block size
+         * @brief negate all the bits in the number, and after negation trim
+         * leading zeros note : unlike fixed size ~ operator this operator does
+         * not reverse. i.e sometimes negate(negate(x)) != x
+         * TODO : formalize it, using either fixed block size argument or
+         * storing of "negate back" block size
          * @return UInt
          */
         [[nodiscard]] UInt negate() const;
