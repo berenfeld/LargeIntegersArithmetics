@@ -35,6 +35,16 @@ namespace large_numbers
         // multiplication
         UInt operator*(LN_BLOCK_TYPE arg) const;
         UInt &operator*=(LN_BLOCK_TYPE arg);
+        /**
+         * @brief Multiply this UNit by arg, adding the result to the result argument
+         * starting with block add_to_block
+         *
+         * @param arg
+         * @param result
+         * @param add_to_block
+         * @return UInt&
+         */
+        void mulAdd(LN_BLOCK_TYPE arg, UInt &result, size_t add_to_block) const;
         UInt operator*(const UInt &arg) const;
         UInt &operator*=(const UInt &arg);
 

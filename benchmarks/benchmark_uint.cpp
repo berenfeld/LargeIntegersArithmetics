@@ -15,6 +15,15 @@ void addition(benchmark::State &state)
     }
 }
 
+void substraction(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt c = a > b ? a - b : b - a;
+    }
+}
+
 void multiplication(benchmark::State &state)
 {
     for (auto _ : state) {
@@ -43,6 +52,7 @@ void gcd(benchmark::State &state)
 }
 
 BENCHMARK(addition);
+BENCHMARK(substraction);
 BENCHMARK(multiplication);
 BENCHMARK(power);
 BENCHMARK(gcd);

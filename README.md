@@ -5,34 +5,38 @@ Try to see how complicated would it be to work with very large integers and mayb
 
 Sample benchmarking on gitpod machines and github runner machines
 
-### Gitpod machine, G++ 9.3.0
+### Local machine, G++ 9.3.0
 
 ```
-gitpod /workspace/LargeIntegersArithmetics $ ./build/Release/BenchmarkLargeInts  --benchmark_repetitions=5 --benchmark_report_aggregates_only
-2021-10-17 18:03:56
+ran@RANB-LPT:~/LargeIntegersArithmetics$ ./benchmark.sh
+2021-10-20 09:37:44
 Running ./build/Release/BenchmarkLargeInts
-Run on (16 X 2800.21 MHz CPU s)
+Run on (16 X 1696.75 MHz CPU s)
 CPU Caches:
   L1 Data 32K (x8)
   L1 Instruction 32K (x8)
-  L2 Unified 1024K (x8)
-  L3 Unified 33792K (x1)
-Load Average: 1.48, 1.86, 1.88
+  L2 Unified 512K (x8)
+  L3 Unified 4096K (x1)
+Load Average: 0.45, 0.16, 0.05
 ----------------------------------------------------------------
 Benchmark                      Time             CPU   Iterations
 ----------------------------------------------------------------
-addition_mean               6939 ns         6938 ns            5
-addition_median             6855 ns         6854 ns            5
-addition_stddev              184 ns          184 ns            5
-multiplication_mean        13237 ns        13235 ns            5
-multiplication_median      13262 ns        13260 ns            5
-multiplication_stddev        248 ns          247 ns            5
-power_mean                154908 ns       154888 ns            5
-power_median              154510 ns       154490 ns            5
-power_stddev                4963 ns         4956 ns            5
-gcd_mean                  757904 ns       757753 ns            5
-gcd_median                753313 ns       753242 ns            5
-gcd_stddev                 13517 ns        13422 ns            5
+addition_mean               4640 ns         4640 ns            5
+addition_median             4591 ns         4591 ns            5
+addition_stddev             83.1 ns         83.1 ns            5
+substraction_mean           5295 ns         5295 ns            5
+substraction_median         5303 ns         5303 ns            5
+substraction_stddev         23.0 ns         23.0 ns            5
+multiplication_mean         5598 ns         5598 ns            5
+multiplication_median       5592 ns         5592 ns            5
+multiplication_stddev       17.5 ns         17.5 ns            5
+power_mean                 16574 ns        16574 ns            5
+power_median               16525 ns        16524 ns            5
+power_stddev                83.6 ns         83.8 ns            5
+gcd_mean                  536304 ns       536306 ns            5
+gcd_median                534539 ns       534540 ns            5
+gcd_stddev                  8152 ns         8152 ns            5
+ran@RANB-LPT:~/LargeIntegersArithmetics$
 ```
 
 ### Gitpod machine, Clang 13.0.0

@@ -142,13 +142,37 @@ namespace large_numbers
         return *this;
     }
 
+    void UInt::mulAdd(LN_BLOCK_TYPE arg, UInt &result, size_t add_to_block) const
+    {
+        LN_BLOCK_TYPE add_to_next_value = 0;
+        LN_SUM_MUL_BLOCK_TYPE arg64 = static_cast<LN_SUM_MUL_BLOCK_TYPE>(arg);
+        while (result._values.size() < (_values.size() + add_to_block + 1)) {
+            result._values.push_back(0);
+        }
+        for (size_t i = 0; i < _values.size(); ++i) {
+            LN_SUM_MUL_BLOCK_TYPE result_value = static_cast<LN_SUM_MUL_BLOCK_TYPE>(_values[i]) * arg64 +
+                                                 result._values[i + add_to_block] + add_to_next_value;
+            result._values[i + add_to_block] = static_cast<LN_BLOCK_TYPE>(result_value);
+            add_to_next_value = result_value >> LN_BITS_IN_BLOCK;
+        }
+        int result_index = _values.size() + add_to_block;
+        while (add_to_next_value) {
+            LN_SUM_MUL_BLOCK_TYPE result_value =
+                static_cast<LN_SUM_MUL_BLOCK_TYPE>(result._values[result_index]) + add_to_next_value;
+            result._values[result_index] = static_cast<LN_BLOCK_TYPE>(result_value);
+            add_to_next_value = result_value >> LN_BITS_IN_BLOCK;
+            ++result_index;
+        }
+        while ((!result._values.empty()) && result._values.back() == 0) {
+            result._values.pop_back();
+        }
+    }
+
     UInt UInt::operator*(const UInt &arg) const
     {
-        UInt result;
+        UInt result = 0;
         for (size_t i = 0; i < arg.size(); ++i) {
-            UInt interm = *this * arg.block(i);
-            interm = interm << (i * LN_BITS_IN_BLOCK);
-            result += interm;
+            mulAdd(arg.block(i), result, i);
         }
         return result;
     }
