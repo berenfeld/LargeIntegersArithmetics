@@ -9,7 +9,7 @@ Sample benchmarking on gitpod machines and github runner machines
 
 ```
 ran@RANB-LPT:~/LargeIntegersArithmetics$ ./benchmark.sh
-2021-10-20 09:37:44
+2021-10-20 11:45:52
 Running ./build/Release/BenchmarkLargeInts
 Run on (16 X 1696.75 MHz CPU s)
 CPU Caches:
@@ -17,26 +17,28 @@ CPU Caches:
   L1 Instruction 32K (x8)
   L2 Unified 512K (x8)
   L3 Unified 4096K (x1)
-Load Average: 0.45, 0.16, 0.05
+Load Average: 0.46, 0.39, 0.28
 ----------------------------------------------------------------
 Benchmark                      Time             CPU   Iterations
 ----------------------------------------------------------------
-addition_mean               4640 ns         4640 ns            5
-addition_median             4591 ns         4591 ns            5
-addition_stddev             83.1 ns         83.1 ns            5
-substraction_mean           5295 ns         5295 ns            5
-substraction_median         5303 ns         5303 ns            5
-substraction_stddev         23.0 ns         23.0 ns            5
-multiplication_mean         5598 ns         5598 ns            5
-multiplication_median       5592 ns         5592 ns            5
-multiplication_stddev       17.5 ns         17.5 ns            5
-power_mean                 16574 ns        16574 ns            5
-power_median               16525 ns        16524 ns            5
-power_stddev                83.6 ns         83.8 ns            5
-gcd_mean                  536304 ns       536306 ns            5
-gcd_median                534539 ns       534540 ns            5
-gcd_stddev                  8152 ns         8152 ns            5
-ran@RANB-LPT:~/LargeIntegersArithmetics$
+addition_mean               4536 ns         4536 ns            5
+addition_median             4543 ns         4543 ns            5
+addition_stddev             11.5 ns         11.5 ns            5
+substraction_mean           5312 ns         5312 ns            5
+substraction_median         5284 ns         5284 ns            5
+substraction_stddev          101 ns          101 ns            5
+multiplication_mean         5658 ns         5658 ns            5
+multiplication_median       5595 ns         5595 ns            5
+multiplication_stddev        120 ns          120 ns            5
+power_mean                 16004 ns        16004 ns            5
+power_median               15998 ns        15998 ns            5
+power_stddev                58.0 ns         58.0 ns            5
+gcd_mean                  533340 ns       533334 ns            5
+gcd_median                534040 ns       534011 ns            5
+gcd_stddev                  8501 ns         8501 ns            5
+base_check_mean         28639644 ns     28639539 ns            5
+base_check_median       28506205 ns     28506203 ns            5
+base_check_stddev        4252339 ns      4252180 ns            5
 ```
 
 ### Gitpod machine, Clang 13.0.0

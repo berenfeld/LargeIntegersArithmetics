@@ -18,6 +18,7 @@
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
     "files.associations": {
         "array": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "iostream": "cpp"
     }
 }
