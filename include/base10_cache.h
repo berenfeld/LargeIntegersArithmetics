@@ -12,8 +12,10 @@ namespace large_numbers
         UInt get(size_t digit_pos, size_t digit_value);
 
       private:
+        void extendTo(size_t max_digit_pos);
         size_t makeKey(size_t digit_pos, size_t digit_value);
         std::unordered_map<size_t, UInt, UInt::UIntHash> _cache;
+        size_t max_digit_pos_cached;
     };
 
     /**
