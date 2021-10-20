@@ -11,6 +11,6 @@ namespace large_numbers
 
       private:
         std::vector<uint32_t> _primes;
-        UInt _product; // product of all primes in base for contains check
+        std::vector<LN_BLOCK_TYPE> _products; // products of all primes in base for contains check
     };
 } // namespace large_numbers

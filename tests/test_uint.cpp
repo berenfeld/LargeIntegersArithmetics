@@ -418,6 +418,10 @@ TEST(UInt, PrimesBase)
     ASSERT_FALSE(base.contains(13));
     ASSERT_FALSE(base.contains(29));
     ASSERT_FALSE(base.contains(2 * 3 * 5 * 7 * 17));
+
+    base = PrimesBase(128);
+    ASSERT_TRUE(base.contains(13));
+    ASSERT_FALSE(base.contains(0x123456789ABCDEF)); // a lucky guess
 }
 
 TEST(UInt, gcd)
@@ -434,18 +438,20 @@ TEST(UInt, gcd)
     ASSERT_EQ(a.gcdWith(48), 12);
 }
 
+/*
 TEST(UInt, StartWithRsa100)
 {
     UInt rsa_100("1522605027922533360535618378132637429718068114961380688657908"
                  "494580122963258952897654000350692006139");
     UInt z = rsa_100.sqrt() += 1;
-    PrimesBase base(128);
-    for (int i = 0; i < 10; ++i) {
+    PrimesBase base(512);
+    for (int i = 0; i < 10000000; ++i) {
         UInt candidate = UInt::power_modulo(z, 2, rsa_100);
-        std::cout << "checking z " << z << " candidate " << candidate << std::endl;
+        // std::cout << "checking z " << z << " candidate " << candidate << std::endl;
         if (base.contains(candidate)) {
             std::cout << "Found B-smooth ! : " << candidate << std::endl;
         }
         z += 1;
     }
 }
+*/

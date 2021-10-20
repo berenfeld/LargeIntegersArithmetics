@@ -6,31 +6,42 @@ namespace large_numbers
     PrimesBase::PrimesBase(size_t size)
     {
         uint32_t num = 2;
-        _product = 1;
-        while (_primes.size() < size) {
+        UInt product = 1;
+        size_t included_primes = 0;
+        while (included_primes < size) {
             if (isPrime(num)) {
-                _primes.push_back(num);
-                _product *= num;
+                product *= num;
+                if (product.size() == 2) {
+                    // store the products in 1-block UInts
+                    product /= num;
+                    _products.push_back(product.block(0));
+                    product = 1;
+                }
+                ++included_primes;
             }
             ++num;
         }
+        // push last product
+        _products.push_back(product.block(0));
     }
 
     bool PrimesBase::contains(const UInt &value) const
     {
-        UInt remaining_product = _product;
         UInt remaining_value = value;
-        do {
-            UInt gcd_result = UInt::gcd(remaining_product, remaining_value);
-            if (gcd_result == remaining_value) {
-                return true;
-            }
-            if (gcd_result == 1) {
-                return false;
-            }
-            remaining_value /= gcd_result;
-            remaining_product = gcd_result;
-        } while (true);
+        for (size_t i = 0; i < _products.size(); ++i) {
+            UInt remaining_product = _products[i];
+            do {
+                UInt gcd_result = UInt::gcd(remaining_product, remaining_value);
+                if (gcd_result == remaining_value) {
+                    return true;
+                }
+                if (gcd_result == 1) {
+                    break;
+                }
+                remaining_value /= gcd_result;
+                remaining_product = gcd_result;
+            } while (true);
+        }
         return false;
     }
 } // namespace large_numbers
