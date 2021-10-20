@@ -15,7 +15,7 @@ namespace large_numbers
                     // store the products in 1-block UInts
                     product /= num;
                     _products.push_back(product.block(0));
-                    product = 1;
+                    product = num;
                 }
                 ++included_primes;
             }
@@ -32,13 +32,13 @@ namespace large_numbers
             UInt remaining_product = _products[i];
             do {
                 UInt gcd_result = UInt::gcd(remaining_product, remaining_value);
-                if (gcd_result == remaining_value) {
+                remaining_value /= gcd_result;
+                if (remaining_value == 1) {
                     return true;
                 }
                 if (gcd_result == 1) {
                     break;
                 }
-                remaining_value /= gcd_result;
                 remaining_product = gcd_result;
             } while (true);
         }

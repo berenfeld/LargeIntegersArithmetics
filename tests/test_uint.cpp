@@ -354,10 +354,11 @@ TEST(UInt, Random)
 {
     // test that we have fixed seed for now
     srand(0);
-    ASSERT_EQ(UInt("0X327B23C6"), large_numbers::rand(1));
-    ASSERT_EQ(UInt("0X66334873"), large_numbers::rand(2));
-    ASSERT_EQ(UInt("0X19495CFF000000002AE8944A"), large_numbers::rand(3));
-    ASSERT_EQ(UInt("0X238E1F290000000046E87CCD000000003D1B58BA00000000507ED7AB"), large_numbers::rand());
+    ASSERT_EQ(UInt("3637540459023997033"), large_numbers::rand(1));
+    ASSERT_EQ(UInt("8408462745175416063"), large_numbers::rand(2));
+    ASSERT_EQ(UInt("7085667359969386281"), large_numbers::rand(3));
+    ASSERT_EQ(UInt("509856956801173727195355788088142797349857806674160671554942450503027376179805071468133774075896"),
+              large_numbers::rand());
 }
 
 TEST(UInt, sqrt)
@@ -395,6 +396,7 @@ TEST(UInt, BasicPrimeCheck)
     ASSERT_TRUE(isPrime(7));
     ASSERT_TRUE(isPrime(101));
     ASSERT_TRUE(isPrime(997));
+    ASSERT_TRUE(isPrime(1031));
 
     ASSERT_FALSE(isPrime(4));
     ASSERT_FALSE(isPrime(6));
@@ -421,7 +423,12 @@ TEST(UInt, PrimesBase)
 
     base = PrimesBase(128);
     ASSERT_TRUE(base.contains(13));
-    ASSERT_FALSE(base.contains(0x123456789ABCDEF)); // a lucky guess
+    UInt candidate = 1;
+    for (int i = 1; i < 100; ++i) {
+        candidate *= (128 - i);
+    }
+    ASSERT_TRUE(base.contains(candidate));
+    ASSERT_FALSE(base.contains(candidate * 1031));
 }
 
 TEST(UInt, gcd)
@@ -438,20 +445,22 @@ TEST(UInt, gcd)
     ASSERT_EQ(a.gcdWith(48), 12);
 }
 
-/*
 TEST(UInt, StartWithRsa100)
 {
     UInt rsa_100("1522605027922533360535618378132637429718068114961380688657908"
                  "494580122963258952897654000350692006139");
-    UInt z = rsa_100.sqrt() += 1;
-    PrimesBase base(512);
-    for (int i = 0; i < 10000000; ++i) {
-        UInt candidate = UInt::power_modulo(z, 2, rsa_100);
-        // std::cout << "checking z " << z << " candidate " << candidate << std::endl;
-        if (base.contains(candidate)) {
-            std::cout << "Found B-smooth ! : " << candidate << std::endl;
+    UInt candidate = rsa_100.sqrt() + 1;
+    PrimesBase base(64);
+    for (int i = 0; i < 1000; ++i) {
+        UInt candidate_power_mod_2 = UInt::power_modulo(candidate, 2, rsa_100);
+        if ((i % 100) == 1) {
+            std::cout << "candidate " << i << " candidate " << candidate << " candidate_power_mod_2 "
+                      << candidate_power_mod_2 << std::endl;
         }
-        z += 1;
+        if (base.contains(candidate_power_mod_2)) {
+            std::cout << "Found B-smooth ! : candidate " << candidate << " candidate_power_mod_2 "
+                      << candidate_power_mod_2 << std::endl;
+        }
+        candidate += 1;
     }
 }
-*/
