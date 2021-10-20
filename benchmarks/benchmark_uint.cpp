@@ -51,10 +51,22 @@ void gcd(benchmark::State &state)
     }
 }
 
+void base_check(benchmark::State &state)
+{
+    large_numbers::PrimesBase base(512);
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        if (base.contains(a)) {
+            a = a + 1;
+        }
+    }
+}
+
 BENCHMARK(addition);
 BENCHMARK(substraction);
 BENCHMARK(multiplication);
 BENCHMARK(power);
 BENCHMARK(gcd);
+BENCHMARK(base_check);
 
 BENCHMARK_MAIN();
