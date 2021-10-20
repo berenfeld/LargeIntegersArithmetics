@@ -132,7 +132,8 @@ namespace large_numbers
         }
         int num_blocks = std::max(::rand() % blocks, 1); // at least one block
         for (auto i = 0; i < num_blocks; ++i) {
-            result += ::rand();
+            // random 64 bit unsigned integer
+            result += ((static_cast<LN_BLOCK_TYPE>(::rand()) << 32) + ::rand());
             if (i != num_blocks - 1) {
                 result = result << LN_BITS_IN_BLOCK;
             }

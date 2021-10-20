@@ -373,22 +373,12 @@ namespace large_numbers
     // static
     int8_t UInt::compare(const UInt &a, const UInt &b)
     {
-        if (a.size() < b.size())
-            return -1;
-        if (a.size() > b.size())
-            return 1;
-        if (lastBit(a.lastBlock()) < lastBit(b.lastBlock()))
-            return -1;
-        if (lastBit(a.lastBlock()) > lastBit(b.lastBlock()))
-            return 1;
-        auto ia = a._values.rbegin();
-        auto ib = b._values.rbegin();
-        for (; ia != a._values.rend() && ib != b._values.rend(); ia++, ib++) {
-            if (*ia != *ib) {
-                if (*ia < *ib)
-                    return -1;
-                if (*ia > *ib)
-                    return 1;
+        if (a.size() != b.size()) {
+            return a.size() > b.size() ? 1 : -1;
+        }
+        for (int i = a.size() - 1; i >= 0; --i) {
+            if (a.block(i) != b.block(i)) {
+                return a.block(i) > b.block(i) ? 1 : -1;
             }
         }
         return 0;
