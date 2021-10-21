@@ -53,7 +53,10 @@ namespace large_numbers
         UInt &raiseToPower(LN_BLOCK_TYPE exp);
 
         // shift
-        UInt operator<<(LN_BLOCK_TYPE offset) const;
+        UInt operator<<(size_t offset) const;
+        UInt &operator<<=(size_t offset);
+        UInt operator>>(size_t offset) const;
+        UInt &operator>>=(size_t offset);
 
         // division
         UInt operator/(const UInt &other) const;
@@ -127,7 +130,13 @@ namespace large_numbers
          * storing of "negate back" block size
          * @return UInt
          */
-        [[nodiscard]] UInt negate() const;
+        UInt negate() const;
+
+        /**
+         * @brief Remove trailing zeros from the _values
+         *
+         */
+        void trimZeros();
 
         std::vector<LN_BLOCK_TYPE> _values;
     };

@@ -25,15 +25,15 @@ namespace large_numbers
         _products.push_back(product.block(0));
     }
 
-    bool PrimesBase::contains(const UInt &value) const
+    bool PrimesBase::contains(const UInt &value, UInt &reminder) const
     {
-        UInt remaining_value = value;
+        reminder = value;
         for (size_t i = 0; i < _products.size(); ++i) {
             UInt remaining_product = _products[i];
             do {
-                UInt gcd_result = UInt::gcd(remaining_product, remaining_value);
-                remaining_value /= gcd_result;
-                if (remaining_value == 1) {
+                UInt gcd_result = UInt::gcd(remaining_product, reminder);
+                reminder /= gcd_result;
+                if (reminder == 1) {
                     return true;
                 }
                 if (gcd_result == 1) {
@@ -43,5 +43,11 @@ namespace large_numbers
             } while (true);
         }
         return false;
+    }
+
+    bool PrimesBase::contains(const UInt &value) const
+    {
+        UInt reminder_unused;
+        return contains(value, reminder_unused);
     }
 } // namespace large_numbers
