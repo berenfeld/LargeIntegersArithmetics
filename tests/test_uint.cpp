@@ -201,7 +201,7 @@ TEST(UInt, Multiply)
     }
 }
 
-TEST(UInt, Shift)
+TEST(UInt, ShiftRight)
 {
     UInt test("0x10000000");
     ASSERT_EQ(UInt("0x10000000"), test << 0);
@@ -218,6 +218,36 @@ TEST(UInt, Shift)
     ASSERT_EQ(UInt("0X2468ACF02468ACF0000000000"), test2 << 37);
     ASSERT_EQ(UInt("0x12345678123456780000000000000000"), test2 << 64);
     ASSERT_EQ(UInt("0x123456781234567800000000000000000000000000000000"), test2 << 128);
+
+    test2 <<= 128;
+    ASSERT_EQ(UInt("0x123456781234567800000000000000000000000000000000"), test2);
+}
+
+TEST(UInt, ShiftLEft)
+{
+    UInt test("0x10000000");
+    ASSERT_EQ(UInt("0x10000000"), test >> 0);
+    ASSERT_EQ(UInt("0x8000000"), test >> 1);
+    ASSERT_EQ(UInt("0x1000000"), test >> 4);
+    ASSERT_EQ(UInt("0x1000"), test >> 16);
+    ASSERT_EQ(UInt("0"), test >> 32);
+
+    UInt test2("0x1234567812345678");
+    ASSERT_EQ(UInt("0x123456781234567"), test2 >> 4);
+    ASSERT_EQ(UInt("0x91a2b3c091a2b3"), test2 >> 5);
+    ASSERT_EQ(UInt("0x12345678123456"), test2 >> 8);
+    ASSERT_EQ(UInt("0x12345678"), test2 >> 32);
+    ASSERT_EQ(UInt("0x91a2b3"), test2 >> 37);
+
+    UInt test3("0x123456781234567800000000000000000000000000000000");
+    ASSERT_EQ(UInt("0x123456781234567"), test3 >> 132);
+    ASSERT_EQ(UInt("0x91a2b3c091a2b3"), test3 >> 133);
+    ASSERT_EQ(UInt("0x12345678123456"), test3 >> 136);
+    ASSERT_EQ(UInt("0x12345678"), test3 >> 160);
+    ASSERT_EQ(UInt("0x91a2b3"), test3 >> 165);
+
+    test3 >>= 165;
+    ASSERT_EQ(UInt("0x91a2b3"), test3);
 }
 
 TEST(UInt, Base10String)
@@ -225,6 +255,12 @@ TEST(UInt, Base10String)
     UInt zero("");
     ASSERT_TRUE(zero == 0);
     ASSERT_EQ("0", zero.toString());
+    ASSERT_EQ(0, zero.size());
+
+    zero = UInt("0");
+    ASSERT_TRUE(zero == 0);
+    ASSERT_EQ("0", zero.toString());
+    ASSERT_EQ(0, zero.size());
 
     UInt test("256");
     ASSERT_EQ("256", test.toString());
@@ -245,6 +281,7 @@ TEST(UInt, Base16String)
 {
     UInt zero;
     ASSERT_EQ("0X0", zero.toString(16));
+    ASSERT_EQ(0, zero.size());
     UInt test("ABCDABCD");
     ASSERT_EQ("0XABCDABCD", test.toString(16));
 }
@@ -384,6 +421,27 @@ TEST(UInt, sqrt)
         powered.sqrt(result);
         ASSERT_EQ(base, result);
     }
+
+    for (auto i = 0; i < 10; ++i) {
+        UInt powered = large_numbers::rand(4);
+        UInt sqrt_num = powered.sqrt();
+        ASSERT_TRUE(UInt::pow(sqrt_num, 2) <= powered);
+        ASSERT_TRUE(UInt::pow(sqrt_num + 1, 2) > powered);
+    }
+
+    // TODO - python still is not 100% accurate for very large integer sqrt
+    /*
+    int return_code;
+    for (auto i = 0; i < 10; ++i) {
+        UInt num = large_numbers::rand(3);
+        std::string command =
+            "python -c 'import decimal; print(int(decimal.Decimal(\"" + num.toString() + "\").sqrt()))'";
+        std::string result = executeCommand(command, return_code);
+        ASSERT_EQ(0, return_code) << "Failed executing command " << command;
+        UInt sqrt_result(result);
+        ASSERT_EQ(sqrt_result, num.sqrt()) << "failed with sqrt of " << num;
+    }
+    */
 }
 
 TEST(UInt, BasicPrimeCheck)
@@ -447,20 +505,22 @@ TEST(UInt, gcd)
 
 TEST(UInt, StartWithRsa100)
 {
-    UInt rsa_100("1522605027922533360535618378132637429718068114961380688657908"
-                 "494580122963258952897654000350692006139");
+    UInt rsa_100(
+        "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
     UInt candidate = rsa_100.sqrt() + 1;
-    PrimesBase base(64);
-    for (int i = 0; i < 1000; ++i) {
+    PrimesBase base(300);
+    UInt reminder;
+    for (int i = 0; i < 10; ++i) {
         UInt candidate_power_mod_2 = UInt::power_modulo(candidate, 2, rsa_100);
-        if ((i % 100) == 1) {
-            std::cout << "candidate " << i << " candidate " << candidate << " candidate_power_mod_2 "
-                      << candidate_power_mod_2 << std::endl;
-        }
-        if (base.contains(candidate_power_mod_2)) {
+
+        if (base.contains(candidate_power_mod_2, reminder)) {
             std::cout << "Found B-smooth ! : candidate " << candidate << " candidate_power_mod_2 "
                       << candidate_power_mod_2 << std::endl;
         }
+        // if ((i % 100) == 1) {
+        std::cout << "candidate " << i << " candidate " << candidate << " candidate_power_mod_2 "
+                  << candidate_power_mod_2 << " reminder " << reminder.size() << std::endl;
+        // }
         candidate += 1;
     }
 }

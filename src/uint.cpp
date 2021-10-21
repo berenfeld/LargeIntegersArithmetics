@@ -30,10 +30,12 @@ namespace large_numbers
         case 10: {
             UInt result = parseBase10StringValues(str2);
             _values = result._values;
+            trimZeros();
             break;
         }
         case 16: {
             parseBase16StringValues(str2, _values);
+            trimZeros();
             break;
         }
         default:
@@ -163,9 +165,7 @@ namespace large_numbers
             add_to_next_value = result_value >> LN_BITS_IN_BLOCK;
             ++result_index;
         }
-        while ((!result._values.empty()) && result._values.back() == 0) {
-            result._values.pop_back();
-        }
+        result.trimZeros();
     }
 
     UInt UInt::operator*(const UInt &arg) const
@@ -277,13 +277,15 @@ namespace large_numbers
         }
         return;
     }
+
     UInt UInt::sqrt() const
     {
         UInt result = *this;
         this->sqrt(result);
         return result;
     }
-    UInt UInt::operator<<(LN_BLOCK_TYPE offset) const
+
+    UInt UInt::operator<<(size_t offset) const
     {
         UInt result(*this);
         LN_BLOCK_TYPE zero_blocks = offset / LN_BITS_IN_BLOCK;
@@ -305,6 +307,39 @@ namespace large_numbers
         }
 
         return result;
+    }
+
+    UInt &UInt::operator<<=(size_t offset)
+    {
+        *this = *this << offset;
+        return *this;
+    }
+
+    UInt UInt::operator>>(size_t offset) const
+    {
+        UInt result(*this);
+        offset = std::min(offset, result.bits());
+
+        size_t zero_blocks = offset / LN_BITS_IN_BLOCK;
+        offset -= (zero_blocks * LN_BITS_IN_BLOCK);
+        result._values.erase(result._values.begin(), result._values.begin() + zero_blocks);
+
+        result._values.push_back(0);
+        for (size_t i = 0; i < result.size() - 1; ++i) {
+            LN_SUM_MUL_BLOCK_TYPE value =
+                (static_cast<LN_SUM_MUL_BLOCK_TYPE>(result._values[i + 1]) << LN_BITS_IN_BLOCK) | result._values[i];
+            value = value >> offset;
+            result._values[i] = static_cast<LN_BLOCK_TYPE>(value);
+        }
+        result.trimZeros();
+
+        return result;
+    }
+
+    UInt &UInt::operator>>=(size_t offset)
+    {
+        *this = *this >> offset;
+        return *this;
     }
 
     UInt UInt::operator/(const UInt &other) const
@@ -411,6 +446,13 @@ namespace large_numbers
             result._values.pop_back();
         }
         return result;
+    }
+
+    void UInt::trimZeros()
+    {
+        while ((!_values.empty()) && _values.back() == 0) {
+            _values.pop_back();
+        }
     }
 
     size_t UInt::bits() const { return (size() - 1) * LN_BITS_IN_BLOCK + lastBit(lastBlock()); }

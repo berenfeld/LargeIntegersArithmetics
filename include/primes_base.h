@@ -7,6 +7,7 @@ namespace large_numbers
     {
       public:
         PrimesBase(size_t size);
+        bool contains(const UInt &value, UInt &reminder) const;
         bool contains(const UInt &value) const;
 
       private:
