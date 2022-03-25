@@ -1,5 +1,11 @@
 # LargeIntegersArithmetics
-Try to see how complicated would it be to work with very large integers and maybe even try to break some RSA numbers
+
+Try to see how complicated would it be to work with very large integers and maybe even try to break some RSA numbers.
+This project is pure c++, built with G++/Clang. It has 100% unit tests coverage policy.
+We implement her basic arithmetic operations and try to implement number sieve algorithms to break some RSA numbers.
+Colaborations are welcome !
+
+Ran
 
 ## Benchmarking
 

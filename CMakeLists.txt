@@ -28,6 +28,7 @@ file(GLOB LargeIntsIncludes "${PROJECT_SOURCE_DIR}/include")
 add_library(LargeInts STATIC ${LargeIntsSrcs})
 target_include_directories(LargeInts PUBLIC ${LargeIntsIncludes})
 target_link_libraries(LargeInts PRIVATE coverage_config)
+configure_file("data/primes.list" ${CMAKE_BINARY_DIR} COPYONLY)
 
 enable_testing()
 find_package(GTest REQUIRED)

@@ -1,7 +1,7 @@
 #include "uint.h"
 #include "base2_cache.h"
+#include "cerror.h"
 #include "consts.h"
-#include "error.h"
 #include "utils.h"
 #include <algorithm>
 #include <assert.h>
@@ -40,6 +40,7 @@ namespace large_numbers
         }
         default:
             throw Error("Base not supported " + std::to_string(base) + " for : '" + str2 + "'");
+            break;
         }
     }
 

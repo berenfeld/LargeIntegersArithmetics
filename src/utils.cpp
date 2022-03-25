@@ -1,7 +1,7 @@
 #include "utils.h"
 #include "base10_cache.h"
+#include "cerror.h"
 #include "consts.h"
-#include "error.h"
 #include <algorithm>
 #include <cmath>
 #include <iomanip>

@@ -1,25 +1,29 @@
 #include "primes_base.h"
+#include "cerror.h"
 #include "utils.h"
+#include <fstream>
 
 namespace large_numbers
 {
     PrimesBase::PrimesBase(size_t size)
     {
-        uint32_t num = 2;
+        const std::string primes_file_name("primes.list");
+        std::ifstream primes_file(primes_file_name);
+        LN_ASSERT(primes_file.is_open(), "failed to open file " + primes_file_name);
+        size_t added_primes = 0;
+        int next_prime;
         UInt product = 1;
-        size_t included_primes = 0;
-        while (included_primes < size) {
-            if (isPrime(num)) {
-                product *= num;
-                if (product.size() == 2) {
-                    // store the products in 1-block UInts
-                    product /= num;
-                    _products.push_back(product.block(0));
-                    product = num;
-                }
-                ++included_primes;
+
+        while (added_primes < size) {
+            primes_file >> next_prime;
+            product *= next_prime;
+            if (product.size() == 2) {
+                // store the products in 1-block UInts
+                product /= next_prime;
+                _products.push_back(product.block(0));
+                product = next_prime;
             }
-            ++num;
+            ++added_primes;
         }
         // push last product
         _products.push_back(product.block(0));
