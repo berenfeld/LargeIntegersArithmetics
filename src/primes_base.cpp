@@ -11,7 +11,7 @@ namespace large_numbers
         std::ifstream primes_file(primes_file_name);
         LN_ASSERT(primes_file.is_open(), "failed to open file " + primes_file_name);
         size_t added_primes = 0;
-        int next_prime;
+        uint32_t next_prime;
         UInt product = 1;
 
         while (added_primes < size) {
@@ -24,6 +24,7 @@ namespace large_numbers
                 product = next_prime;
             }
             ++added_primes;
+            _primes.push_back(next_prime);
         }
         // push last product
         _products.push_back(product.block(0));

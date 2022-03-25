@@ -507,20 +507,38 @@ TEST(UInt, StartWithRsa100)
 {
     UInt rsa_100(
         "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
-    UInt candidate = rsa_100.sqrt() + 1;
-    PrimesBase base(300);
-    UInt reminder;
-    for (int i = 0; i < 10; ++i) {
-        UInt candidate_power_mod_2 = UInt::power_modulo(candidate, 2, rsa_100);
+    UInt rsa_100_sqrt = rsa_100.sqrt();
+    std::cerr << "RSA-100 : " << rsa_100 << std::endl;
+    std::cerr << "RSA-100 sqrt : " << rsa_100_sqrt << std::endl;
 
-        if (base.contains(candidate_power_mod_2, reminder)) {
-            std::cout << "Found B-smooth ! : candidate " << candidate << " candidate_power_mod_2 "
-                      << candidate_power_mod_2 << std::endl;
+    size_t numof_base_elements = 64;
+
+    PrimesBase base(numof_base_elements);
+    std::cerr << "Using a base with " << numof_base_elements << " elements " << std::endl;
+
+    UInt base_element = rsa_100_sqrt + 1;
+
+    const size_t numof_test_elements = 0x10000000;
+
+    std::cerr << "Testing " << numof_test_elements << " elements " << std::endl;
+
+    for (size_t i = 0; i < numof_test_elements; ++i) {
+        UInt candidate = base_element;
+        size_t index = i;
+        size_t current_bit = 0;
+        while (index > 0) {
+            if ((index % 2) == 1) {
+                candidate *= base.getPrime(current_bit);
+            }
+            index >>= 1;
+            ++current_bit;
         }
-        // if ((i % 100) == 1) {
-        std::cout << "candidate " << i << " candidate " << candidate << " candidate_power_mod_2 "
-                  << candidate_power_mod_2 << " reminder " << reminder.size() << std::endl;
-        // }
-        candidate += 1;
+        // std::cerr << "Testing candidate " << candidate << std::endl;
+        UInt result = candidate.raiseToPower(2, rsa_100);
+        const bool in_base = base.contains(result);
+        if (in_base) {
+            std::cerr << "Found ! Candidate " << candidate << " index " << i << " result " << result << " in base "
+                      << base.contains(result) << std::endl;
+        }
     }
 }
