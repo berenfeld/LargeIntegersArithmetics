@@ -1,4 +1,4 @@
-#include "error.h"
+#include "cerror.h"
 #include "primes_base.h"
 #include "uint.h"
 #include "utils.h"
