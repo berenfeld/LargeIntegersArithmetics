@@ -44,7 +44,14 @@ gtest_discover_tests(TestLargeInts AUTO)
 # benchmark
 find_package(benchmark REQUIRED)
 include(${benchmark_CONFIG})
-file(GLOB BenchmarkLargeIntsSrcs "${PROJECT_SOURCE_DIR}/benchmarks/*.cpp")
+file(GLOB BenchmarkLargeIntsSrcs "${PROJECT_SOURCE_DIR}/src/benchmarks/*.cpp")
 add_executable(BenchmarkLargeInts ${BenchmarkLargeIntsSrcs})
 target_include_directories(BenchmarkLargeInts PUBLIC ${LargeIntsIncludes})
 target_link_libraries(BenchmarkLargeInts LargeInts benchmark::benchmark)
+
+# rsa 100
+file(GLOB Rsa100Srcs "${PROJECT_SOURCE_DIR}/src/rsa_100/rsa_100.cpp")
+add_executable(Rsa100 ${Rsa100Srcs})
+target_include_directories(Rsa100 PUBLIC ${LargeIntsIncludes})
+target_link_libraries(Rsa100 LargeInts)
+

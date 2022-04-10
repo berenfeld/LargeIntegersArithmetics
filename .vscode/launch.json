@@ -1,12 +1,12 @@
 {
     "configurations": [
-    {
-        "type": "gdb",
-        "request": "launch",
-        "name": "Launch Program",
-        "target": "./build/${command:cmake.buildType}/TestLargeInts",
-        "cwd": "${workspaceRoot}",
-        "valuesFormatting": "parseText"
-    }
+        {
+            "type": "gdb",
+            "request": "launch",
+            "name": "Launch Program",
+            "target": "${workspaceFolder}/build/${command:cmake.buildType}/Rsa100",
+            "cwd": "${workspaceFolder}/build/${command:cmake.buildType}",
+            "valuesFormatting": "parseText"
+        }
     ]
 }
