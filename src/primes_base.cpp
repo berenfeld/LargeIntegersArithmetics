@@ -23,6 +23,7 @@ namespace large_numbers
                 _products.push_back(product.block(0));
                 product = next_prime;
             }
+            _primes.push_back(next_prime);
             ++added_primes;
         }
         // push last product
