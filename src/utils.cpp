@@ -124,6 +124,7 @@ namespace large_numbers
         throw Error("Invalid base " + str);
     }
 
+    // static
     UInt rand(int blocks)
     {
         UInt result = 0;

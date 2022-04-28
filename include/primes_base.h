@@ -9,6 +9,7 @@ namespace large_numbers
         PrimesBase(size_t size);
         bool contains(const UInt &value, UInt &reminder) const;
         bool contains(const UInt &value) const;
+        uint32_t getPrime(uint32_t index) const { return _primes.at(index); }
 
       private:
         std::vector<uint32_t> _primes;

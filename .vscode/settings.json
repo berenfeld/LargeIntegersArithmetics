@@ -65,6 +65,9 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "typeinfo": "cpp",
-        "cerrno": "cpp"
+        "cerrno": "cpp",
+        "chrono": "cpp",
+        "ratio": "cpp",
+        "cinttypes": "cpp"
     }
 }
