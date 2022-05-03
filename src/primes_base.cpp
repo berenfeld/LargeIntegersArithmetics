@@ -55,4 +55,13 @@ namespace large_numbers
         UInt reminder_unused;
         return contains(value, reminder_unused);
     }
+
+    std::vector<UInt> PrimesBase::getPrimesAsUInts() const
+    {
+        std::vector<UInt> result;
+        for (uint32_t prime : _primes) {
+            result.push_back(prime);
+        }
+        return result;
+    }
 } // namespace large_numbers

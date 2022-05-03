@@ -1,3 +1,4 @@
+#include "algorithms.h"
 #include "consts.h"
 #include "primes_base.h"
 #include "uint.h"
@@ -63,6 +64,29 @@ void base_check(benchmark::State &state)
     }
 }
 
+void product_tree_naive(benchmark::State &state)
+{
+    large_numbers::PrimesBase base(1000);
+    std::vector<UInt> values = base.getPrimesAsUInts();
+    for (auto _ : state) {
+        UInt result = 1;
+        for (UInt value : values) {
+            result *= value;
+        }
+    }
+}
+
+void product_tree(benchmark::State &state)
+{
+    large_numbers::PrimesBase base(1000);
+    std::vector<UInt> values = base.getPrimesAsUInts();
+    for (auto _ : state) {
+        UInt result = large_numbers::product(values);
+    }
+}
+
+BENCHMARK(product_tree_naive);
+BENCHMARK(product_tree);
 BENCHMARK(addition);
 BENCHMARK(substraction);
 BENCHMARK(multiplication);

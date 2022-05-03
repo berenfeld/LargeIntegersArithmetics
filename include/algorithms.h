@@ -12,4 +12,13 @@ namespace large_numbers
      * based on https://www.geeksforgeeks.org/pollards-rho-algorithm-prime-factorization/
      */
     UInt rhoFactorization(UInt n, uint32_t c = 0, uint32_t timeout_usecs = 100 * 1000);
+
+    /**
+     * @brief optimized compute of the product of all the given values
+     *
+     * @param values
+     * @return UInt
+     */
+    UInt product(const std::vector<UInt> &values);
+
 } // namespace large_numbers

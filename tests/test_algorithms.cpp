@@ -20,3 +20,20 @@ TEST(Algorithms, RhoFactorization)
 
     ASSERT_EQ(rhoFactorization(base.getPrime(995) * base.getPrime(994), 0, 1), 1);
 }
+
+TEST(Algorithms, ProductTree)
+{
+    ASSERT_EQ(product({2}), 2);
+    ASSERT_EQ(product({}), 1);
+
+    large_numbers::PrimesBase base(2);
+    std::vector<UInt> values = base.getPrimesAsUInts();
+    ASSERT_EQ(product(values), 6);
+
+    base = large_numbers::PrimesBase(5);
+    values = base.getPrimesAsUInts();
+    ASSERT_EQ(product(values), 2310);
+
+    ASSERT_EQ(product({2, 2, 2, 2, 2, 2, 2, 2, 2, 2}), 1024);
+    ASSERT_EQ(product({2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}), 2048);
+}
