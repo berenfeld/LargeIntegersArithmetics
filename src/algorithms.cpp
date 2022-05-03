@@ -42,21 +42,32 @@ namespace large_numbers
      * @param values
      * @return UInt
      */
+    std::vector<std::vector<UInt>> productTree(const std::vector<UInt> &values)
+    {
+        std::vector<std::vector<UInt>> result_tree;
+        std::vector<UInt> results(values);
+        result_tree.push_back(values);
+        while (results.size() > 1) {
+            std::vector<UInt> intermidiate_results;
+            for (size_t index = 0; index < results.size() - 1; index += 2) {
+                intermidiate_results.push_back(results[index] * results[index + 1]);
+            }
+            if (results.size() % 2) {
+                intermidiate_results.push_back(results[results.size() - 1]);
+            }
+            result_tree.push_back(intermidiate_results);
+            results = intermidiate_results;
+        }
+        return result_tree;
+    }
+
     UInt product(const std::vector<UInt> &values)
     {
-        if (values.empty()) {
+        auto product_tree = productTree(values);
+        auto last = product_tree[product_tree.size() - 1];
+        if (last.empty()) {
             return 1;
         }
-        std::vector<UInt> results(values);
-        size_t results_size = results.size();
-        while (results_size > 1) {
-            size_t middle = results_size / 2;
-            size_t parity = results_size % 2;
-            for (size_t index = 0; index < middle; ++index) {
-                results[index] *= results[index + middle + parity];
-            }
-            results_size = middle + parity;
-        }
-        return results.at(0);
+        return last[0];
     }
 } // namespace large_numbers

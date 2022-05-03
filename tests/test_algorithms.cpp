@@ -36,4 +36,10 @@ TEST(Algorithms, ProductTree)
 
     ASSERT_EQ(product({2, 2, 2, 2, 2, 2, 2, 2, 2, 2}), 1024);
     ASSERT_EQ(product({2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2}), 2048);
+
+    std::vector<std::vector<UInt>> result = {{1, 2, 3, 4}, {2, 12}, {24}};
+    ASSERT_EQ(productTree(result[0]), result);
+
+    result = {{1, 2, 3, 4, 5}, {2, 12, 5}, {24, 5}, {120}};
+    ASSERT_EQ(productTree(result[0]), result);
 }

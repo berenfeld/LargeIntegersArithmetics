@@ -19,6 +19,8 @@ namespace large_numbers
      * @param values
      * @return UInt
      */
+    std::vector<std::vector<UInt>> productTree(const std::vector<UInt> &values);
+
     UInt product(const std::vector<UInt> &values);
 
 } // namespace large_numbers
