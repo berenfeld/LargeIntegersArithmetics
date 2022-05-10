@@ -23,4 +23,6 @@ namespace large_numbers
 
     UInt product(const std::vector<UInt> &values);
 
+    std::vector<UInt> remainderTree(UInt n, const std::vector<UInt> &x);
+
 } // namespace large_numbers
