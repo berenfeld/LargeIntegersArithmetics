@@ -43,3 +43,11 @@ TEST(Algorithms, ProductTree)
     result = {{1, 2, 3, 4, 5}, {2, 12, 5}, {24, 5}, {120}};
     ASSERT_EQ(productTree(result[0]), result);
 }
+
+TEST(Algorithms, RemainderTree)
+{
+    UInt n = 8675309;
+    std::vector<UInt> x{11, 13, 17, 19, 23};
+    std::vector<UInt> result = remainderTree(n, x);
+    ASSERT_EQ(result, std::vector<UInt>({5, 6, 5, 4, 8}));
+}

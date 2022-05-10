@@ -1,6 +1,7 @@
 #include "algorithms.h"
 #include "utils.h"
 #include <chrono>
+#include <math.h>
 #include <vector>
 
 namespace large_numbers
@@ -69,5 +70,21 @@ namespace large_numbers
             return 1;
         }
         return last[0];
+    }
+
+    std::vector<UInt> remainderTree(UInt n, const std::vector<UInt> &x)
+    {
+        auto tree = productTree(x);
+        std::vector<UInt> result(x.size());
+        result[0] = n;
+        UInt q, r;
+        for (auto it = tree.rbegin(); it != tree.rend(); ++it) {
+            const std::vector<UInt> &t = *it;
+            for (int idx = t.size() - 1; idx >= 0; --idx) {
+                UInt::div_mod(result[idx / 2], t[idx], q, r);
+                result[idx] = r;
+            }
+        }
+        return result;
     }
 } // namespace large_numbers

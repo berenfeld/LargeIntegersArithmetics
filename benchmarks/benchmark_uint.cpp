@@ -4,6 +4,7 @@
 #include "uint.h"
 #include "utils.h"
 #include <benchmark/benchmark.h>
+#include <iostream>
 
 using namespace large_numbers;
 
@@ -85,6 +86,36 @@ void product_tree(benchmark::State &state)
     }
 }
 
+void remainder_tree_naive(benchmark::State &state)
+{
+    UInt rsa_100(
+        "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
+    large_numbers::PrimesBase base(1000);
+    std::vector<UInt> primes = {base.getPrime(999), base.getPrime(998), base.getPrime(997), base.getPrime(996)};
+    UInt q, r;
+    std::vector<UInt> result;
+    for (auto _ : state) {
+        for (const UInt &prime : primes) {
+            UInt::div_mod(rsa_100, prime, q, r);
+            result.push_back(r);
+        }
+    }
+}
+
+void remainder_tree(benchmark::State &state)
+{
+    UInt rsa_100(
+        "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
+    large_numbers::PrimesBase base(1000);
+    std::vector<UInt> primes = {base.getPrime(999), base.getPrime(998), base.getPrime(997), base.getPrime(996)};
+    std::vector<UInt> result;
+    for (auto _ : state) {
+        result = remainderTree(rsa_100, primes);
+    }
+}
+
+BENCHMARK(remainder_tree_naive);
+BENCHMARK(remainder_tree);
 BENCHMARK(product_tree_naive);
 BENCHMARK(product_tree);
 BENCHMARK(addition);
