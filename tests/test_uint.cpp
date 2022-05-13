@@ -92,6 +92,12 @@ TEST(UInt, Addition)
         UInt r1_r2(result);
         ASSERT_EQ(r1_r2, r1 + r2);
     }
+
+    x = 123456;
+    ++x;
+    ASSERT_EQ(x, 123457);
+    --x;
+    ASSERT_EQ(x, 123456);
 }
 
 TEST(UInt, Substraction)
@@ -400,11 +406,12 @@ TEST(UInt, Random)
 
 TEST(UInt, sqrt)
 {
-    UInt x = 1;
+    UInt x = 0;
+    ASSERT_EQ(x.sqrt(), 0);
+    x = 1;
     ASSERT_EQ(x.sqrt(), UInt(1));
     x = 4;
-    UInt result(0);
-    x.sqrt(result);
+    UInt result = x.sqrt();
     ASSERT_EQ(result, UInt(2));
     ASSERT_EQ(x.sqrt(), UInt(2));
     x = 25;
@@ -417,9 +424,9 @@ TEST(UInt, sqrt)
     for (auto i = 0; i < 10; ++i) {
         UInt base = large_numbers::rand(4);
         UInt powered = UInt::pow(base, 2);
-        UInt result(0);
-        powered.sqrt(result);
+        UInt result = powered.sqrt();
         ASSERT_EQ(base, result);
+        ASSERT_EQ(UInt::sqrt(powered), base);
     }
 
     for (auto i = 0; i < 10; ++i) {

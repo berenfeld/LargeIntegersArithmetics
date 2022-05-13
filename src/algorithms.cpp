@@ -87,4 +87,35 @@ namespace large_numbers
         }
         return result;
     }
+
+    UInt fermatFactorization(UInt n, uint32_t timeout_usecs)
+    {
+        if (n <= 1) {
+            return n;
+        }
+        if (n.bit(0) == 0) {
+            return 2;
+        }
+        auto start = std::chrono::steady_clock::now();
+        uint32_t elapsed = 0;
+        UInt a = n.sqrt();
+        if (UInt::pow(a, 2) < n) {
+            ++a;
+        }
+        UInt t;
+        do {
+            t = UInt::pow(a, 2) - n;
+            if (t.sqrt().raiseToPower(2) == t) {
+                break;
+            }
+            ++a;
+            elapsed =
+                std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start).count();
+            if (elapsed > timeout_usecs) {
+                return 1;
+            }
+        } while (1);
+        UInt b = t.sqrt();
+        return a - b;
+    }
 } // namespace large_numbers

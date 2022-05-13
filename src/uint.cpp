@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <cmath>
 #include <sstream>
+#include <unordered_set>
 
 namespace large_numbers
 {
@@ -58,6 +59,18 @@ namespace large_numbers
     bool UInt::operator!=(const UInt &other) const { return !(*this == other); }
 
     bool UInt::operator!=(LN_BLOCK_TYPE value) const { return !(*this == value); }
+
+    UInt &UInt::operator++()
+    {
+        *this += 1;
+        return *this;
+    }
+
+    UInt &UInt::operator--()
+    {
+        *this -= 1;
+        return *this;
+    }
 
     UInt &UInt::operator+=(const UInt &other)
     {
@@ -257,32 +270,32 @@ namespace large_numbers
 
     UInt UInt::gcdWith(const UInt &other) const { return gcd(*this, other); }
 
-    void UInt::sqrt(UInt &result, LN_BLOCK_TYPE steps_limit) const
+    // static
+    UInt UInt::sqrt(const UInt &n)
     {
-        // case of no limit
-        if (steps_limit < 0) {
-            steps_limit = INT32_MAX;
+        if (n < 1) {
+            return n;
         }
-        // give a good guess if needed
-        if (result == UInt(0)) {
-            LN_BLOCK_TYPE len = this->bits() >> 2;
-            result = UInt(1) << len;
-        }
+        // start from a good guess
+        LN_BLOCK_TYPE len = n.bits() >> 2;
+        UInt result = UInt(1) << len;
+
+        std::unordered_set<UInt, UIntHasher> results;
         // to find the sqrt(S)=lim(x->inf): X_(n+1) = (Xn + S/Xn)/2
-        UInt tmp = UInt(0);
-        UInt &old_res = tmp;
-        for (LN_BLOCK_TYPE i = 0; (i < steps_limit) && (old_res != result); i++) {
-            old_res = result;
-            result += ((*this) / result);
-            result /= 2; // todo: implement >> and make this line ">> 1"
-        }
-        return;
+        do {
+            result += (n / result);
+            result >>= 1;
+            if (results.find(result) != results.end()) {
+                break;
+            }
+            results.insert(result);
+        } while (1);
+        return result;
     }
 
     UInt UInt::sqrt() const
     {
-        UInt result = *this;
-        this->sqrt(result);
+        UInt result = UInt::sqrt(*this);
         return result;
     }
 
@@ -436,6 +449,13 @@ namespace large_numbers
     LN_BLOCK_TYPE UInt::block(int i) const { return _values[i]; }
     LN_BLOCK_TYPE UInt::lastBlock() const { return _values[size() - 1]; }
 
+    uint32_t UInt::bit(int i) const
+    {
+        uint32_t block_index = i / sizeof(LN_BLOCK_TYPE) * 8;
+        uint32_t bit_index = i % sizeof(LN_BLOCK_TYPE) * 8;
+        return block(block_index) & (0x1ULL << bit_index);
+    }
+
     UInt UInt::negate() const
     {
         UInt result;
@@ -458,4 +478,12 @@ namespace large_numbers
 
     size_t UInt::bits() const { return (size() - 1) * LN_BITS_IN_BLOCK + lastBit(lastBlock()); }
 
+    std::size_t UIntHasher::operator()(const UInt &element) const
+    {
+        std::size_t ret = 0;
+        for (size_t idx = 0; idx < element.size(); ++idx) {
+            ret ^= std::hash<LN_BLOCK_TYPE>()(element.block(idx));
+        }
+        return ret;
+    }
 } // namespace large_numbers

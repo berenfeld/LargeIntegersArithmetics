@@ -14,7 +14,7 @@ namespace large_numbers
       private:
         void extendTo(size_t max_digit_pos);
         size_t makeKey(size_t digit_pos);
-        std::unordered_map<size_t, UInt, UInt::UIntHash> _cache;
+        std::unordered_map<size_t, UInt, UIntHasher> _cache;
         size_t max_digit_pos_cached;
     };
 
