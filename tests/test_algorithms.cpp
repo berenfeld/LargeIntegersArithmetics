@@ -51,3 +51,17 @@ TEST(Algorithms, RemainderTree)
     std::vector<UInt> result = remainderTree(n, x);
     ASSERT_EQ(result, std::vector<UInt>({5, 6, 5, 4, 8}));
 }
+
+TEST(Algorithms, Fermat)
+{
+    ASSERT_EQ(fermatFactorization(1), 1);
+    ASSERT_EQ(fermatFactorization(15), 3);
+    ASSERT_EQ(fermatFactorization(18), 2);
+    ASSERT_EQ(fermatFactorization(17), 1);
+    ASSERT_EQ(fermatFactorization(6557), 79);
+    UInt n("115792089237316195423570985008721211221144628262713908746538761285902758367353");
+    ASSERT_EQ(fermatFactorization(n), UInt("340282366920938463463374607431817146293"));
+    UInt rsa_100(
+        "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
+    ASSERT_EQ(fermatFactorization(rsa_100), 1);
+}

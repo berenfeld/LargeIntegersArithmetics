@@ -25,4 +25,12 @@ namespace large_numbers
 
     std::vector<UInt> remainderTree(UInt n, const std::vector<UInt> &x);
 
+    /**
+     * @brief Fermat factorization
+     * works fast when n = p*q and p and q share half of their significant bits
+     * @param n
+     * @param timeout_usecs
+     * @return UInt a factor of n. 1 if not found
+     */
+    UInt fermatFactorization(UInt n, uint32_t timeout_usecs = 100 * 1000);
 } // namespace large_numbers
