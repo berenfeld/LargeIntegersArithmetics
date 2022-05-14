@@ -510,6 +510,20 @@ TEST(UInt, gcd)
     ASSERT_EQ(a.gcdWith(48), 12);
 }
 
+TEST(UInt, lcm)
+{
+    ASSERT_EQ(UInt::lcm(2, 2), 2);
+    ASSERT_EQ(UInt::lcm(2, 3), 6);
+    ASSERT_EQ(UInt::lcm(3, 2), 6);
+    ASSERT_EQ(UInt::lcm(4, 2), 4);
+    ASSERT_EQ(UInt::lcm(2, 4), 4);
+    ASSERT_EQ(UInt::lcm(20, 36), 180);
+    ASSERT_EQ(UInt::lcm(36, 48), 144);
+
+    UInt a = 36;
+    ASSERT_EQ(a.lcmWith(48), 144);
+}
+
 TEST(UInt, StartWithRsa100)
 {
     UInt rsa_100(

@@ -78,6 +78,10 @@ namespace large_numbers
         static UInt gcd(const UInt &a, const UInt &b);
         UInt gcdWith(const UInt &other) const;
 
+        // lcm
+        static UInt lcm(const UInt &a, const UInt &b);
+        UInt lcmWith(const UInt &other) const;
+
         // root square
         static UInt sqrt(const UInt &n);
         UInt sqrt() const;

@@ -5,6 +5,9 @@ namespace large_numbers
     std::vector<uint32_t> range(uint32_t end);
     std::vector<uint32_t> range(uint32_t begin, uint32_t end);
 
+    UInt gcd(const std::vector<uint32_t> &values);
+    UInt lcm(const std::vector<uint32_t> &values);
+
     /**
      * @brief
      *

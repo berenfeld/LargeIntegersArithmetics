@@ -16,6 +16,30 @@ namespace large_numbers
         return result;
     }
 
+    UInt gcd(const std::vector<uint32_t> &values)
+    {
+        if (values.empty()) {
+            return 1;
+        }
+        UInt result = values[0];
+        for (size_t idx = 1; idx < values.size(); ++idx) {
+            result = UInt::gcd(result, values[idx]);
+        }
+        return result;
+    }
+
+    UInt lcm(const std::vector<uint32_t> &values)
+    {
+        if (values.empty()) {
+            return 1;
+        }
+        UInt result = values[0];
+        for (size_t idx = 1; idx < values.size(); ++idx) {
+            result = UInt::lcm(result, values[idx]);
+        }
+        return result;
+    }
+
     UInt rhoFactorization(UInt n, uint32_t c, uint32_t timeout_usecs)
     {
         auto start = std::chrono::steady_clock::now();
