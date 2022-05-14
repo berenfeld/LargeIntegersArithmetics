@@ -7,6 +7,12 @@
 
 using namespace large_numbers;
 
+TEST(Algorithms, Range)
+{
+    ASSERT_EQ(range(5), std::vector<uint32_t>({0, 1, 2, 3, 4}));
+    ASSERT_EQ(range(1, 4), std::vector<uint32_t>({1, 2, 3}));
+}
+
 TEST(Algorithms, RhoFactorization)
 {
     ASSERT_EQ(rhoFactorization(1), 1);

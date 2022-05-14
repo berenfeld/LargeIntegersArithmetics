@@ -2,6 +2,9 @@
 
 namespace large_numbers
 {
+    std::vector<uint32_t> range(uint32_t end);
+    std::vector<uint32_t> range(uint32_t begin, uint32_t end);
+
     /**
      * @brief
      *

@@ -1,11 +1,21 @@
 #include "algorithms.h"
 #include "utils.h"
+#include <algorithm>
 #include <chrono>
 #include <math.h>
+#include <numeric>
 #include <vector>
 
 namespace large_numbers
 {
+    std::vector<uint32_t> range(uint32_t end) { return range(0, end); }
+    std::vector<uint32_t> range(uint32_t begin, uint32_t end)
+    {
+        std::vector<uint32_t> result(end - begin);
+        std::iota(std::begin(result), std::end(result), begin);
+        return result;
+    }
+
     UInt rhoFactorization(UInt n, uint32_t c, uint32_t timeout_usecs)
     {
         auto start = std::chrono::steady_clock::now();
