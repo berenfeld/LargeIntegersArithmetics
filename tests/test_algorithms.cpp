@@ -13,6 +13,26 @@ TEST(Algorithms, Range)
     ASSERT_EQ(range(1, 4), std::vector<uint32_t>({1, 2, 3}));
 }
 
+TEST(Algorithms, Gcd)
+{
+    ASSERT_EQ(gcd({}), 1);
+    ASSERT_EQ(gcd({5}), 5);
+    ASSERT_EQ(gcd({6, 10}), 2);
+    ASSERT_EQ(gcd({6, 10, 36}), 2);
+    ASSERT_EQ(gcd({8, 32, 4}), 4);
+    ASSERT_EQ(gcd({6, 10, 4}), 2);
+    ASSERT_EQ(gcd(range(1, 10)), 1);
+}
+
+TEST(Algorithms, Lcm)
+{
+    ASSERT_EQ(lcm({}), 1);
+    ASSERT_EQ(lcm({5}), 5);
+    ASSERT_EQ(lcm({6, 10}), 30);
+    ASSERT_EQ(lcm({6, 10, 4}), 60);
+    ASSERT_EQ(lcm(range(1, 10)), 2520);
+}
+
 TEST(Algorithms, RhoFactorization)
 {
     ASSERT_EQ(rhoFactorization(1), 1);

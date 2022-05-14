@@ -271,6 +271,11 @@ namespace large_numbers
     UInt UInt::gcdWith(const UInt &other) const { return gcd(*this, other); }
 
     // static
+    UInt UInt::lcm(const UInt &a, const UInt &b) { return a * b / gcd(a, b); }
+
+    UInt UInt::lcmWith(const UInt &other) const { return lcm(*this, other); }
+
+    // static
     UInt UInt::sqrt(const UInt &n)
     {
         if (n < 1) {
