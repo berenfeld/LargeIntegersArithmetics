@@ -207,7 +207,7 @@ TEST(UInt, Multiply)
     }
 }
 
-TEST(UInt, ShiftRight)
+TEST(UInt, ShiftLeft)
 {
     UInt test("0x10000000");
     ASSERT_EQ(UInt("0x10000000"), test << 0);
@@ -224,12 +224,27 @@ TEST(UInt, ShiftRight)
     ASSERT_EQ(UInt("0X2468ACF02468ACF0000000000"), test2 << 37);
     ASSERT_EQ(UInt("0x12345678123456780000000000000000"), test2 << 64);
     ASSERT_EQ(UInt("0x123456781234567800000000000000000000000000000000"), test2 << 128);
+    ASSERT_EQ(UInt("0x123456781234567800000000000000000000000000000000"), test2 << 128);
 
     test2 <<= 128;
     ASSERT_EQ(UInt("0x123456781234567800000000000000000000000000000000"), test2);
+
+    UInt test3 = 0x1;
+    ASSERT_EQ(UInt("0x100000000"), test3 << 32);
+    ASSERT_EQ(UInt("0x10000000000000000"), test3 << 64);
+    ASSERT_EQ(UInt("0x100000000000000000000000000000000"), test3 << 128);
+    ASSERT_EQ(UInt("0x10000000000000000000000000000000000000000000000000000000000000000"), test3 << 256);
+
+    for (size_t shift = 0; shift < 1000; ++shift) {
+        ASSERT_EQ(test3, (test3 << shift) >> shift);
+    }
+    test3 = UInt("0x1234567123456712345671234567123456712345671234567");
+    for (size_t shift = 0; shift < 1000; ++shift) {
+        ASSERT_EQ(test3, (test3 << shift) >> shift);
+    }
 }
 
-TEST(UInt, ShiftLEft)
+TEST(UInt, ShiftRight)
 {
     UInt test("0x10000000");
     ASSERT_EQ(UInt("0x10000000"), test >> 0);
@@ -339,6 +354,15 @@ TEST(UInt, Division)
     }
 }
 
+TEST(UInt, Bitwise)
+{
+    UInt x = 0x1001;
+    ASSERT_EQ(x & 0x10, 0);
+    ASSERT_EQ(x & 0x1, 0x1);
+    x &= 0x1010;
+    ASSERT_EQ(x, 0x1000);
+}
+
 TEST(UInt, Modulo)
 {
     UInt a = 256;
@@ -349,11 +373,26 @@ TEST(UInt, Modulo)
     ASSERT_EQ(UInt(6), d);
 
     UInt base = 2;
-    uint32_t exp = 10;
+    UInt exp = 10;
     UInt modulo = 1000;
-    ASSERT_EQ(UInt::power_modulo(base, exp, modulo), 24);
+    ASSERT_EQ(UInt::powerModulo(base, exp, modulo), 24);
     base.raiseToPower(10, 1000);
     ASSERT_EQ(base, 24);
+
+    int return_code;
+    for (auto i = 0; i < 10; ++i) {
+        // cant go too large, otherwise it will take too long
+        UInt base = 2;
+        UInt exp = ::rand() % 10000;
+        UInt modulo = large_numbers::rand(1);
+        std::string command =
+            "python -c 'print( (" + base.toString() + " ** " + exp.toString() + ") % " + modulo.toString() + ")'";
+        std::string py_result_str = executeCommand(command, return_code);
+        ASSERT_EQ(0, return_code) << "Failed executing command " << command;
+        UInt py_result(py_result_str);
+        UInt result = UInt::powerModulo(base, exp, modulo);
+        ASSERT_EQ(py_result, result);
+    }
 }
 
 TEST(UInt, power)
@@ -372,6 +411,7 @@ TEST(UInt, power)
     UInt two = 2;
     ASSERT_EQ(UInt::pow(two, 1), 2);
     ASSERT_EQ(UInt::pow(two, 2), 4);
+    ASSERT_EQ(UInt::pow(two, 10), 1024);
     ASSERT_EQ(UInt::pow(two, 31), 0x80000000);
     two.raiseToPower(1);
     ASSERT_EQ(two, 2);
@@ -532,7 +572,7 @@ TEST(UInt, StartWithRsa100)
     PrimesBase base(300);
     UInt reminder;
     for (int i = 0; i < 10; ++i) {
-        UInt candidate_power_mod_2 = UInt::power_modulo(candidate, 2, rsa_100);
+        UInt candidate_power_mod_2 = UInt::powerModulo(candidate, 2, rsa_100);
 
         if (base.contains(candidate_power_mod_2, reminder)) {
             std::cout << "Found B-smooth ! : candidate " << candidate << " candidate_power_mod_2 "

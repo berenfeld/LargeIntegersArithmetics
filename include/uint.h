@@ -52,8 +52,8 @@ namespace large_numbers
         UInt &operator*=(const UInt &arg);
 
         // power
-        static UInt pow(const UInt &base, LN_BLOCK_TYPE exp);
-        UInt &raiseToPower(LN_BLOCK_TYPE exp);
+        static UInt pow(const UInt &base, const UInt &exp);
+        UInt &raiseToPower(const UInt &exp);
 
         // shift
         UInt operator<<(size_t offset) const;
@@ -70,9 +70,13 @@ namespace large_numbers
         UInt &operator%=(const UInt &other);
         static void div_mod(const UInt &a, const UInt &b, UInt &q, UInt &r);
 
+        // binary
+        UInt operator&(const UInt &other) const;
+        UInt &operator&=(const UInt &other);
+
         // power modulo
-        static UInt power_modulo(const UInt &base, LN_BLOCK_TYPE exp, const UInt &modulo);
-        UInt &raiseToPower(LN_BLOCK_TYPE exp, const UInt &modulo);
+        static UInt powerModulo(const UInt &base, const UInt &exp, const UInt &modulo);
+        UInt &raiseToPower(const UInt &exp, const UInt &modulo);
 
         // gcd
         static UInt gcd(const UInt &a, const UInt &b);
@@ -94,13 +98,14 @@ namespace large_numbers
         static int8_t compare(const UInt &a, const UInt &b);
 
         size_t size() const;
-        LN_BLOCK_TYPE block(int i) const;
-        LN_BLOCK_TYPE lastBlock() const;
+        const LN_BLOCK_TYPE &block(int i) const;
+        const LN_BLOCK_TYPE &lastBlock() const;
         size_t bits() const;
         uint32_t bit(int i) const;
         std::string toString(int base = 10) const;
 
         friend std::ostream &operator<<(std::ostream &os, const UInt &value) { return os << value.toString(10); }
+        friend class UIntHasher;
 
       private:
         /**

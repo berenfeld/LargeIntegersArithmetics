@@ -2,6 +2,8 @@
 
 namespace large_numbers
 {
+    UInt pollardPMinusOneFactorization(UInt n, uint32_t timeout_usecs = 100 * 1000);
+
     std::vector<uint32_t> range(uint32_t end);
     std::vector<uint32_t> range(uint32_t begin, uint32_t end);
 

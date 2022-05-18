@@ -91,3 +91,12 @@ TEST(Algorithms, Fermat)
         "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
     ASSERT_EQ(fermatFactorization(rsa_100), 1);
 }
+
+TEST(Algorithms, PollardPMinusOne)
+{
+    ASSERT_EQ(pollardPMinusOneFactorization(15), 3);
+    ASSERT_EQ(pollardPMinusOneFactorization(299), 13);
+    ASSERT_EQ(pollardPMinusOneFactorization(UInt(17) * UInt(100049)), UInt(17));
+    ASSERT_EQ(pollardPMinusOneFactorization(UInt(1009) * UInt(1019)), UInt(1009));
+    ASSERT_EQ(pollardPMinusOneFactorization(UInt(255019) * UInt(255023)), UInt(1)); // timeout
+}
