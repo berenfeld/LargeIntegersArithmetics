@@ -2,12 +2,36 @@
 #include "utils.h"
 #include <algorithm>
 #include <chrono>
+#include <iostream>
 #include <math.h>
 #include <numeric>
 #include <vector>
 
 namespace large_numbers
 {
+    UInt pollardPMinusOneFactorization(UInt n, uint32_t timeout_usecs)
+    {
+        auto start = std::chrono::steady_clock::now();
+        uint32_t elapsed = 0;
+        size_t bits = 2;
+        UInt result;
+        UInt M = 2;
+        do {
+            const uint32_t B = 0x1ULL << bits;
+            const std::vector<uint32_t> new_values = range(B / 2, B);
+            const UInt M1 = lcm(new_values);
+            M = UInt::lcm(M, M1);
+            result = UInt::gcd(UInt::powerModulo(2, M, n) - 1, n);
+            if (result != 1) {
+                return result;
+            }
+            ++bits;
+            elapsed =
+                std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - start).count();
+        } while (elapsed < timeout_usecs);
+        return result;
+    }
+
     std::vector<uint32_t> range(uint32_t end) { return range(0, end); }
     std::vector<uint32_t> range(uint32_t begin, uint32_t end)
     {

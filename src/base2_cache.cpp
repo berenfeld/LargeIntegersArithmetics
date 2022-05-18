@@ -9,8 +9,7 @@ namespace large_numbers
     void Base2Cache::extendTo(size_t max_digit_pos)
     {
         UInt base2_num = UInt(1) << max_digit_pos_cached;
-        for (size_t digit_pos = max_digit_pos_cached; digit_pos < max_digit_pos;
-             ++digit_pos, base2_num = base2_num << 1) {
+        for (size_t digit_pos = max_digit_pos_cached; digit_pos < max_digit_pos; ++digit_pos, base2_num <<= 1) {
             _cache[digit_pos] = base2_num;
         }
         max_digit_pos_cached = max_digit_pos;
