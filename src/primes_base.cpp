@@ -30,6 +30,18 @@ namespace large_numbers
         _products.push_back(product.block(0));
     }
 
+    UInt PrimesBase::findFactor(const UInt &n) const
+    {
+        UInt reminder;
+        for (size_t i = 0; i < _products.size(); ++i) {
+            UInt gcd_result = UInt::gcd(n, _products[i]);
+            if (gcd_result != 1) {
+                return gcd_result;
+            }
+        }
+        return 1;
+    }
+
     bool PrimesBase::contains(const UInt &value, UInt &reminder) const
     {
         reminder = value;

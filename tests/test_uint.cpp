@@ -521,6 +521,8 @@ TEST(UInt, PrimesBase)
     ASSERT_TRUE(base.contains(4));
     ASSERT_TRUE(base.contains(40));
     ASSERT_TRUE(base.contains(2 * 3 * 5 * 7 * 9 * 2 * 3 * 5 * 7 * 9));
+    ASSERT_EQ(base.findFactor(11 * 37), 11);
+    ASSERT_EQ(base.findFactor(1009), 1);
 
     ASSERT_FALSE(base.contains(13));
     ASSERT_FALSE(base.contains(29));
@@ -562,26 +564,4 @@ TEST(UInt, lcm)
 
     UInt a = 36;
     ASSERT_EQ(a.lcmWith(48), 144);
-}
-
-TEST(UInt, StartWithRsa100)
-{
-    UInt rsa_100(
-        "1522605027922533360535618378132637429718068114961380688657908494580122963258952897654000350692006139");
-    UInt candidate = rsa_100.sqrt() + 1;
-    PrimesBase base(300);
-    UInt reminder;
-    for (int i = 0; i < 10; ++i) {
-        UInt candidate_power_mod_2 = UInt::powerModulo(candidate, 2, rsa_100);
-
-        if (base.contains(candidate_power_mod_2, reminder)) {
-            std::cout << "Found B-smooth ! : candidate " << candidate << " candidate_power_mod_2 "
-                      << candidate_power_mod_2 << std::endl;
-        }
-        // if ((i % 100) == 1) {
-        std::cout << "candidate " << i << " candidate " << candidate << " candidate_power_mod_2 "
-                  << candidate_power_mod_2 << " reminder " << reminder.size() << std::endl;
-        // }
-        candidate += 1;
-    }
 }

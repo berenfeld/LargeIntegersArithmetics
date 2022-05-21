@@ -1,4 +1,5 @@
 #include "algorithms.h"
+#include "primes_base.h"
 #include "utils.h"
 #include <algorithm>
 #include <chrono>
@@ -9,6 +10,7 @@
 
 namespace large_numbers
 {
+
     UInt pollardPMinusOneFactorization(UInt n, uint32_t timeout_usecs)
     {
         auto start = std::chrono::steady_clock::now();
