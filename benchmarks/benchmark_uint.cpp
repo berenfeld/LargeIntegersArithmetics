@@ -1,10 +1,12 @@
 #include "algorithms.h"
 #include "consts.h"
 #include "primes_base.h"
+#include "spdlog/spdlog.h"
 #include "uint.h"
 #include "utils.h"
 #include <benchmark/benchmark.h>
 #include <iostream>
+#include <spdlog/spdlog.h>
 
 using namespace large_numbers;
 
@@ -125,4 +127,14 @@ BENCHMARK(power);
 BENCHMARK(gcd);
 BENCHMARK(base_check);
 
-BENCHMARK_MAIN();
+int main(int argc, char **argv)
+{
+    spdlog::set_pattern("%H:%M:%S.%f %l %v");
+    spdlog::info("Starting benchmark...");
+    ::benchmark::Initialize(&argc, argv);
+    if (::benchmark::ReportUnrecognizedArguments(argc, argv)) {
+        return 1;
+    }
+    ::benchmark::RunSpecifiedBenchmarks();
+    spdlog::info("Benchmark Done...");
+}
