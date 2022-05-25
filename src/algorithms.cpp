@@ -5,6 +5,7 @@
 #include <iostream>
 #include <math.h>
 #include <numeric>
+#include <spdlog/spdlog.h>
 #include <vector>
 
 namespace large_numbers

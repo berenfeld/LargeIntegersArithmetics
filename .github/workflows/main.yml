@@ -17,7 +17,11 @@ jobs:
 
     steps:
       - name: Install libraries
-        run: sudo apt-get install -y --no-install-recommends libgtest-dev gcovr clang-format libbenchmark-dev
+        run: |
+          sudo apt-get install -y --no-install-recommends libgtest-dev gcovr clang-format libbenchmark-dev
+          cd /tmp && git clone https://github.com/gabime/spdlog.git
+          cd /tmp/spdlog && mkdir build && cd build && cmake ..
+          cd /tmp/spdlog/build && make -j && sudo make install
 
       - name: Checkout
         uses: actions/checkout@v2

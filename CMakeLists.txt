@@ -8,6 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # treat warnings as errors
 add_compile_options(-Wall -Werror)
 
+find_package(spdlog REQUIRED)
+
 # Code Coverage Configuration
 add_library(coverage_config INTERFACE)
 
@@ -28,6 +30,7 @@ file(GLOB LargeIntsIncludes "${PROJECT_SOURCE_DIR}/include")
 add_library(LargeInts STATIC ${LargeIntsSrcs})
 target_include_directories(LargeInts PUBLIC ${LargeIntsIncludes})
 target_link_libraries(LargeInts PRIVATE coverage_config)
+target_link_libraries(LargeInts PRIVATE spdlog::spdlog)
 configure_file("data/primes.list" ${CMAKE_BINARY_DIR} COPYONLY)
 
 enable_testing()
@@ -35,7 +38,7 @@ find_package(GTest REQUIRED)
 file(GLOB TestLargeIntsSrcs "${PROJECT_SOURCE_DIR}/tests/*.cpp")
 add_executable(TestLargeInts ${TestLargeIntsSrcs})
 target_include_directories(TestLargeInts PUBLIC ${LargeIntsIncludes} ${GTEST_INCLUDE_DIRS})
-target_link_libraries(TestLargeInts LargeInts ${GTEST_BOTH_LIBRARIES} pthread)
+target_link_libraries(TestLargeInts LargeInts ${GTEST_LIBRARIES} pthread)
 gtest_discover_tests(TestLargeInts AUTO)
 
 # benchmark
