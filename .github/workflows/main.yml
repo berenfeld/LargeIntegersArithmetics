@@ -48,14 +48,14 @@ jobs:
         run: BUILD_TYPE=${{matrix.BUILD_TYPE}} ./run_tests.sh
 
       - name: Coverage Report Artifact
-        if: ${{matrix.BUILD_TYPE}} == 'Debug'
+        if: ${{ matrix.BUILD_TYPE == 'Debug' }}
         uses: actions/upload-artifact@v3
         with:
           name: code-coverage-report
           path: build/coverage/html
 
       - name: Benchmark
-        if: ${{matrix.BUILD_TYPE}} == 'Release'
+        if: ${{ matrix.BUILD_TYPE == 'Release' }}
         run: |
           cd ./build/${{matrix.BUILD_TYPE}}
           ./BenchmarkLargeInts --benchmark_repetitions=5 --benchmark_report_aggregates_only
