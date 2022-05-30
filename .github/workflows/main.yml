@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Install libraries
         run: |
+          sudo apt-get update
+          sudo apt-get dist-upgrade -y
           sudo apt-get install -y --no-install-recommends libgtest-dev gcovr clang-format libbenchmark-dev
           cd /tmp && git clone https://github.com/gabime/spdlog.git
           cd /tmp/spdlog && mkdir build && cd build && cmake ..
