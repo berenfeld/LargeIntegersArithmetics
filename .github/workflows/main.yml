@@ -20,7 +20,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get dist-upgrade -y
-          sudo apt-get install -y --no-install-recommends libgtest-dev gcovr clang-format libbenchmark-dev
+          sudo apt-get install -y --no-install-recommends libgtest-dev gcovr clang-format libbenchmark-dev python3-dev
           cd /tmp && git clone https://github.com/gabime/spdlog.git
           cd /tmp/spdlog && mkdir build && cd build && cmake ..
           cd /tmp/spdlog/build && make -j && sudo make install

@@ -11,102 +11,65 @@ Ran
 
 Sample benchmarking on gitpod machines and github runner machines
 
-### Local machine, G++ 9.3.0
+### gitpod machine, G++ 9.3.0
 
 ```
-ran@RANB-LPT:~/LargeIntegersArithmetics$ ./benchmark.sh
-2021-10-20 11:45:52
+gitpod /workspace/LargeIntegersArithmetics (benchmark-with-python) $ BUILD_TYPE=Release ./benchmark.sh
+12:42:02.721071 info Starting benchmark...
+2022-06-02 12:42:02
 Running ./build/Release/BenchmarkLargeInts
-Run on (16 X 1696.75 MHz CPU s)
+Run on (16 X 2450 MHz CPU s)
 CPU Caches:
   L1 Data 32K (x8)
   L1 Instruction 32K (x8)
   L2 Unified 512K (x8)
-  L3 Unified 4096K (x1)
-Load Average: 0.46, 0.39, 0.28
-----------------------------------------------------------------
-Benchmark                      Time             CPU   Iterations
-----------------------------------------------------------------
-addition_mean               4536 ns         4536 ns            5
-addition_median             4543 ns         4543 ns            5
-addition_stddev             11.5 ns         11.5 ns            5
-substraction_mean           5312 ns         5312 ns            5
-substraction_median         5284 ns         5284 ns            5
-substraction_stddev          101 ns          101 ns            5
-multiplication_mean         5658 ns         5658 ns            5
-multiplication_median       5595 ns         5595 ns            5
-multiplication_stddev        120 ns          120 ns            5
-power_mean                 16004 ns        16004 ns            5
-power_median               15998 ns        15998 ns            5
-power_stddev                58.0 ns         58.0 ns            5
-gcd_mean                  533340 ns       533334 ns            5
-gcd_median                534040 ns       534011 ns            5
-gcd_stddev                  8501 ns         8501 ns            5
-base_check_mean         28639644 ns     28639539 ns            5
-base_check_median       28506205 ns     28506203 ns            5
-base_check_stddev        4252339 ns      4252180 ns            5
-```
-
-### Gitpod machine, Clang 13.0.0
-
-```
-gitpod /workspace/LargeIntegersArithmetics $ ./build/Release/BenchmarkLargeInts  --benchmark_repetitions=5 --benchmark_report_aggregates_only
-2021-10-17 18:07:29
-Running ./build/Release/BenchmarkLargeInts
-Run on (16 X 2800.21 MHz CPU s)
-CPU Caches:
-  L1 Data 32K (x8)
-  L1 Instruction 32K (x8)
-  L2 Unified 1024K (x8)
-  L3 Unified 33792K (x1)
-Load Average: 0.99, 1.49, 1.73
-----------------------------------------------------------------
-Benchmark                      Time             CPU   Iterations
-----------------------------------------------------------------
-addition_mean               5246 ns         5246 ns            5
-addition_median             5223 ns         5223 ns            5
-addition_stddev             70.1 ns         70.2 ns            5
-multiplication_mean        10369 ns        10368 ns            5
-multiplication_median      10316 ns        10314 ns            5
-multiplication_stddev        188 ns          188 ns            5
-power_mean                123122 ns       123108 ns            5
-power_median              121955 ns       121937 ns            5
-power_stddev                3719 ns         3718 ns            5
-gcd_mean                  601103 ns       601023 ns            5
-gcd_median                590274 ns       590213 ns            5
-gcd_stddev                 21783 ns        21769 ns            5
-gitpod /workspace/LargeIntegersArithmetics $ clang++ --version
-Ubuntu clang version 13.0.0-++20210309052636+4e1c487004a2-1~exp1~20210309163348.339
-Target: x86_64-pc-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-```
-
-### Github machine, G++ 9.3.0
-
-```
-2021-10-17 18:11:32
-Running ./build/Release/BenchmarkLargeInts
-Run on (2 X 2294.69 MHz CPU s)
-CPU Caches:
-  L1 Data 32K (x2)
-  L1 Instruction 32K (x2)
-  L2 Unified 256K (x2)
-  L3 Unified 51200K (x1)
-Load Average: 0.47, 0.21, 0.09
-----------------------------------------------------------------
-Benchmark                      Time             CPU   Iterations
-----------------------------------------------------------------
-addition_mean               7636 ns         7635 ns            5
-addition_median             7526 ns         7525 ns            5
-addition_stddev              223 ns          223 ns            5
-multiplication_mean        14875 ns        14874 ns            5
-multiplication_median      14537 ns        14536 ns            5
-multiplication_stddev       1314 ns         1314 ns            5
-power_mean                165498 ns       165484 ns            5
-power_median              166213 ns       166190 ns            5
-power_stddev                5034 ns         5034 ns            5
-gcd_mean                  803144 ns       803069 ns            5
-gcd_median                803845 ns       803657 ns            5
-gcd_stddev                  7793 ns         7812 ns            5
+  L3 Unified 32768K (x1)
+Load Average: 10.53, 11.31, 8.54
+-----------------------------------------------------------------------
+Benchmark                             Time             CPU   Iterations
+-----------------------------------------------------------------------
+addition_mean                     21244 ns        19929 ns            5
+addition_median                   20976 ns        19950 ns            5
+addition_stddev                     821 ns          204 ns            5
+addition_python_mean              32305 ns        31675 ns            5
+addition_python_median            31662 ns        31220 ns            5
+addition_python_stddev             1959 ns         1696 ns            5
+substraction_mean                 18990 ns        18906 ns            5
+substraction_median               19008 ns        18999 ns            5
+substraction_stddev                 363 ns          283 ns            5
+substraction_python_mean          26748 ns        26743 ns            5
+substraction_python_median        26581 ns        26579 ns            5
+substraction_python_stddev          787 ns          785 ns            5
+multiplication_mean               20845 ns        20844 ns            5
+multiplication_median             20997 ns        20997 ns            5
+multiplication_stddev               830 ns          829 ns            5
+multiplication_python_mean        29892 ns        29868 ns            5
+multiplication_python_median      30167 ns        30059 ns            5
+multiplication_python_stddev        933 ns          925 ns            5
+power_mean                        57257 ns        57253 ns            5
+power_median                      54524 ns        54522 ns            5
+power_stddev                       4305 ns         4305 ns            5
+power_python_mean                 20806 ns        20804 ns            5
+power_python_median               20717 ns        20716 ns            5
+power_python_stddev                 551 ns          551 ns            5
+remainder_tree_naive_mean       2646747 ns      2646643 ns            5
+remainder_tree_naive_median     2633863 ns      2633767 ns            5
+remainder_tree_naive_stddev       33925 ns        33938 ns            5
+remainder_tree_mean              584541 ns       584160 ns            5
+remainder_tree_median            556627 ns       556614 ns            5
+remainder_tree_stddev             51052 ns        50317 ns            5
+product_tree_naive_mean         8125984 ns      8124567 ns            5
+product_tree_naive_median       8053739 ns      8053513 ns            5
+product_tree_naive_stddev        173553 ns       172926 ns            5
+product_tree_mean               2080646 ns      2080539 ns            5
+product_tree_median             2074957 ns      2074915 ns            5
+product_tree_stddev               38178 ns        38188 ns            5
+gcd_mean                        2032377 ns      1975395 ns            5
+gcd_median                      2049137 ns      1925251 ns            5
+gcd_stddev                        68886 ns        84992 ns            5
+base_check_mean               249206555 ns    249132310 ns            5
+base_check_median             208959500 ns    208960059 ns            5
+base_check_stddev             197489154 ns    197366400 ns            5
+12:42:54.548117 info Benchmark Done...
+gitpod /workspace/LargeIntegersArithmetics (benchmark-with-python) $
 ```

@@ -11,8 +11,6 @@
     ],
     "testMate.cpp.debug.breakOnFailure": true,
     "editor.minimap.enabled": false,
-    "gitlens.showWhatsNewAfterUpgrades": false,
-    "gitlens.showWelcomeOnInstall": false,
     "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
-    "C_Cpp.clang_format_path": "/usr/bin/clang-format"
+    "C_Cpp.clang_format_path": "/usr/bin/clang-format",
 }
