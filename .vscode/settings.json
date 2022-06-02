@@ -13,4 +13,12 @@
     "editor.minimap.enabled": false,
     "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+    "files.associations": {
+        "bit": "cpp",
+        "cwchar": "cpp",
+        "random": "cpp",
+        "limits": "cpp",
+        "ratio": "cpp",
+        "functional": "cpp"
+    },
 }

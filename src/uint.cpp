@@ -1,4 +1,5 @@
 #include "uint.h"
+#include "algorithms.h"
 #include "base2_cache.h"
 #include "cerror.h"
 #include "consts.h"
@@ -200,22 +201,17 @@ namespace large_numbers
     // static
     UInt UInt::pow(const UInt &base, const UInt &exp)
     {
-        // build 2 powers of base based on the bits of exp
-        std::vector<UInt> powers(exp.bits());
+        // now compute the power
+        std::vector<UInt> values;
         UInt base_power = base;
         for (size_t bit = 0; bit < exp.bits(); ++bit) {
-            powers[bit] = base_power;
+            if (exp.bit(bit)) {
+                values.push_back(base_power);
+            }
             base_power *= base_power;
         }
-        // now compute the power
-        UInt result = 1;
-        UInt bit_value = 0x1;
-        for (size_t bit = 0; bit < exp.bits(); ++bit) {
-            if ((exp & bit_value) != UInt(0)) {
-                result *= powers[bit];
-            }
-            bit_value <<= 1;
-        }
+
+        UInt result = product(values);
         return result;
     }
 
@@ -470,10 +466,10 @@ namespace large_numbers
     const LN_BLOCK_TYPE &UInt::block(int i) const { return _values[i]; }
     const LN_BLOCK_TYPE &UInt::lastBlock() const { return _values[size() - 1]; }
 
-    uint32_t UInt::bit(int i) const
+    LN_BLOCK_TYPE UInt::bit(size_t i) const
     {
-        uint32_t block_index = i / sizeof(LN_BLOCK_TYPE) * 8;
-        uint32_t bit_index = i % sizeof(LN_BLOCK_TYPE) * 8;
+        uint32_t block_index = i / (sizeof(LN_BLOCK_TYPE) * 8);
+        uint32_t bit_index = i % (sizeof(LN_BLOCK_TYPE) * 8);
         return block(block_index) & (0x1ULL << bit_index);
     }
 

@@ -101,7 +101,7 @@ namespace large_numbers
         const LN_BLOCK_TYPE &block(int i) const;
         const LN_BLOCK_TYPE &lastBlock() const;
         size_t bits() const;
-        uint32_t bit(int i) const;
+        LN_BLOCK_TYPE bit(size_t i) const;
         std::string toString(int base = 10) const;
 
         friend std::ostream &operator<<(std::ostream &os, const UInt &value) { return os << value.toString(10); }

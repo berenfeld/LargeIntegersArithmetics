@@ -81,6 +81,46 @@ void multiplication_python(benchmark::State &state)
     }
 }
 
+void shift_left(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        auto shift_amount = ::rand() % 1024;
+        std::string op = "x = " + a.toString(16) + " << " + std::to_string(shift_amount);
+        UInt x = a << shift_amount;
+    }
+}
+
+void shift_left_python(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        auto shift_amount = ::rand() % 1024;
+        std::string op = "x = " + a.toString(16) + " << " + std::to_string(shift_amount);
+        PyRun_SimpleString(op.c_str());
+    }
+}
+
+void shift_right(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        auto shift_amount = ::rand() % 1024;
+        std::string op = "x = " + a.toString(16) + " >> " + std::to_string(shift_amount);
+        UInt x = a << shift_amount;
+    }
+}
+
+void shift_right_python(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        auto shift_amount = ::rand() % 1024;
+        std::string op = "x = " + a.toString(16) + " >> " + std::to_string(shift_amount);
+        PyRun_SimpleString(op.c_str());
+    }
+}
+
 void power(benchmark::State &state)
 {
     for (auto _ : state) {
@@ -98,6 +138,35 @@ void power_python(benchmark::State &state)
         auto exp = ::rand() % 10;
         std::string op = "x = pow(" + base.toString(16) + " , " + std::to_string(exp) + ")";
         PyRun_SimpleString(op.c_str());
+    }
+}
+
+void modulo(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        if (a > b) {
+            std::string op = "x = " + a.toString(16) + " % " + b.toString(16);
+        } else {
+            std::string op = "x = " + b.toString(16) + " % " + a.toString(16);
+        }
+        UInt c = a % b;
+    }
+}
+
+void modulo_python(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        if (a > b) {
+            std::string op = "x = " + a.toString(16) + " % " + b.toString(16);
+            PyRun_SimpleString(op.c_str());
+        } else {
+            std::string op = "x = " + b.toString(16) + " % " + a.toString(16);
+            PyRun_SimpleString(op.c_str());
+        }
     }
 }
 
@@ -177,8 +246,14 @@ BENCHMARK(substraction);
 BENCHMARK(substraction_python);
 BENCHMARK(multiplication);
 BENCHMARK(multiplication_python);
+BENCHMARK(shift_left);
+BENCHMARK(shift_left_python);
+BENCHMARK(shift_right);
+BENCHMARK(shift_right_python);
 BENCHMARK(power);
 BENCHMARK(power_python);
+BENCHMARK(modulo);
+BENCHMARK(modulo_python);
 BENCHMARK(remainder_tree_naive);
 BENCHMARK(remainder_tree);
 BENCHMARK(product_tree_naive);
@@ -188,9 +263,10 @@ BENCHMARK(base_check);
 
 int main(int argc, char **argv)
 {
+    srand(time(nullptr));
     spdlog::set_pattern("%H:%M:%S.%f %l %v");
     spdlog::info("Starting benchmark...");
-    Py_Initialize();
+    Py_InitializeEx(0);
     ::benchmark::Initialize(&argc, argv);
     if (::benchmark::ReportUnrecognizedArguments(argc, argv)) {
         return 1;
