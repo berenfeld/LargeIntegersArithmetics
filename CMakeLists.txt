@@ -44,7 +44,9 @@ gtest_discover_tests(TestLargeInts AUTO)
 # benchmark
 find_package(benchmark REQUIRED)
 include(${benchmark_CONFIG})
+
+find_package(PythonLibs REQUIRED)
 file(GLOB BenchmarkLargeIntsSrcs "${PROJECT_SOURCE_DIR}/benchmarks/*.cpp")
 add_executable(BenchmarkLargeInts ${BenchmarkLargeIntsSrcs})
-target_include_directories(BenchmarkLargeInts PUBLIC ${LargeIntsIncludes})
-target_link_libraries(BenchmarkLargeInts LargeInts benchmark::benchmark)
+target_include_directories(BenchmarkLargeInts PUBLIC ${LargeIntsIncludes} ${PYTHON_INCLUDE_DIRS} )
+target_link_libraries(BenchmarkLargeInts LargeInts benchmark::benchmark ${PYTHON_LIBRARIES})

@@ -4,6 +4,7 @@
 #include "spdlog/spdlog.h"
 #include "uint.h"
 #include "utils.h"
+#include <Python.h>
 #include <benchmark/benchmark.h>
 #include <iostream>
 #include <spdlog/spdlog.h>
@@ -16,6 +17,17 @@ void addition(benchmark::State &state)
         UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
         UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
         UInt c = a + b;
+        std::string op = "x = " + a.toString(16) + " + " + b.toString(16);
+    }
+}
+
+void addition_python(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        std::string op = "x = " + a.toString(16) + " + " + b.toString(16);
+        PyRun_SimpleString(op.c_str());
     }
 }
 
@@ -24,7 +36,28 @@ void substraction(benchmark::State &state)
     for (auto _ : state) {
         UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
         UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        UInt c = a > b ? a - b : b - a;
+        if (a > b) {
+            UInt c = a - b;
+            std::string op = "x = " + a.toString(16) + " - " + b.toString(16);
+        } else {
+            UInt c = b - a;
+            std::string op = "x = " + b.toString(16) + " - " + a.toString(16);
+        }
+    }
+}
+
+void substraction_python(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        if (a > b) {
+            std::string op = "x = " + a.toString(16) + " - " + b.toString(16);
+            PyRun_SimpleString(op.c_str());
+        } else {
+            std::string op = "x = " + b.toString(16) + " - " + a.toString(16);
+            PyRun_SimpleString(op.c_str());
+        }
     }
 }
 
@@ -33,7 +66,18 @@ void multiplication(benchmark::State &state)
     for (auto _ : state) {
         UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
         UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        std::string op = "x = " + a.toString(16) + " * " + b.toString(16);
         UInt c = a * b;
+    }
+}
+
+void multiplication_python(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        std::string op = "x = " + a.toString(16) + " * " + b.toString(16);
+        PyRun_SimpleString(op.c_str());
     }
 }
 
@@ -42,7 +86,18 @@ void power(benchmark::State &state)
     for (auto _ : state) {
         UInt base = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
         auto exp = ::rand() % 10;
+        std::string op = "x = pow(" + base.toString(16) + " , " + std::to_string(exp) + ")";
         UInt c = UInt::pow(base, exp);
+    }
+}
+
+void power_python(benchmark::State &state)
+{
+    for (auto _ : state) {
+        UInt base = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        auto exp = ::rand() % 10;
+        std::string op = "x = pow(" + base.toString(16) + " , " + std::to_string(exp) + ")";
+        PyRun_SimpleString(op.c_str());
     }
 }
 
@@ -116,14 +171,18 @@ void remainder_tree(benchmark::State &state)
     }
 }
 
+BENCHMARK(addition);
+BENCHMARK(addition_python);
+BENCHMARK(substraction);
+BENCHMARK(substraction_python);
+BENCHMARK(multiplication);
+BENCHMARK(multiplication_python);
+BENCHMARK(power);
+BENCHMARK(power_python);
 BENCHMARK(remainder_tree_naive);
 BENCHMARK(remainder_tree);
 BENCHMARK(product_tree_naive);
 BENCHMARK(product_tree);
-BENCHMARK(addition);
-BENCHMARK(substraction);
-BENCHMARK(multiplication);
-BENCHMARK(power);
 BENCHMARK(gcd);
 BENCHMARK(base_check);
 
@@ -131,6 +190,7 @@ int main(int argc, char **argv)
 {
     spdlog::set_pattern("%H:%M:%S.%f %l %v");
     spdlog::info("Starting benchmark...");
+    Py_Initialize();
     ::benchmark::Initialize(&argc, argv);
     if (::benchmark::ReportUnrecognizedArguments(argc, argv)) {
         return 1;
