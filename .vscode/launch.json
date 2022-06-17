@@ -1,12 +1,28 @@
 {
     "configurations": [
-    {
-        "type": "gdb",
-        "request": "launch",
-        "name": "Launch Program",
-        "target": "./build/${command:cmake.buildType}/TestLargeInts",
-        "cwd": "${workspaceRoot}",
-        "valuesFormatting": "parseText"
-    }
+        {
+            "name": "BenchmarkLargeInts",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/BenchmarkLargeInts",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        },
     ]
 }

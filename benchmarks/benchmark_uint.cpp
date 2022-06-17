@@ -11,11 +11,28 @@
 
 using namespace large_numbers;
 
+std::vector<UInt> inputs_vec_large;
+std::vector<int> exps_vec;
+size_t inputs_vec_idx;
+size_t exps_idx;
+
+const UInt &get_next_random_input()
+{
+    inputs_vec_idx = (inputs_vec_idx + 1) % inputs_vec_large.size();
+    return inputs_vec_large[inputs_vec_idx];
+}
+
+int get_next_random_exp()
+{
+    exps_idx = (exps_idx + 1) % exps_vec.size();
+    return exps_vec[exps_idx];
+}
+
 void addition(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt a = get_next_random_input();
+        UInt b = get_next_random_input();
         UInt c = a + b;
         std::string op = "x = " + a.toString(16) + " + " + b.toString(16);
     }
@@ -24,8 +41,8 @@ void addition(benchmark::State &state)
 void addition_python(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt a = get_next_random_input();
+        UInt b = get_next_random_input();
         std::string op = "x = " + a.toString(16) + " + " + b.toString(16);
         PyRun_SimpleString(op.c_str());
     }
@@ -34,8 +51,8 @@ void addition_python(benchmark::State &state)
 void substraction(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt a = get_next_random_input();
+        UInt b = get_next_random_input();
         if (a > b) {
             UInt c = a - b;
             std::string op = "x = " + a.toString(16) + " - " + b.toString(16);
@@ -49,8 +66,8 @@ void substraction(benchmark::State &state)
 void substraction_python(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt a = get_next_random_input();
+        UInt b = get_next_random_input();
         if (a > b) {
             std::string op = "x = " + a.toString(16) + " - " + b.toString(16);
             PyRun_SimpleString(op.c_str());
@@ -64,8 +81,8 @@ void substraction_python(benchmark::State &state)
 void multiplication(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt a = get_next_random_input();
+        UInt b = get_next_random_input();
         std::string op = "x = " + a.toString(16) + " * " + b.toString(16);
         UInt c = a * b;
     }
@@ -74,8 +91,8 @@ void multiplication(benchmark::State &state)
 void multiplication_python(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt a = get_next_random_input();
+        UInt b = get_next_random_input();
         std::string op = "x = " + a.toString(16) + " * " + b.toString(16);
         PyRun_SimpleString(op.c_str());
     }
@@ -84,8 +101,8 @@ void multiplication_python(benchmark::State &state)
 void power(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt base = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        auto exp = ::rand() % 10;
+        UInt base = get_next_random_input();
+        int exp = get_next_random_exp();
         std::string op = "x = pow(" + base.toString(16) + " , " + std::to_string(exp) + ")";
         UInt c = UInt::pow(base, exp);
     }
@@ -94,8 +111,8 @@ void power(benchmark::State &state)
 void power_python(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt base = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        auto exp = ::rand() % 10;
+        UInt base = get_next_random_input();
+        int exp = get_next_random_exp();
         std::string op = "x = pow(" + base.toString(16) + " , " + std::to_string(exp) + ")";
         PyRun_SimpleString(op.c_str());
     }
@@ -104,8 +121,8 @@ void power_python(benchmark::State &state)
 void gcd(benchmark::State &state)
 {
     for (auto _ : state) {
-        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
-        UInt b = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt a = get_next_random_input();
+        UInt b = get_next_random_input();
         UInt c = UInt::gcd(a, b);
     }
 }
@@ -115,7 +132,7 @@ void base_check(benchmark::State &state)
     large_numbers::PrimesBase base(512);
     UInt reminder;
     for (auto _ : state) {
-        UInt a = large_numbers::rand(LN_BENCHMARK_UINT_BITS / LN_BITS_IN_BLOCK);
+        UInt a = get_next_random_input();
         if (base.contains(a, reminder)) {
             a = a + 1;
         }
@@ -195,6 +212,14 @@ int main(int argc, char **argv)
     if (::benchmark::ReportUnrecognizedArguments(argc, argv)) {
         return 1;
     }
+
+    static const size_t INPUTS = 100;
+
+    for (size_t idx = 0; idx < INPUTS; ++idx) {
+        inputs_vec_large.push_back(large_numbers::rand(32));
+        exps_vec.push_back(::rand() % 10);
+    }
+
     ::benchmark::RunSpecifiedBenchmarks();
     spdlog::info("Benchmark Done...");
 }
