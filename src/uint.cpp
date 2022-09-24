@@ -1,4 +1,5 @@
 #include "uint.h"
+#include "algorithms.h"
 #include "base2_cache.h"
 #include "cerror.h"
 #include "consts.h"
@@ -200,21 +201,18 @@ namespace large_numbers
     // static
     UInt UInt::pow(const UInt &base, const UInt &exp)
     {
-        // build 2 powers of base based on the bits of exp
-        std::vector<UInt> powers(exp.bits());
-        UInt base_power = base;
-        for (size_t bit = 0; bit < exp.bits(); ++bit) {
-            powers[bit] = base_power;
-            base_power *= base_power;
-        }
-        // now compute the power
         UInt result = 1;
-        UInt bit_value = 0x1;
-        for (size_t bit = 0; bit < exp.bits(); ++bit) {
-            if ((exp & bit_value) != UInt(0)) {
-                result *= powers[bit];
+        UInt base2 = base;
+        UInt exp2 = exp;
+        for (;;) {
+            if ((exp2 & 0x1) == (0x1)) {
+                result *= base2;
             }
-            bit_value <<= 1;
+            exp2 >>= 1;
+            if (exp2 == 0) {
+                break;
+            }
+            base2 *= base2;
         }
         return result;
     }

@@ -103,7 +103,6 @@ void power(benchmark::State &state)
     for (auto _ : state) {
         UInt base = get_next_random_input();
         int exp = get_next_random_exp();
-        std::string op = "x = pow(" + base.toString(16) + " , " + std::to_string(exp) + ")";
         UInt c = UInt::pow(base, exp);
     }
 }
