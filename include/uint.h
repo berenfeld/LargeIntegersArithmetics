@@ -48,6 +48,8 @@ namespace large_numbers
          * @return UInt&
          */
         void mulAdd(LN_BLOCK_TYPE arg, UInt &result, size_t add_to_block) const;
+        UInt naiveMultiplyWith(const UInt &arg) const;
+
         UInt operator*(const UInt &arg) const;
         UInt &operator*=(const UInt &arg);
 
@@ -100,6 +102,9 @@ namespace large_numbers
         size_t size() const;
         const LN_BLOCK_TYPE &block(int i) const;
         const LN_BLOCK_TYPE &lastBlock() const;
+        UInt reduceToLowBlocks(size_t reduce_to_blocks) const;
+        UInt reduceToHighBlocks(size_t reduce_to_blocks) const;
+
         size_t bits() const;
         uint32_t bit(int i) const;
         std::string toString(int base = 10) const;

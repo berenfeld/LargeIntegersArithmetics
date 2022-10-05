@@ -18,6 +18,40 @@ TEST(UInt, Constructions)
     ASSERT_EQ(two, two2);
 }
 
+TEST(UInt, Size)
+{
+    UInt zero;
+    ASSERT_EQ(zero.size(), 0);
+    ASSERT_EQ(zero.bits(), 0);
+    ASSERT_EQ(zero.reduceToLowBlocks(1), 0);
+    ASSERT_EQ(zero.reduceToHighBlocks(1), 0);
+
+    UInt one = 1;
+    ASSERT_EQ(one.size(), 1);
+    ASSERT_EQ(one.bits(), 1);
+    ASSERT_EQ(one.reduceToLowBlocks(1), 1);
+    ASSERT_EQ(one.reduceToHighBlocks(1), 1);
+
+    UInt test1 = (one << LN_BITS_IN_BLOCK) + 2; // 0x10000000000000002
+    ASSERT_EQ(test1.size(), 2);
+    ASSERT_EQ(test1.bits(), LN_BITS_IN_BLOCK + 1);
+    ASSERT_EQ(test1.reduceToLowBlocks(1), 2);
+    ASSERT_EQ(test1.reduceToHighBlocks(1), 1);
+
+    UInt test2("0x8000000000000000700000000000000060000000000000005000000000000000");
+    ASSERT_EQ(test2.size(), 4);
+    ASSERT_EQ(test2.bits(), LN_BITS_IN_BLOCK * 4);
+
+    ASSERT_EQ(test2.reduceToLowBlocks(0), 0);
+    ASSERT_EQ(test2.reduceToHighBlocks(0), 0);
+    ASSERT_EQ(test2.reduceToLowBlocks(1), UInt("0x5000000000000000"));
+    ASSERT_EQ(test2.reduceToHighBlocks(1), UInt("0x8000000000000000"));
+    ASSERT_EQ(test2.reduceToLowBlocks(2), UInt("0x60000000000000005000000000000000"));
+    ASSERT_EQ(test2.reduceToHighBlocks(2), UInt("0x80000000000000007000000000000000"));
+    ASSERT_EQ(test2.reduceToLowBlocks(3), UInt("0x700000000000000060000000000000005000000000000000"));
+    ASSERT_EQ(test2.reduceToHighBlocks(3), UInt("0x800000000000000070000000000000006000000000000000"));
+}
+
 TEST(UInt, Comparison)
 {
     UInt zero;

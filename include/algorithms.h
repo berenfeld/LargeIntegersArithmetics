@@ -2,6 +2,8 @@
 
 namespace large_numbers
 {
+    UInt karatsuba(const UInt &a, const UInt &b);
+
     UInt pollardPMinusOneFactorization(UInt n, uint32_t timeout_usecs = 100 * 1000);
 
     std::vector<uint32_t> range(uint32_t end);

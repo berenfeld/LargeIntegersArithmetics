@@ -100,3 +100,15 @@ TEST(Algorithms, PollardPMinusOne)
     ASSERT_EQ(pollardPMinusOneFactorization(UInt(1009) * UInt(1019)), UInt(1009));
     ASSERT_EQ(pollardPMinusOneFactorization(UInt(255019) * UInt(255023)), UInt(1)); // timeout
 }
+
+TEST(Algorithms, Karatsuba)
+{
+    ASSERT_EQ(UInt(0), karatsuba(UInt(0), 0));
+    ASSERT_EQ(UInt(6), karatsuba(UInt(3), 2));
+
+    for (int i = 0; i < 100; ++i) {
+        UInt n1 = large_numbers::rand(10);
+        UInt n2 = large_numbers::rand(10);
+        ASSERT_EQ(n1 * n2, karatsuba(n1, n2));
+    }
+}

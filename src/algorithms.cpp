@@ -10,6 +10,24 @@
 
 namespace large_numbers
 {
+    UInt karatsuba(const UInt &n1, const UInt &n2)
+    {
+        if ((n1.size() <= 1) || (n2.size() <= 1)) {
+            return n1.naiveMultiplyWith(n2);
+        }
+        const size_t min_size = std::min(n1.size(), n2.size());
+        const size_t split_size = static_cast<size_t>(std::ceil(min_size / 2));
+        const UInt low1 = n1.reduceToLowBlocks(split_size);
+        const UInt high1 = n1.reduceToHighBlocks(n1.size() - split_size);
+        const UInt low2 = n2.reduceToLowBlocks(split_size);
+        const UInt high2 = n2.reduceToHighBlocks(n2.size() - split_size);
+
+        const UInt z0 = karatsuba(low1, low2);
+        const UInt z1 = karatsuba(low1 + high1, low2 + high2);
+        const UInt z2 = karatsuba(high1, high2);
+
+        return (z2 << (LN_BITS_IN_BLOCK * split_size * 2)) + ((z1 - z2 - z0) << (LN_BITS_IN_BLOCK * split_size)) + z0;
+    }
     UInt pollardPMinusOneFactorization(UInt n, uint32_t timeout_usecs)
     {
         auto start = std::chrono::steady_clock::now();

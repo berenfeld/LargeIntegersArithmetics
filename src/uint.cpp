@@ -183,7 +183,7 @@ namespace large_numbers
         result.trimZeros();
     }
 
-    UInt UInt::operator*(const UInt &arg) const
+    UInt UInt::naiveMultiplyWith(const UInt &arg) const
     {
         UInt result = 0;
         for (size_t i = 0; i < arg.size(); ++i) {
@@ -191,6 +191,8 @@ namespace large_numbers
         }
         return result;
     }
+
+    UInt UInt::operator*(const UInt &arg) const { return karatsuba(*this, arg); }
 
     UInt &UInt::operator*=(const UInt &arg)
     {
@@ -318,10 +320,8 @@ namespace large_numbers
             carry = (value_sum >> reminder_comp);
             result._values[zero_blocks + idx] = next_value;
         }
-        if (carry) {
-            result._values.push_back(carry);
-        }
-
+        result._values.push_back(carry);
+        result.trimZeros();
         return result;
     }
 
@@ -467,6 +467,23 @@ namespace large_numbers
     size_t UInt::size() const { return _values.size(); }
     const LN_BLOCK_TYPE &UInt::block(int i) const { return _values[i]; }
     const LN_BLOCK_TYPE &UInt::lastBlock() const { return _values[size() - 1]; }
+
+    UInt UInt::reduceToLowBlocks(size_t reduce_to_blocks) const
+    {
+        reduce_to_blocks = std::min(size(), reduce_to_blocks);
+        UInt result = *this;
+        result._values.resize(reduce_to_blocks);
+        return result;
+    }
+
+    UInt UInt::reduceToHighBlocks(size_t reduce_to_blocks) const
+    {
+        reduce_to_blocks = std::min(size(), reduce_to_blocks);
+        UInt result;
+        const size_t start_reduce_index = size() - reduce_to_blocks;
+        result._values = std::vector<LN_BLOCK_TYPE>(_values.begin() + start_reduce_index, _values.end());
+        return result;
+    }
 
     uint32_t UInt::bit(int i) const
     {
