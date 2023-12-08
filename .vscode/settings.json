@@ -12,6 +12,7 @@
     "testMate.cpp.debug.breakOnFailure": true,
     "editor.minimap.enabled": false,
     "cmake.buildDirectory": "${workspaceFolder}/build/${buildType}",
+    "cmake.options.statusBarVisibility": "visible",
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
     "files.associations": {
         "array": "cpp",

@@ -13,3 +13,4 @@ vscode:
     - eamodio.gitlens
     - https://github.com/microsoft/vscode-cpptools/releases/download/v1.9.8/cpptools-linux.vsix
     - https://github.com/matepek/vscode-catch2-test-adapter/releases/download/v4.2.2/matepek-vscode-catch2-test-adapter-4.2.2.vsix
+    - twxs.cmake
